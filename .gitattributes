@@ -1,6 +1,6 @@
 # Normalise line endings: Git stores text as LF, checks out native (LF/CRLF) per OS.
 # This ends the "LF will be replaced by CRLF" churn/warnings on Windows.
-* text=auto
+* text=auto eol=lf
 
 # Shell scripts must stay LF even on Windows (they run on Ubuntu).
 *.sh text eol=lf
