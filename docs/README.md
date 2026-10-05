@@ -15,7 +15,7 @@ set of documents, and points each type of reader to the right starting place.
 Newcomers should open **[`00-orientation.md`](00-orientation.md)** first — it's the shortest path in.
 
 > **Where the project stands (2026-08-18):** the documentation is complete, the **MVP application code is written —
-> all 10 modules** (see [`../code/`](../code/)), the **novice→mastery guide library** is in [`../guides/`](../guides/),
+> all 10 modules** (see [`../services/monolith/`](../code/)), the **novice→mastery guide library** is in [`../guides/`](../guides/),
 > and the **six FFP "intelligence-engine" white papers** are in [`whitepapers/`](whitepapers/). The one remaining
 > step is *running* the code green on a Linux box (see [`../PENDING.md`](../PENDING.md)). The repository front door
 > is [`../README.md`](../README.md).
@@ -105,7 +105,7 @@ base, replicated from the project archive (blueprint T5):
 | **FFP specs** | [`ffp/`](ffp/) | 17 FFP specifications (deltas on the MVP) + the frontend-engineering companion + **module elucidation (25)** and **conformance PICS (26)** |
 | **Guides** | [`../guides/`](../guides/) | The novice→mastery learning library — 40 topic **101s** (incl. the **Technology Stack 101** component map) + 12 **role-mastery** journeys (MVP) + the FFP learning hub |
 | **White papers** | [`whitepapers/`](whitepapers/) | 6 "intelligence-engine" design papers (*design-now / build-FFP*): FAQ chatbot, anomaly detection ×2, two recommenders, churn detection — + a face-quality-gate note |
-| **MVP code** | [`../code/`](../code/) | The **built application** — all 10 modules, 6 migrations, tests, idempotent seed (`ruff`+`py_compile` clean; pending the Ubuntu/CI run) |
+| **MVP code** | [`../services/monolith/`](../code/) | The **built application** — all 10 modules, 6 migrations, tests, idempotent seed (`ruff`+`py_compile` clean; pending the Ubuntu/CI run) |
 
 The existing `deep-dive/` (condensed developer docs) and `user-guides/` (end-user) remain; `mvp/` + `ffp/` are the
 **fuller** canonical specifications. When they differ, the `mvp/`+`ffp/` sets are authoritative (see the refinement
