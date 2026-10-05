@@ -90,7 +90,7 @@ and risky — and people need help *now*. So IDRM:
 | **Architecture decisions** (ADRs) | ✅ done | every major choice recorded with its *why* |
 | **Learning library** (guides) | ✅ done | 40 "101" guides + 12 role-mastery maps + learning hubs |
 | **Conformance gate** (the PICS) | ✅ **signed off** | the checklist the build must satisfy is agreed and locked |
-| **The MVP code** | ◻ **not started — this is next** | `code/` is empty; the build is fully unblocked |
+| **The MVP code** | ◻ **not started — this is next** | `services/monolith/` is empty; the build is fully unblocked |
 | **The FFP** | ◻ later, on triggers | evolves after the MVP is live |
 
 **One-line status:** *everything needed to build is ready and agreed; the next step is writing the MVP code.*

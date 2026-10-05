@@ -6,7 +6,7 @@
 fixtures, know which tests run without a database, and use the one-command quality gate.
 
 Files: [`tests/`](../../code/tests/), [`tests/conftest.py`](../../code/tests/conftest.py),
-[`code/Makefile`](../../code/Makefile).
+[`services/monolith/Makefile`](../../code/Makefile).
 
 ---
 
@@ -142,7 +142,7 @@ Before any change is considered done, `make qa` runs the whole machine-checkable
 order:[1]
 
 ```make
-# code/Makefile
+# services/monolith/Makefile
 qa: ## the pre-PR gate: everything a machine can check, in order
 	$(MAKE) format lint typecheck coverage      # black+isort · ruff · mypy · pytest ≥80% coverage
 ```

@@ -54,7 +54,7 @@ export DATABASE_URL="postgresql+asyncpg://idrm_user:realpass@db:5432/idrm_db"
 export LOG_LEVEL=DEBUG
 ```
 
-🧠 **Nuance:** the template file [`code/.env.example`](../../code/.env.example) documents
+🧠 **Nuance:** the template file [`services/monolith/.env.example`](../../code/.env.example) documents
 every variable; you copy it to `.env` and fill in real values. The `CHANGE_ME`
 placeholders are intentional trip-wires.[1]
 

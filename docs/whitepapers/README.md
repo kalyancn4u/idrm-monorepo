@@ -104,6 +104,6 @@ backbone that Papers 1, 4 and 5 build on — reused here so we design with prove
 - **2026-08-17** — **Paper 6 (Churn Detection)** written (persona-aware, readiness-not-engagement, no dark
   patterns). ***All six white papers complete (Task M).*** Engines remain → FFP.
 - **2026-08-17** — Added companion note **`face-quality-gate.md`** + shipped the client-side detection gate
-  (`code/frontend/static/js/face-quality.js`, ADR-011): on-device, advisory, nothing biometric stored. Server
+  (`services/monolith/frontend/static/js/face-quality.js`, ADR-011): on-device, advisory, nothing biometric stored. Server
   `passes_face_quality_gate` documented as an intentional no-op. `PICS-FIL-005` stays Planned pending a manual
   browser check.

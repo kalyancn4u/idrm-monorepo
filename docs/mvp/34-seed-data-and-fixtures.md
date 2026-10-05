@@ -22,7 +22,7 @@ Two words you will see throughout, defined once:
 
 - **Fixture** — a small, fixed bundle of data prepared for a test so the test starts from a known state. Per
   [`70-quality-test-strategy.md`](70-quality-test-strategy.md), each module also owns *tiny* fixtures (built in
-  `code/tests/factories.py`) so it can be tested **in isolation**, without loading this whole dataset.
+  `services/monolith/tests/factories.py`) so it can be tested **in isolation**, without loading this whole dataset.
 - **Idempotent** — *"safe to run many times."* Running the seed twice must **not** create duplicate rows. We
   guarantee this by giving every seed row a **deterministic UUID** (a UUID computed from a stable text key, so the
   same row always gets the same id) and inserting it only if that id is not already present.

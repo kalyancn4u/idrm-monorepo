@@ -227,7 +227,7 @@ the live data + audit trail are how accountability becomes visible.
 ---
 
 > ✅ **All ten modules are now elucidated** (INC · USR · LOC · NTF · RES · FIL · AUD · ADM · ALR · RPT). Later
-> passes deepen worked examples and add code/test evidence as the MVP is built.
+> passes deepen worked examples and add services/monolith/test evidence as the MVP is built.
 
 ---
 

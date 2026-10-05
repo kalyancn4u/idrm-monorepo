@@ -23,7 +23,7 @@
 - ✅ **Follow-ups** — seed data + doc 34, the six Task-M white papers, and the FIL face-detection gate: all done (§3).
 - ⏳ **Still open** — the run (§2) + the external poster update (§3). *(The 2026-08-22 coherence audit's
   follow-ups — F5-B `/incidents` filters and F3 pagination helper — were both implemented that day.)*
-- 🗄️ **`archive/idrm-mvp-code/`** — a **frozen one-time snapshot** of `code/` (not a living mirror; `code/`
+- 🗄️ **`archive/idrm-mvp-code/`** — a **frozen one-time snapshot** of `services/monolith/` (not a living mirror; `services/monolith/`
   stays the sole source). Committed 2026-08-22; `local == origin/main`.
 - 📖 **Code walk-through (2026-08-23)** — `docs/walkthrough/` (README + 12 chapters + GLOSSARY + Marp/Pages
   tooling) is **done, committed, and LIVE** at https://kalyancn4u.github.io/idrm-artifacts/ (Pages enabled).
@@ -44,8 +44,8 @@ The MVP runs **natively on Ubuntu** (no Docker). To stand up and run the code:
    sudo openssl genpkey -algorithm RSA -out /etc/idrm/jwt_private.pem -pkeyopt rsa_keygen_bits:2048
    sudo openssl rsa -pubout -in /etc/idrm/jwt_private.pem -out /etc/idrm/jwt_public.pem
    ```
-4. **Configure the app** — `cp code/.env.example code/.env` and fill in real values (DB URL, S3 keys, key paths).
-5. **Build & run** (from `code/`):
+4. **Configure the app** — `cp services/monolith/.env.example services/monolith/.env` and fill in real values (DB URL, S3 keys, key paths).
+5. **Build & run** (from `services/monolith/`):
    ```bash
    make setup      # conda env + dependencies
    make install    # (or: pip install -e ".[dev]")
@@ -66,7 +66,7 @@ Driven by the roadmap [`§13`](docs/mvp/27-implementation-roadmap.md) and the si
 [`docs/mvp/26-conformance-pics.md`](docs/mvp/26-conformance-pics.md). Build **one module at a time**; flip a
 `PICS-<MOD>-*` row to ✅ **only** when its code **and** a passing test exist.
 
-- [x] **Increment 1 — repository scaffold** (`code/`): app/core, infrastructure/database, `main.py` (health +
+- [x] **Increment 1 — repository scaffold** (`services/monolith/`): app/core, infrastructure/database, `main.py` (health +
   request-id middleware + 10 module routers), Makefile, CI, alembic (async), tests (health smoke), frontend
   design tokens, seed stub. `py_compile` OK.
 - [~] **Increment 2 — Users/Auth (USR)** — **code + tests DONE** (models + migration 0001; schemas; repository;
@@ -148,7 +148,7 @@ Driven by the roadmap [`§13`](docs/mvp/27-implementation-roadmap.md) and the si
   (3) AD engine #2 (credibility), (4) recommender #1 (financial/charity), (5) recommender #2 (incident-notification
   routing), (6) churn detection. Engines themselves remain → FFP. Grounded in the `archive/analyses/notebooks/`
   reference notebooks (FAQ chatbot + Zee recommenders). Links 0-broken.
-- [x] **`docs/mvp/34-seed-data-and-fixtures.md` + `code/scripts/seed.py`** — **DONE (2026-08-17).** The full
+- [x] **`docs/mvp/34-seed-data-and-fixtures.md` + `services/monolith/scripts/seed.py`** — **DONE (2026-08-17).** The full
   row-by-row seed dataset (roadmap §3.4) is written out, and the idempotent seed script is implemented (8 users +
   guest, 3 orgs + 4 resources, incidents in all 8 states + timelines, alerts/notifications/files/audit). Loaded by
   `make seed` after `make migrate`. `ruff` + `py_compile` clean; unrun here.
@@ -159,7 +159,7 @@ Driven by the roadmap [`§13`](docs/mvp/27-implementation-roadmap.md) and the si
   `q` wording. code = contract = schema now agree. `ruff`/`compile` clean; unrun here. See the CHANGELOGs.
 - [x] **F3 — DONE 2026-08-22.** Extracted the `{data, pagination}` envelope into `app/core/pagination.py`
   (`paginate` + `total_pages`), routed all 8 list endpoints through it. Pure unit test executed here and
-  passes; `ruff`/`compile` clean. See `code/CHANGELOG.md`.
+  passes; `ruff`/`compile` clean. See `services/monolith/CHANGELOG.md`.
 
 ## 4. Housekeeping when picking up on the new box
 

@@ -8,7 +8,7 @@ You do not need prior experience with FastAPI, PostGIS, JWT auth, or async Pytho
 Each concept is introduced from zero, shown in the actual code, and reinforced with
 footnotes, pitfalls, and small exercises.
 
-> **What this covers:** the code under [`code/`](../../code/) — a pure-Python
+> **What this covers:** the code under [`services/monolith/`](../../code/) — a pure-Python
 > **FastAPI modular monolith** (HTML + Tailwind + JS + Leaflet UI, PostgreSQL 16 +
 > PostGIS 3.4, MinIO for files). It pairs with the product specs in
 > [`docs/mvp/`](../mvp/) and the builder's [Implementation Roadmap](../mvp/27-implementation-roadmap.md).
@@ -87,7 +87,7 @@ plainly, cross-linked from the footnotes.
 This app is not a single-file script — it needs **PostgreSQL + PostGIS + MinIO** to run.
 The fastest way to see it live is the Ubuntu bring-up checklist in
 [`PENDING.md` §1](../../PENDING.md); the day-to-day commands are in
-[`code/README.md`](../../code/README.md):
+[`services/monolith/README.md`](../../code/README.md):
 
 ```bash
 cd code

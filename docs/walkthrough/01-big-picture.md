@@ -6,7 +6,7 @@
 four ideas the codebase is built on, read the architecture diagram, and state the
 three "design laws" that keep the system correct.
 
-Files: the whole app under [`code/app/`](../../code/app/); the entry point is
+Files: the whole app under [`services/monolith/app/`](../../code/app/); the entry point is
 [`app/main.py`](../../code/app/main.py). No need to open them yet — this chapter is the map.
 
 ---
@@ -162,7 +162,7 @@ The payoff: services stay **pure and independently testable**, and coupling is
 **one-directional** (a feature depends on audit/notifications, never the reverse).[2]
 
 ```python
-# code/app/modules/incidents/router.py — composition at the edge (trimmed)
+# services/monolith/app/modules/incidents/router.py — composition at the edge (trimmed)
 updated = await svc.perform_transition(incident, action, actor_id, role, **kwargs)
 await _notify_requester(db, updated, actor_id)          # notifications
 await AuditService(AuditRepository(db)).record(...)     # audit
@@ -209,7 +209,7 @@ grow by being correct first.
   only at the router edge.
 - The MVP is deliberately minimal; the FFP grows it without a rewrite.
 
-🛠️ **Try it:** open [`code/app/main.py`](../../code/app/main.py) and find the ten
+🛠️ **Try it:** open [`services/monolith/app/main.py`](../../code/app/main.py) and find the ten
 `app.include_router(...)` lines near the bottom. That list *is* the ten modules — you
 now know what each one is for.
 

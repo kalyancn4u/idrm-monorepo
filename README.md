@@ -16,7 +16,7 @@ It is written so a **complete newcomer can orient in minutes and reach mastery**
 |---|---|
 | **Product vision** (`posters/`) | ✅ 35 posters across 9 phases — the authoritative source |
 | **Documentation** (`docs/`, `guides/`) | ✅ Complete — MVP + FFP specs, 40 "101" guides + 12 role guides, roadmap, glossary |
-| **MVP application code** (`code/`) | 🟢 **All 10 modules written** (FastAPI modular monolith, 6 migrations, tests, seed) — `ruff` + `py_compile` clean, **not yet executed** (needs a Linux box with PostgreSQL/PostGIS/MinIO) |
+| **MVP application code** (`services/monolith/`) | 🟢 **All 10 modules written** (FastAPI modular monolith, 6 migrations, tests, seed) — `ruff` + `py_compile` clean, **not yet executed** (needs a Linux box with PostgreSQL/PostGIS/MinIO) |
 | **Design white papers** (`docs/whitepapers/`) | ✅ 6 "intelligence-engine" papers (design-now / build-FFP) + a face-quality-gate note |
 | **The one open step** | ▶️ **The run** — `make install && migrate && seed && qa` on Ubuntu/CI, which turns "written" into "verified" (see [`PENDING.md`](PENDING.md)) |
 
@@ -32,7 +32,7 @@ It is written so a **complete newcomer can orient in minutes and reach mastery**
 | You are… | Open this first |
 |---|---|
 | **New to IDRM** (any role) | [`docs/README.md`](docs/README.md) → then [`docs/00-orientation.md`](docs/00-orientation.md) — the shortest path in |
-| **Building the MVP code** | [`docs/mvp/27-implementation-roadmap.md`](docs/mvp/27-implementation-roadmap.md) (the builder's guide) → then [`code/README.md`](code/README.md) |
+| **Building the MVP code** | [`docs/mvp/27-implementation-roadmap.md`](docs/mvp/27-implementation-roadmap.md) (the builder's guide) → then [`services/monolith/README.md`](services/monolith/README.md) |
 | **Running / deploying it** | [`PENDING.md`](PENDING.md) §1 — the Ubuntu bring-up checklist |
 | **A stakeholder / sponsor** | [`docs/09-roadmap.md`](docs/09-roadmap.md) (the whole journey) + [`presentation/`](presentation/) (the decks) |
 | **Learning a topic (novice→mastery)** | [`guides/mvp/learn/`](guides/mvp/learn/) — 40 "101" guides |
@@ -44,7 +44,7 @@ It is written so a **complete newcomer can orient in minutes and reach mastery**
 ## 2. Repository map
 
 ```
-idrm-artifacts/
+idrm-monorepo/
 ├── README.md            ← you are here (the repository front door)
 ├── PENDING.md           ← what's left to do + the Ubuntu bring-up checklist (read for hand-off)
 ├── posters/             ← 🎯 the AUTHORITATIVE product vision — 35 phase posters (start of truth)
@@ -58,7 +58,7 @@ idrm-artifacts/
 ├── guides/              ← the novice→mastery LEARNING library (40 "101s" + 12 role journeys)
 │   ├── mvp/             ←   MVP learning hub + learn/ (101s) + roles/ (role journeys)
 │   └── ffp/             ←   FFP learning hub (delta)
-├── code/                ← 🟢 the MVP APPLICATION CODE (FastAPI modular monolith) — the deliverable
+├── services/monolith/                ← 🟢 the MVP APPLICATION CODE (FastAPI modular monolith) — the deliverable
 ├── presentation/        ← stakeholder decks (pptx/pdf) + companion notes
 └── archive/             ← working history: doc-set masters, analyses, the FFP code TEMPLATE, retired drafts
 ```
