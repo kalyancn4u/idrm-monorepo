@@ -6,11 +6,11 @@
 RS256 tokens prove identity, how the dependency guards enforce roles (and allow guests),
 and how the login lifecycle resists abuse.
 
-Files: [`core/security.py`](../../code/app/core/security.py),
-[`core/dependencies.py`](../../code/app/core/dependencies.py),
-[`core/rate_limit.py`](../../code/app/core/rate_limit.py),
-[`modules/users/deps.py`](../../code/app/modules/users/deps.py),
-[`modules/users/service.py`](../../code/app/modules/users/service.py).
+Files: [`core/security.py`](../../services/monolith/app/core/security.py),
+[`core/dependencies.py`](../../services/monolith/app/core/dependencies.py),
+[`core/rate_limit.py`](../../services/monolith/app/core/rate_limit.py),
+[`modules/users/deps.py`](../../services/monolith/app/modules/users/deps.py),
+[`modules/users/service.py`](../../services/monolith/app/modules/users/service.py).
 
 ---
 

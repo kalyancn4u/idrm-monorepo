@@ -217,8 +217,8 @@ equity** — with **conversion** important but subordinate, and **fraud ≈ 0** 
   and [`Zee_Recommender_Academic_v2.ipynb`](../../archive/analyses/notebooks/Zee_Recommender_Academic_v2.ipynb)
   (CF via Pearson/cosine/KNN, matrix factorization SVD/ALS, regression, ensemble, cold-start; RMSE/MAE/MAPE).
 - Depends on **Paper 3** (credibility gate): [`3-credibility-assessment.md`](3-credibility-assessment.md).
-- MVP need signals: [`../../code/app/modules/incidents`](../../code/app/modules/incidents) ·
-  [`../../code/app/modules/resources`](../../code/app/modules/resources).
+- MVP need signals: [`../../services/monolith/app/modules/incidents`](../../services/monolith/app/modules/incidents) ·
+  [`../../services/monolith/app/modules/resources`](../../services/monolith/app/modules/resources).
 - [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md) (money → FFP) ·
   [`../mvp/25-module-elucidation.md`](../mvp/25-module-elucidation.md) · [`../mvp/26-conformance-pics.md`](../mvp/26-conformance-pics.md).
 - Hub + shared template: [`README.md`](README.md).

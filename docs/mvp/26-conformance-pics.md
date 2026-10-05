@@ -24,7 +24,7 @@
 | **Evidence** | The authoritative doc §; later, the code path + test id. |
 | **src** | The `_removed` snippet(s) this row was reconciled from. |
 
-> **All rows are `Planned` today** — the MVP code (`../../code/`) is not built yet. This sheet is what "done"
+> **All rows are `Planned` today** — the MVP code (`../../services/monolith/`) is not built yet. This sheet is what "done"
 > will be measured against. Legend for module codes: see the ledger.
 
 ---

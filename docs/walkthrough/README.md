@@ -8,7 +8,7 @@ You do not need prior experience with FastAPI, PostGIS, JWT auth, or async Pytho
 Each concept is introduced from zero, shown in the actual code, and reinforced with
 footnotes, pitfalls, and small exercises.
 
-> **What this covers:** the code under [`services/monolith/`](../../code/) — a pure-Python
+> **What this covers:** the code under [`services/monolith/`](../../services/monolith/) — a pure-Python
 > **FastAPI modular monolith** (HTML + Tailwind + JS + Leaflet UI, PostgreSQL 16 +
 > PostGIS 3.4, MinIO for files). It pairs with the product specs in
 > [`docs/mvp/`](../mvp/) and the builder's [Implementation Roadmap](../mvp/27-implementation-roadmap.md).
@@ -27,7 +27,7 @@ jargon, explains the reasoning, flags pitfalls, and points to further reading. R
 them — the footnotes are where the nuance lives.
 
 > **📺 Live slides:** the decks publish to GitHub Pages on every push once Pages is
-> enabled — **[view them online](https://kalyancn4u.github.io/idrm-artifacts/)**
+> enabled — **[view them online](https://kalyancn4u.github.io/idrm-monorepo/)**
 > (combined deck + one per chapter). See [`.github/workflows/pages.yml`](../../.github/workflows/pages.yml).
 
 > **Two ways to read it**
@@ -71,7 +71,7 @@ plainly, cross-linked from the footnotes.
 ## Conventions used throughout
 
 - **Code excerpts are illustrative**, often trimmed for focus. Each links to the real
-  file so you can read it in full — e.g. [`app/main.py`](../../code/app/main.py).
+  file so you can read it in full — e.g. [`app/main.py`](../../services/monolith/app/main.py).
 - Inline markers like `[1]` point to the bulleted **Footnotes** block at the bottom of
   that same slide (one bullet per reference).
 - 🧠 **Nuance** callouts highlight a subtle "why." ⚠️ **Pitfall** callouts warn of a
@@ -87,7 +87,7 @@ plainly, cross-linked from the footnotes.
 This app is not a single-file script — it needs **PostgreSQL + PostGIS + MinIO** to run.
 The fastest way to see it live is the Ubuntu bring-up checklist in
 [`PENDING.md` §1](../../PENDING.md); the day-to-day commands are in
-[`services/monolith/README.md`](../../code/README.md):
+[`services/monolith/README.md`](../../services/monolith/README.md):
 
 ```bash
 cd code

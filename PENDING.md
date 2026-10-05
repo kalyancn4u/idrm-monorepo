@@ -26,7 +26,7 @@
 - 🗄️ **`archive/idrm-mvp-code/`** — a **frozen one-time snapshot** of `services/monolith/` (not a living mirror; `services/monolith/`
   stays the sole source). Committed 2026-08-22; `local == origin/main`.
 - 📖 **Code walk-through (2026-08-23)** — `docs/walkthrough/` (README + 12 chapters + GLOSSARY + Marp/Pages
-  tooling) is **done, committed, and LIVE** at https://kalyancn4u.github.io/idrm-artifacts/ (Pages enabled).
+  tooling) is **done, committed, and LIVE** at https://kalyancn4u.github.io/idrm-monorepo/ (Pages enabled).
 
 ---
 

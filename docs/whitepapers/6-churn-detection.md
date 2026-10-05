@@ -36,7 +36,7 @@ one in need is forgotten, and leave everyone else in peace.
 The MVP already records the raw activity signals; it simply doesn't model them:
 
 - **`users.last_login_at`** and `created_at` — recency and tenure per account.
-- **The append-only audit trail** ([`../../code/app/modules/audit`](../../code/app/modules/audit)) — a timestamped
+- **The append-only audit trail** ([`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit)) — a timestamped
   record of *who did what, when*, across every module: the ground truth for "activity."
 - **Incident & timeline history** — when a provider last accepted/completed, when a citizen's request last moved.
 - **Notification engagement** — read/acted signals (a proxy for attention).
@@ -196,10 +196,10 @@ guardrail** (complaint/opt-out rate) and **100 % "leave dormant citizens alone."
 
 ## References
 
-- MVP seams: `users.last_login_at` ([`../../code/app/modules/users`](../../code/app/modules/users)),
-  [`../../code/app/modules/audit`](../../code/app/modules/audit) (activity timestamps),
-  [`../../code/app/modules/incidents`](../../code/app/modules/incidents),
-  [`../../code/app/modules/notifications`](../../code/app/modules/notifications) (engagement).
+- MVP seams: `users.last_login_at` ([`../../services/monolith/app/modules/users`](../../services/monolith/app/modules/users)),
+  [`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit) (activity timestamps),
+  [`../../services/monolith/app/modules/incidents`](../../services/monolith/app/modules/incidents),
+  [`../../services/monolith/app/modules/notifications`](../../services/monolith/app/modules/notifications) (engagement).
 - Ties to **Paper 5** (load-rebalance as churn prevention): [`5-recommender-incident-notification-routing.md`](5-recommender-incident-notification-routing.md).
 - [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md) ·
   [`../mvp/25-module-elucidation.md`](../mvp/25-module-elucidation.md) · [`../mvp/26-conformance-pics.md`](../mvp/26-conformance-pics.md).

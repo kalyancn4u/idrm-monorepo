@@ -7,11 +7,11 @@ losing its purity.*
 the append-only audit trail, follow a notification, and understand the storage abstraction
 and the server-side image pipeline.
 
-Files: [`audit/`](../../code/app/modules/audit/),
-[`notifications/`](../../code/app/modules/notifications/),
-[`files/service.py`](../../code/app/modules/files/service.py),
-[`files/storage.py`](../../code/app/modules/files/storage.py),
-[`files/imaging.py`](../../code/app/modules/files/imaging.py).
+Files: [`audit/`](../../services/monolith/app/modules/audit/),
+[`notifications/`](../../services/monolith/app/modules/notifications/),
+[`files/service.py`](../../services/monolith/app/modules/files/service.py),
+[`files/storage.py`](../../services/monolith/app/modules/files/storage.py),
+[`files/imaging.py`](../../services/monolith/app/modules/files/imaging.py).
 
 ---
 

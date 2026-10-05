@@ -39,7 +39,7 @@ The MVP already ships the **hook** this engine plugs into: the **Task-L stub**. 
 That is deliberately non-intelligent (no ML in the MVP), but it establishes the **contract** — the request/response
 shape, the auth, the rate-limit, the place in the UI — so the FFP engine is a *drop-in replacement for the reply
 logic*, not a new feature bolted on. See the stub at
-[`../../code/app/modules/notifications/router.py`](../../code/app/modules/notifications/router.py) and its ADR
+[`../../services/monolith/app/modules/notifications/router.py`](../../services/monolith/app/modules/notifications/router.py) and its ADR
 lineage in [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md).
 
 **The upgrade is purely internal:** same endpoint, same shape; the fixed string is replaced by a
@@ -202,6 +202,6 @@ halts higher tiers automatically — safety dominates every other number.
 
 - Method backbone: [`../../archive/analyses/notebooks/dsml_faqs_chatbot.ipynb`](../../archive/analyses/notebooks/dsml_faqs_chatbot.ipynb)
   (TF-IDF/BM25 retrieval, Word2Vec/LDA, DistilGPT-2, FAISS, quantization, NER-for-PII).
-- MVP seam: [`../../code/app/modules/notifications/router.py`](../../code/app/modules/notifications/router.py) (`/notifications/chat`), Task L.
+- MVP seam: [`../../services/monolith/app/modules/notifications/router.py`](../../services/monolith/app/modules/notifications/router.py) (`/notifications/chat`), Task L.
 - [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md) · [`../mvp/25-module-elucidation.md`](../mvp/25-module-elucidation.md) · [`../mvp/26-conformance-pics.md`](../mvp/26-conformance-pics.md) (`PICS-NTF-004`).
 - Hub + shared template: [`README.md`](README.md).

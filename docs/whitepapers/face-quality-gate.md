@@ -3,8 +3,8 @@
 > *Type: Design note (companion to the six white papers) · Audience: complete novices → frontend/ML engineers &
 > privacy reviewers · Status: **MVP detection gate implemented (client-side)**; FaceNet recognition → FFP.*
 > *Not one of the six engine papers — a focused note on `PICS-FIL-005` / **ADR-011**. Code:
-> [`../../code/frontend/static/js/face-quality.js`](../../code/frontend/static/js/face-quality.js) (client) +
-> [`../../code/app/modules/files/imaging.py`](../../code/app/modules/files/imaging.py) (server). Hub: [`README.md`](README.md).*
+> [`../../services/monolith/frontend/static/js/face-quality.js`](../../services/monolith/frontend/static/js/face-quality.js) (client) +
+> [`../../services/monolith/app/modules/files/imaging.py`](../../services/monolith/app/modules/files/imaging.py) (server). Hub: [`README.md`](README.md).*
 
 ---
 
@@ -33,12 +33,12 @@ Two terms, defined once, because the difference is the whole privacy story:
 Per ADR-011's word — *client-side* — the detection gate runs **in the browser**, and the server does the
 non-face quality re-checks it already had:
 
-- **Client (implemented):** [`face-quality.js`](../../code/frontend/static/js/face-quality.js) — a dependency-free
+- **Client (implemented):** [`face-quality.js`](../../services/monolith/frontend/static/js/face-quality.js) — a dependency-free
   vanilla-JS module. On file selection it decodes the image on-device and checks **size, dimensions, brightness,
   sharpness (a blur proxy)**, and — best-effort — a **face *count*** via the browser's built-in `FaceDetector`
   API. It returns friendly warnings ("too dark", "blurry", "no clear face"). It is **advisory** — it never blocks
   the upload — and **graceful**: if `FaceDetector` isn't available, the face check is simply skipped.
-- **Server (unchanged, authoritative):** [`imaging.py`](../../code/app/modules/files/imaging.py) `process_image`
+- **Server (unchanged, authoritative):** [`imaging.py`](../../services/monolith/app/modules/files/imaging.py) `process_image`
   re-checks size/dimensions, **strips EXIF/GPS**, downscales, and runs its own blur check — because we never trust
   the client. `passes_face_quality_gate` is a deliberate **no-op**: the server computes **no** face data at all.
 
@@ -131,15 +131,15 @@ stored.
 
 ## Honest status
 
-The client gate is **implemented** ([`face-quality.js`](../../code/frontend/static/js/face-quality.js)); the server
+The client gate is **implemented** ([`face-quality.js`](../../services/monolith/frontend/static/js/face-quality.js)); the server
 seam is documented as a no-op by design. Because it is browser code, it is **not** exercised by the Python
 `make qa` suite — it needs a quick **manual browser check** on the upload screen (which is itself still to be built
 out in the frontend). So `PICS-FIL-005` stays **Planned** until that manual verification, per roadmap §14.
 
 ## References
 
-- Client: [`../../code/frontend/static/js/face-quality.js`](../../code/frontend/static/js/face-quality.js) ·
-  Server: [`../../code/app/modules/files/imaging.py`](../../code/app/modules/files/imaging.py).
+- Client: [`../../services/monolith/frontend/static/js/face-quality.js`](../../services/monolith/frontend/static/js/face-quality.js) ·
+  Server: [`../../services/monolith/app/modules/files/imaging.py`](../../services/monolith/app/modules/files/imaging.py).
 - [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md) (ADR-011) ·
   [`../mvp/26-conformance-pics.md`](../mvp/26-conformance-pics.md) (`PICS-FIL-005`).
 - Hub: [`README.md`](README.md).

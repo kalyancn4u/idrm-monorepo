@@ -5,7 +5,7 @@
 **By the end of this chapter you will be able to:** narrate a full request through the
 codebase from memory, extend the system confidently, and assess your own understanding.
 
-Files: all of [`services/monolith/app/`](../../code/app/) — this chapter connects everything.
+Files: all of [`services/monolith/app/`](../../services/monolith/app/) — this chapter connects everything.
 
 ---
 

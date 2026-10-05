@@ -5,8 +5,8 @@
 **By the end of this chapter you will be able to:** describe the test layout, explain the
 fixtures, know which tests run without a database, and use the one-command quality gate.
 
-Files: [`tests/`](../../code/tests/), [`tests/conftest.py`](../../code/tests/conftest.py),
-[`services/monolith/Makefile`](../../code/Makefile).
+Files: [`tests/`](../../services/monolith/tests/), [`tests/conftest.py`](../../services/monolith/tests/conftest.py),
+[`services/monolith/Makefile`](../../services/monolith/Makefile).
 
 ---
 

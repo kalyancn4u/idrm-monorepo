@@ -4,7 +4,7 @@
 > *The row-by-row deep-dive behind [`27-implementation-roadmap.md`](27-implementation-roadmap.md) §3.4 (the
 > **signed-off** seed spec) and [`50-data-model.md`](50-data-model.md) §9. Where §3.4 gives the **shape** of the
 > starter data, this gives the **exact rows** — and it is the written companion to the real script at
-> [`../../code/scripts/seed.py`](../../code/scripts/seed.py), loaded by `make seed`.*
+> [`../../services/monolith/scripts/seed.py`](../../services/monolith/scripts/seed.py), loaded by `make seed`.*
 
 ---
 
@@ -27,7 +27,7 @@ Two words you will see throughout, defined once:
   guarantee this by giving every seed row a **deterministic UUID** (a UUID computed from a stable text key, so the
   same row always gets the same id) and inserting it only if that id is not already present.
 
-> **Where the truth lives.** This document *describes* the dataset; [`../../code/scripts/seed.py`](../../code/scripts/seed.py)
+> **Where the truth lives.** This document *describes* the dataset; [`../../services/monolith/scripts/seed.py`](../../services/monolith/scripts/seed.py)
 > *is* the dataset. If they ever disagree, the script wins and this doc should be updated to match.
 
 ---
@@ -130,7 +130,7 @@ Notes that make these *correct*, not just present:
 
 Every incident's history is recorded as a row per transition (this is what feeds `GET /incidents/{id}/updates`).
 The seed generates them from each incident's path, with **staggered timestamps** (30 minutes apart) so the
-**response-time reports** ([`../../code/app/modules/reports`](../../code/app/modules/reports)) compute realistic
+**response-time reports** ([`../../services/monolith/app/modules/reports`](../../services/monolith/app/modules/reports)) compute realistic
 averages instead of zeros. Worked example for the `verified` incident:
 
 ```text
@@ -156,7 +156,7 @@ To make the dashboards, maps, and read-only trails non-empty, the seed also load
 - **Files** (2, metadata only — the bytes would live in MinIO) — an `incident_photo` on the `accepted` incident
   (uploaded by Rajesh) and a `completion_proof` on the `completed` incident (uploaded by Priya).
 - **Audit logs** (2) — `organization.verified` (Lakshmi verifying Priya Care) and `incident.approve` (Arjun),
-  so the append-only trail ([`../../code/app/modules/audit`](../../code/app/modules/audit)) has real entries.
+  so the append-only trail ([`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit)) has real entries.
 
 ---
 
@@ -164,7 +164,7 @@ To make the dashboards, maps, and read-only trails non-empty, the seed also load
 
 This full dataset is for **running the app** and **integration** tests. For **unit / API** tests, each module must
 stay independently testable, so it does **not** load the whole world. Those small, per-module fixtures live in
-[`../../code/tests/factories.py`](../../code/tests/factories.py) — e.g. `make_user(role=…)`,
+[`../../services/monolith/tests/factories.py`](../../services/monolith/tests/factories.py) — e.g. `make_user(role=…)`,
 `auth_provider_with_org(…)`, `make_org(…)` — and each module has its own `tests/{unit,api,integration}/<module>/`.
 Keep the two layers distinct: **factories** = minimal, per-test; **seed** = the rich, whole-system starter set.
 
@@ -172,7 +172,7 @@ Keep the two layers distinct: **factories** = minimal, per-test; **seed** = the 
 
 ## 7. Extending the dataset (how to add a row safely)
 
-1. Add the row to the matching list in [`../../code/scripts/seed.py`](../../code/scripts/seed.py) (e.g. `_USERS`,
+1. Add the row to the matching list in [`../../services/monolith/scripts/seed.py`](../../services/monolith/scripts/seed.py) (e.g. `_USERS`,
    `_ORGS`, `_INCIDENTS`).
 2. Give it a **stable key** so its `sid(...)` UUID is deterministic — that is what keeps `make seed` idempotent.
 3. Re-run `make seed`: existing rows are skipped, only the new one is inserted.
@@ -186,4 +186,4 @@ Keep the two layers distinct: **factories** = minimal, per-test; **seed** = the 
 - [`50-data-model.md`](50-data-model.md) — the 13 tables + enums these rows populate; §9 (idempotent seed)
 - [`11-requirements-scope-and-acceptance.md`](11-requirements-scope-and-acceptance.md) — the 8-state lifecycle
 - [`70-quality-test-strategy.md`](70-quality-test-strategy.md) — fixtures vs seed; the test layers
-- [`../../code/scripts/seed.py`](../../code/scripts/seed.py) — the authoritative script this doc describes
+- [`../../services/monolith/scripts/seed.py`](../../services/monolith/scripts/seed.py) — the authoritative script this doc describes

@@ -6,8 +6,8 @@
 typed object, override any of them from the environment, and trace how `main.py` assembles
 the app and stamps every request with a correlation id.
 
-Files: [`app/core/config.py`](../../code/app/core/config.py),
-[`app/main.py`](../../code/app/main.py).
+Files: [`app/core/config.py`](../../services/monolith/app/core/config.py),
+[`app/main.py`](../../services/monolith/app/main.py).
 
 ---
 
@@ -54,7 +54,7 @@ export DATABASE_URL="postgresql+asyncpg://idrm_user:realpass@db:5432/idrm_db"
 export LOG_LEVEL=DEBUG
 ```
 
-🧠 **Nuance:** the template file [`services/monolith/.env.example`](../../code/.env.example) documents
+🧠 **Nuance:** the template file [`services/monolith/.env.example`](../../services/monolith/.env.example) documents
 every variable; you copy it to `.env` and fill in real values. The `CHANGE_ME`
 placeholders are intentional trip-wires.[1]
 

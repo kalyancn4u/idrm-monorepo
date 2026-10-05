@@ -3,7 +3,7 @@
 > *Type: White paper (design-now / build-FFP) · Audience: complete novices → security/ML engineers & SREs ·
 > Status: engine → FFP; MVP seam shipped.*
 > *The intelligent successor to the MVP's **static** rate-limiter and allow/deny lists (roadmap §8.4). MVP seam:
-> [`../../code/app/core/rate_limit.py`](../../code/app/core/rate_limit.py). Hub: [`README.md`](README.md).*
+> [`../../services/monolith/app/core/rate_limit.py`](../../services/monolith/app/core/rate_limit.py). Hub: [`README.md`](README.md).*
 
 ---
 
@@ -169,7 +169,7 @@ automatic.
   **appeal path**, and hard blocks get **human review**. Auto-expiry prevents indefinite lock-out of a real victim.
 - **Transparency & proportionality.** Prefer the *least restrictive* effective action (throttle/challenge before
   block). Log security decisions to the append-only audit trail
-  ([`../../code/app/modules/audit`](../../code/app/modules/audit)).
+  ([`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit)).
 
 Cross-refs: [`../mvp/22-architecture-security-and-iam.md`](../mvp/22-architecture-security-and-iam.md) (security);
 [`../mvp/13-requirements-traceability-matrix.md`](../mvp/13-requirements-traceability-matrix.md) §4 (DPDP mapping).
@@ -214,7 +214,7 @@ review loop and appeal-overturn rate keep the system honest.
 
 ## References
 
-- MVP seam: [`../../code/app/core/rate_limit.py`](../../code/app/core/rate_limit.py) (static per-IP limiter) and
+- MVP seam: [`../../services/monolith/app/core/rate_limit.py`](../../services/monolith/app/core/rate_limit.py) (static per-IP limiter) and
   roadmap [`../mvp/27-implementation-roadmap.md`](../mvp/27-implementation-roadmap.md) §8.4 (static allow/deny lists).
 - Security & DPDP: [`../mvp/22-architecture-security-and-iam.md`](../mvp/22-architecture-security-and-iam.md) ·
   [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md) (APISIX gateway ADR) ·

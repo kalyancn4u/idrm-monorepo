@@ -6,10 +6,10 @@
 read a `ST_DWithin` proximity query, understand the pure-maths core, and say why the
 reverse-geocoder is deliberately offline.
 
-Files: [`locations/geo.py`](../../code/app/modules/locations/geo.py),
-[`locations/repository.py`](../../code/app/modules/locations/repository.py),
-[`locations/service.py`](../../code/app/modules/locations/service.py),
-[`incidents/repository.py`](../../code/app/modules/incidents/repository.py).
+Files: [`locations/geo.py`](../../services/monolith/app/modules/locations/geo.py),
+[`locations/repository.py`](../../services/monolith/app/modules/locations/repository.py),
+[`locations/service.py`](../../services/monolith/app/modules/locations/service.py),
+[`incidents/repository.py`](../../services/monolith/app/modules/incidents/repository.py).
 
 ---
 

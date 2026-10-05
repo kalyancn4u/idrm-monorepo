@@ -6,7 +6,7 @@
 say what each one is responsible for (and what it must *not* do), and read a request as
 it falls through them.
 
-Files: a representative module — [`app/modules/incidents/`](../../code/app/modules/incidents/)
+Files: a representative module — [`app/modules/incidents/`](../../services/monolith/app/modules/incidents/)
 (`models · schemas · repository · service · router`).
 
 ---
@@ -192,7 +192,7 @@ The rule is **cohesion, not uniformity**: put code where it belongs.[2]
   that touches the DB; **schemas** guard the wire.
 - Deviations (no table; extra files) follow **cohesion**, not uniformity.
 
-🛠️ **Try it:** open [`app/modules/audit/`](../../code/app/modules/audit/) — a small
+🛠️ **Try it:** open [`app/modules/audit/`](../../services/monolith/app/modules/audit/) — a small
 module — and match each file to its row in the table above. Notice it has a `service`
 and `repository` but its router only *reads* (Ch 9 explains why).
 

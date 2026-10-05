@@ -6,8 +6,8 @@
 read a log line, describe how secrets are kept out of logs, and trace how every error —
 yours or the framework's — becomes one consistent envelope.
 
-Files: [`app/core/logging.py`](../../code/app/core/logging.py),
-[`app/core/exceptions.py`](../../code/app/core/exceptions.py).
+Files: [`app/core/logging.py`](../../services/monolith/app/core/logging.py),
+[`app/core/exceptions.py`](../../services/monolith/app/core/exceptions.py).
 
 ---
 

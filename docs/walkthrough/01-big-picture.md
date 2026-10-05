@@ -6,8 +6,8 @@
 four ideas the codebase is built on, read the architecture diagram, and state the
 three "design laws" that keep the system correct.
 
-Files: the whole app under [`services/monolith/app/`](../../code/app/); the entry point is
-[`app/main.py`](../../code/app/main.py). No need to open them yet — this chapter is the map.
+Files: the whole app under [`services/monolith/app/`](../../services/monolith/app/); the entry point is
+[`app/main.py`](../../services/monolith/app/main.py). No need to open them yet — this chapter is the map.
 
 ---
 
@@ -209,7 +209,7 @@ grow by being correct first.
   only at the router edge.
 - The MVP is deliberately minimal; the FFP grows it without a rewrite.
 
-🛠️ **Try it:** open [`services/monolith/app/main.py`](../../code/app/main.py) and find the ten
+🛠️ **Try it:** open [`services/monolith/app/main.py`](../../services/monolith/app/main.py) and find the ten
 `app.include_router(...)` lines near the bottom. That list *is* the ten modules — you
 now know what each one is for.
 

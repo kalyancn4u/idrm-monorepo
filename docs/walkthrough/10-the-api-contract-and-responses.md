@@ -8,8 +8,8 @@ why the OpenAPI file is the source of contract truth.
 
 Files: [`docs/mvp/40-api-specification.md`](../mvp/40-api-specification.md),
 [`40-api-openapi.yaml`](../mvp/40-api-openapi.yaml),
-[`app/core/pagination.py`](../../code/app/core/pagination.py),
-[`app/core/exceptions.py`](../../code/app/core/exceptions.py).
+[`app/core/pagination.py`](../../services/monolith/app/core/pagination.py),
+[`app/core/exceptions.py`](../../services/monolith/app/core/exceptions.py).
 
 ---
 

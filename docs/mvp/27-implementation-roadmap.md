@@ -374,7 +374,7 @@ can be tested in isolation without loading the whole world.
 
 **A worked taste** (illustrative — the authoritative row-by-row dataset will live in a dedicated deep-dive
 sub-doc, [`34-seed-data-and-fixtures.md`](34-seed-data-and-fixtures.md), plus the real seed script at
-[`../../code/scripts/seed.py`](../../code/scripts/seed.py)):
+[`../../services/monolith/scripts/seed.py`](../../services/monolith/scripts/seed.py)):
 
 ```text
 users:        Rajesh Kumar  · role=citizen  · status=active · lang=en

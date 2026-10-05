@@ -6,10 +6,10 @@
 describe the session-per-request pattern, read a repository, understand soft-delete, and
 say how the schema is created and changed safely with migrations.
 
-Files: [`infrastructure/database/engine.py`](../../code/app/infrastructure/database/engine.py),
-[`base.py`](../../code/app/infrastructure/database/base.py),
-[`core/dependencies.py`](../../code/app/core/dependencies.py),
-[`alembic/versions/`](../../code/alembic/versions/).
+Files: [`infrastructure/database/engine.py`](../../services/monolith/app/infrastructure/database/engine.py),
+[`base.py`](../../services/monolith/app/infrastructure/database/base.py),
+[`core/dependencies.py`](../../services/monolith/app/core/dependencies.py),
+[`alembic/versions/`](../../services/monolith/alembic/versions/).
 
 ---
 
@@ -158,7 +158,7 @@ service (Ch 2, Ch 6).[1]
 - The schema is built and evolved **only by Alembic migrations**, including the PostGIS
   extension and the indexes the code relies on.
 
-🛠️ **Try it:** open [`alembic/versions/0001_users_baseline.py`](../../code/alembic/versions/0001_users_baseline.py)
+🛠️ **Try it:** open [`alembic/versions/0001_users_baseline.py`](../../services/monolith/alembic/versions/0001_users_baseline.py)
 and find `CREATE EXTENSION`. That one line is why every later spatial column just works.
 
 **Next:** [Chapter 6 — Security, Auth & RBAC](06-security-auth-and-rbac.md), where we learn

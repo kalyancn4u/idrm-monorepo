@@ -38,7 +38,7 @@ The MVP already records every ingredient this engine needs — it just doesn't *
   `rejected` is a *false/unsubstantiated* signal; `cancelled` is ambiguous. Plus `rating`/`review` on completion.
 - **Timeline & response** — `incident_updates` gives who did what, when (so we can measure provider speed).
 - **Completion proof** — `files` (an `incident_photo` / `completion_proof`) is evidence a job was really done.
-- **The append-only audit trail** — [`../../code/app/modules/audit`](../../code/app/modules/audit) is the tamper-
+- **The append-only audit trail** — [`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit) is the tamper-
   evident history the scores are computed from.
 - **Account signals** — `users.status`, `email_verified`, account age.
 
@@ -195,10 +195,10 @@ not an afterthought.
 
 ## References
 
-- MVP seams: [`../../code/app/modules/audit`](../../code/app/modules/audit) (trail),
-  [`../../code/app/modules/resources`](../../code/app/modules/resources) (org verification),
-  [`../../code/app/modules/incidents`](../../code/app/modules/incidents) (lifecycle + ratings),
-  [`../../code/app/modules/files`](../../code/app/modules/files) (completion proof).
+- MVP seams: [`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit) (trail),
+  [`../../services/monolith/app/modules/resources`](../../services/monolith/app/modules/resources) (org verification),
+  [`../../services/monolith/app/modules/incidents`](../../services/monolith/app/modules/incidents) (lifecycle + ratings),
+  [`../../services/monolith/app/modules/files`](../../services/monolith/app/modules/files) (completion proof).
 - [`../mvp/21-architecture-decisions.md`](../mvp/21-architecture-decisions.md) (ADR-011, detection-not-biometric) ·
   [`../mvp/25-module-elucidation.md`](../mvp/25-module-elucidation.md) · [`../mvp/26-conformance-pics.md`](../mvp/26-conformance-pics.md).
 - Feeds **Paper 5** (incident-notification routing / provider matching): [`5-recommender-incident-notification-routing.md`](5-recommender-incident-notification-routing.md).

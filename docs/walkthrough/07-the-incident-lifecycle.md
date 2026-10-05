@@ -6,9 +6,9 @@
 the transition table, explain single-claim / critical-approval / ownership, and say why
 modeling this as an explicit state machine prevents whole classes of bugs.
 
-Files: [`incidents/lifecycle.py`](../../code/app/modules/incidents/lifecycle.py),
-[`incidents/service.py`](../../code/app/modules/incidents/service.py),
-[`incidents/router.py`](../../code/app/modules/incidents/router.py).
+Files: [`incidents/lifecycle.py`](../../services/monolith/app/modules/incidents/lifecycle.py),
+[`incidents/service.py`](../../services/monolith/app/modules/incidents/service.py),
+[`incidents/router.py`](../../services/monolith/app/modules/incidents/router.py).
 
 ---
 

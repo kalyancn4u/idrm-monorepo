@@ -164,7 +164,7 @@ improve ranking.
 - **Fairness / load.** Don't always route to the same top provider (monopoly + burnout); balance load and give
   newer, credible providers a fair chance (bounded exploration) — never at the cost of speed for a critical case.
 - **Audit.** Routing/assignment decisions hit the append-only trail
-  ([`../../code/app/modules/audit`](../../code/app/modules/audit)).
+  ([`../../services/monolith/app/modules/audit`](../../services/monolith/app/modules/audit)).
 
 Cross-refs: [`../mvp/22-architecture-security-and-iam.md`](../mvp/22-architecture-security-and-iam.md);
 [`../mvp/13-requirements-traceability-matrix.md`](../mvp/13-requirements-traceability-matrix.md) §4 (DPDP).
@@ -210,9 +210,9 @@ The two poles that define success are **under-response rate ≈ 0** (nothing fal
 - Method backbone: [`../../archive/analyses/notebooks/Zee_Recommender_System_Final.ipynb`](../../archive/analyses/notebooks/Zee_Recommender_System_Final.ipynb)
   & [`Zee_Recommender_Academic_v2.ipynb`](../../archive/analyses/notebooks/Zee_Recommender_Academic_v2.ipynb) (CF, MF SVD/ALS, KNN, ensemble; RMSE/MAE).
 - Consumes **Paper 3** (credibility): [`3-credibility-assessment.md`](3-credibility-assessment.md).
-- MVP seams: [`../../code/app/modules/locations`](../../code/app/modules/locations) (`/nearby`),
-  [`../../code/app/modules/incidents`](../../code/app/modules/incidents) (`/incidents/nearby`, single-claim),
-  [`../../code/app/modules/notifications`](../../code/app/modules/notifications) (NTF-001, preferences),
-  [`../../code/app/modules/resources`](../../code/app/modules/resources) (service_categories, capacity).
+- MVP seams: [`../../services/monolith/app/modules/locations`](../../services/monolith/app/modules/locations) (`/nearby`),
+  [`../../services/monolith/app/modules/incidents`](../../services/monolith/app/modules/incidents) (`/incidents/nearby`, single-claim),
+  [`../../services/monolith/app/modules/notifications`](../../services/monolith/app/modules/notifications) (NTF-001, preferences),
+  [`../../services/monolith/app/modules/resources`](../../services/monolith/app/modules/resources) (service_categories, capacity).
 - [`../mvp/25-module-elucidation.md`](../mvp/25-module-elucidation.md) · [`../mvp/26-conformance-pics.md`](../mvp/26-conformance-pics.md) (`PICS-RES-003`).
 - Hub + shared template: [`README.md`](README.md).

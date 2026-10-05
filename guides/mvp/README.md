@@ -4,7 +4,7 @@
 
 > New to the project? Start at the repository front door [`../../README.md`](../../README.md) and the
 > documentation hub [`../../docs/README.md`](../../docs/README.md). The MVP application code these guides teach
-> toward is written and lives in [`../../code/`](../../code/).
+> toward is written and lives in [`../../services/monolith/`](../../services/monolith/).
 
 This folder holds the **MVP novice-friendly guides** (tutorials & how-tos: getting started, setup, walkthroughs).
 
