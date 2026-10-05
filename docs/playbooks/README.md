@@ -8,7 +8,8 @@ Operational guides for building and running the IDRM monorepo.
 |---|---|
 | implementation-playbook.md | What is the mental model? (structure, contract, loop) |
 | action-plan.md             | What is the ordered execution? (9 phases) |
-| makefile-playbook.md       | What does each Makefile target do? |
+| makefile-playbook.md       | What does each Makefile target do, and why? |
+| makefile-reference.md      | What is the actual Makefile code? |
 | bun-commands.md            | What Bun commands do I type? |
 | migration-mapping.md       | What moved from where during the restructure? |
 
@@ -21,9 +22,10 @@ read implementation-playbook.md first, then action-plan.md.
 
 1. implementation-playbook.md - the mental model.
 2. action-plan.md - the concrete steps.
-3. makefile-playbook.md - the daily tasks.
-4. bun-commands.md - the command cheat sheet.
-5. migration-mapping.md - the historical record.
+3. makefile-playbook.md - the daily tasks explained.
+4. makefile-reference.md - the Makefile code.
+5. bun-commands.md - the command cheat sheet.
+6. migration-mapping.md - the historical record.
 
 ## Next steps
 
