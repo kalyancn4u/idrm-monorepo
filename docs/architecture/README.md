@@ -12,6 +12,8 @@ Documents that explain how the IDRM monorepo is structured and why.
 | contract-testing.md       | How do we prove the backend honours the contract? |
 | layered-architecture.md   | How many layers, and which layer does what? |
 | language-stack.md         | Why these five languages, and not more? |
+| supporting-languages.md   | SQL, YAML, JSON, Protobuf, gRPC, HCL, Ansible, Bash |
+| tooling-decisions.md      | Why Bun, Turborepo, and Expo |
 
 ## Who should read this
 
@@ -25,7 +27,7 @@ Six top-level areas: apps/, packages/, services/, shared/, infra/, gateway/.
 Four network tiers: presentation, edge, domain, data. Four internal layers
 per service: controller, service, domain, repository. Five languages:
 Python, TypeScript, JavaScript, Go, Java. One contract, one typed client,
-many consumers.
+many consumers. Bun installs; Turborepo orchestrates; Expo packages.
 
 ## Next steps
 
