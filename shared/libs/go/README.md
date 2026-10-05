@@ -1,0 +1,2 @@
+# Shared go library
+Placeholder.

@@ -1,0 +1,20 @@
+{
+  // ---------------------------------------------------------------------------
+  // IDRM docs — Markdown link behaviour (see archive/instructions.txt §13)
+  // ---------------------------------------------------------------------------
+  // In the Markdown PREVIEW pane, clicking a link to another .md opens the REAL
+  // file in the editor (instead of just navigating the preview). Single-click,
+  // no extra gesture needed.
+  "markdown.preview.openMarkdownLinks": "inEditor",
+
+  // Flag broken cross-document links / missing files / bad #headers as you edit,
+  // so links keep working without a manual audit. (%20-encoded spaces are fine.)
+  "markdown.validate.enabled": true,
+  "markdown.validate.fileLinks.enabled": "warning",
+  "markdown.validate.fragmentLinks.enabled": "warning",
+
+  // NOTE: In the raw Markdown EDITOR (not Preview), VS Code always requires
+  // Ctrl+Click (Windows/Linux) or Cmd+Click (macOS) to follow a link — that is
+  // built-in behaviour and cannot be changed by a setting. Use the Preview pane
+  // (Ctrl+Shift+V) if you prefer single-click navigation.
+}

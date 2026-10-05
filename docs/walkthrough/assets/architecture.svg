@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="884" viewBox="0 0 900 884" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" role="img" aria-label="Architecture of the IDRM MVP FastAPI modular monolith: an HTTP request from the web client flows through the FastAPI app (request-id and JSON logging middleware), into a module router, through the shared guards (JWT auth, RBAC, rate limit, DB session), into a service that enforces business rules such as the incident lifecycle, then a repository, then PostgreSQL with PostGIS as the single source of truth; the response is returned as one data-and-pagination or error envelope. MinIO stores file objects; audit and notifications are composed at the router edge. Design laws: PostGIS is the source of truth, the api/v1 contract is frozen, and modules compose only at the router edge.">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/>
+    </marker>
+    <marker id="arrowDash" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1a7f37"/>
+    </marker>
+  </defs>
+
+  <!-- self-contained background so the diagram is readable on any page theme -->
+  <rect x="0" y="0" width="900" height="884" rx="14" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+
+  <text x="450" y="40" text-anchor="middle" font-size="21" font-weight="700" fill="#1f2328">IDRM MVP — how one request flows through the modular monolith</text>
+  <text x="450" y="64" text-anchor="middle" font-size="12.5" fill="#57606a">Top to bottom is exactly the path each chapter zooms into. One deployable app; clean layers.</text>
+
+  <!-- ============ central pipeline (x=300..600) ============ -->
+  <!-- B1 Client -->
+  <rect x="300" y="88" width="300" height="46" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="116" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Web client — HTML + Tailwind + JS + Leaflet</text>
+
+  <!-- B2 FastAPI app / middleware -->
+  <rect x="300" y="150" width="300" height="60" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="176" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">FastAPI app (app/main.py)</text>
+  <text x="450" y="196" text-anchor="middle" font-size="11.5" fill="#57606a">X-Request-Id + JSON logging middleware   ·   Ch 3–4</text>
+
+  <!-- B3 Router -->
+  <rect x="300" y="226" width="300" height="52" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="250" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Module router   /api/v1/…</text>
+  <text x="450" y="268" text-anchor="middle" font-size="11.5" fill="#57606a">one of 10 modules   ·   Ch 2</text>
+
+  <!-- B4 Guards / dependencies -->
+  <rect x="300" y="294" width="300" height="66" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="318" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Shared guards (app/core/dependencies)</text>
+  <text x="450" y="336" text-anchor="middle" font-size="11.5" fill="#57606a">Bearer→claims (RS256) · require_role (RBAC)</text>
+  <text x="450" y="352" text-anchor="middle" font-size="11.5" fill="#57606a">rate_limit · get_db (session)   ·   Ch 6</text>
+
+  <!-- B5 Service -->
+  <rect x="300" y="376" width="300" height="66" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="400" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Service — business rules</text>
+  <text x="450" y="418" text-anchor="middle" font-size="11.5" fill="#57606a">e.g. the incident lifecycle state machine</text>
+  <text x="450" y="434" text-anchor="middle" font-size="11.5" fill="#57606a">Ch 7</text>
+
+  <!-- B6 Repository -->
+  <rect x="300" y="458" width="300" height="52" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="482" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Repository (async SQLAlchemy)</text>
+  <text x="450" y="500" text-anchor="middle" font-size="11.5" fill="#57606a">the only layer that touches the DB   ·   Ch 5</text>
+
+  <!-- B7 Postgres/PostGIS -->
+  <rect x="300" y="526" width="300" height="64" rx="10" fill="#eef2ff" stroke="#3b5bdb" stroke-width="2.2"/>
+  <text x="450" y="550" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">PostgreSQL 16 + PostGIS 3.4</text>
+  <text x="450" y="568" text-anchor="middle" font-size="11.5" fill="#57606a">single source of truth (spatial + relational)</text>
+  <text x="450" y="584" text-anchor="middle" font-size="11.5" fill="#57606a">Ch 5, 8</text>
+
+  <!-- B8 Response envelope -->
+  <rect x="300" y="606" width="300" height="58" rx="10" fill="#ffffff" stroke="#3b5bdb" stroke-width="1.6"/>
+  <text x="450" y="630" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Response: one JSON envelope</text>
+  <text x="450" y="648" text-anchor="middle" font-size="11.5" fill="#57606a">{data, pagination} · single item · error{code}   ·   Ch 10</text>
+
+  <!-- central arrows -->
+  <line x1="450" y1="134" x2="450" y2="149" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="210" x2="450" y2="225" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="278" x2="450" y2="293" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="360" x2="450" y2="375" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="442" x2="450" y2="457" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="510" x2="450" y2="525" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="450" y1="590" x2="450" y2="605" stroke="#57606a" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- ============ left column: cross-cutting composed at the router edge ============ -->
+  <rect x="30" y="356" width="236" height="96" rx="10" fill="#ffffff" stroke="#1a7f37" stroke-width="1.6"/>
+  <text x="148" y="380" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">Cross-cutting (router edge)</text>
+  <text x="148" y="400" text-anchor="middle" font-size="11.5" fill="#57606a">Audit — append-only trail</text>
+  <text x="148" y="418" text-anchor="middle" font-size="11.5" fill="#57606a">Notifications — notify requester</text>
+  <text x="148" y="438" text-anchor="middle" font-size="11.5" fill="#57606a">one-directional · Ch 9</text>
+  <path d="M300,409 L268,404" stroke="#1a7f37" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#arrowDash)"/>
+
+  <!-- ============ right node: MinIO ============ -->
+  <rect x="634" y="452" width="236" height="64" rx="10" fill="#ffffff" stroke="#1a7f37" stroke-width="1.6"/>
+  <text x="752" y="478" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">MinIO (S3-compatible)</text>
+  <text x="752" y="497" text-anchor="middle" font-size="11.5" fill="#57606a">file objects; DB stores keys · Ch 9</text>
+  <path d="M600,484 L632,484" stroke="#1a7f37" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#arrowDash)"/>
+
+  <!-- ============ design laws footer ============ -->
+  <rect x="30" y="694" width="840" height="166" rx="12" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+  <text x="50" y="722" font-size="13" font-weight="700" fill="#5b6570" letter-spacing="0.7">THREE DESIGN LAWS THAT KEEP THE SYSTEM COHERENT</text>
+
+  <text x="50" y="752" font-size="14" font-weight="700" fill="#3b5bdb">Law 1</text>
+  <text x="120" y="752" font-size="13.5" fill="#1f2328">PostGIS is the single source of truth. MinIO holds only file bytes; the DB stores keys/URLs, never blobs.</text>
+
+  <text x="50" y="786" font-size="14" font-weight="700" fill="#3b5bdb">Law 2</text>
+  <text x="120" y="786" font-size="13.5" fill="#1f2328">The /api/v1 contract is frozen. The FFP only ADDS endpoints at the same paths — it never renames them.</text>
+
+  <text x="50" y="820" font-size="14" font-weight="700" fill="#3b5bdb">Law 3</text>
+  <text x="120" y="820" font-size="13.5" fill="#1f2328">Modules compose only at the router edge (feature → audit, feature → notifications), so services stay pure.</text>
+
+  <text x="50" y="848" font-size="12" fill="#57606a">MVP = one deployable FastAPI monolith. The same module boundaries later become FFP microservices (Strangler Fig) — no rewrite.</text>
+</svg>

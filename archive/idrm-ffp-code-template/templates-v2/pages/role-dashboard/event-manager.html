@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Event Manager Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+</head>
+<body>
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- ROLE DASHBOARD · EVENT_MANAGER (L5) · Scope: Event · Render: FastAPI (F) -->
+  <div class="role-strip role-EVENT_MANAGER" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="event-manager.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role">EVENT_MANAGER</span>
+        </div>
+        <span class="render-tier tier-F" title="Rendered by FastAPI — RBAC-gated, per-user"><span class="dotc"></span>FastAPI</span>
+      </div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="event-manager.html" class="active" aria-current="page">Console</a></li>
+        <li><a href="#requests">Attached requests</a></li>
+        <li><a href="#assign">Assignment</a></li>
+        <li><a href="../shared/notifications.html" class="nav-badge">Alerts <span class="dot" aria-hidden="true"></span></a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="../shared/profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="app-sidebar">
+      <nav aria-label="Primary">
+        <ul class="side-nav">
+          <li><a href="event-manager.html" class="active" aria-current="page"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span> Event console</a></li>
+          <li><a href="#requests"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Attached requests</a></li>
+          <li><a href="#assign"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Assignment board</a></li>
+          <li><a href="../map/dm-authority-zone.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Event area</a></li>
+          <li><a href="../shared/notifications.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></span> Notifications</a></li>
+          <li><a href="../shared/profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div>
+          <h1 style="margin-bottom:var(--space-1);">Hyderabad Floods — Madhapur</h1>
+          <p class="text-muted" style="margin:0;">Event #evt-HYD-2026-03 · <span class="badge badge-warning">ACTIVE</span> · opened 2 days ago</p>
+        </div>
+        <button class="btn btn-secondary" onclick="idrmToast('Event report generated (mockup)','success')">Generate report</button>
+      </div>
+
+      <div class="scope-banner scope-limited" role="note">
+        <span class="scope-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
+        <div class="scope-body">
+          <span class="scope-tag">Scope · This event only (<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> limited)</span>
+          <p>You run <strong>one disaster-event instance</strong>: link requests, coordinate providers and volunteers inside it, manage its timeline. You <strong>cannot approve / reject</strong> requests (that is DM Authority) and cannot create requests.</p>
+        </div>
+      </div>
+
+      <section class="section grid grid-4">
+        <div class="card"><div class="stat"><span class="stat-label">Attached requests</span><span class="stat-value">126</span><span class="stat-trend">18 unassigned</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Providers engaged</span><span class="stat-value">11</span><span class="stat-trend">4 orgs</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Volunteers</span><span class="stat-value">34</span><span class="stat-trend">in 5 wards</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Resolved</span><span class="stat-value">71%</span><span class="stat-trend up">+9% today</span></div></div>
+      </section>
+
+      <section class="section" id="requests">
+        <h3>Requests attached to this event</h3>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Type</th><th>Priority</th><th>Status</th><th>Ward</th><th>Assign</th></tr></thead>
+            <tbody>
+              <tr><td>#a1b2</td><td><span class="svc-dot svc-MEDICAL"></span> MEDICAL</td><td><span class="prio prio-CRITICAL">CRITICAL</span></td><td><span class="status status-APPROVED">APPROVED</span></td><td>Madhapur</td><td><button class="btn btn-outline btn-sm" id="assign" onclick="idrmToast('Provider assigned within event (mockup)','success')">Assign</button></td></tr>
+              <tr><td>#c3d4</td><td><span class="svc-dot svc-FOOD"></span> FOOD</td><td><span class="prio prio-MEDIUM">MEDIUM</span></td><td><span class="status status-ACCEPTED">ACCEPTED</span></td><td>Kondapur</td><td><span class="text-small muted">Team B</span></td></tr>
+              <tr><td>#e5f6</td><td><span class="svc-dot svc-WATER"></span> WATER</td><td><span class="prio prio-HIGH">HIGH</span></td><td><span class="status status-IN_PROGRESS">IN_PROGRESS</span></td><td>Gachibowli</td><td><span class="text-small muted">Mobile U2</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="api-note">
+        <strong>Access ·</strong> EVENT_MANAGER (default). Runs the event; <strong>no approve/reject, no create</strong>.<br>
+        <strong>Scope ·</strong> Event — requests where <code>event_id = my_event</code>; <em>Manage users · <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Event</em> (assign within the event only).<br>
+        <strong>Render ·</strong> <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> — event-scoped queries + assignment writes; report generation is Python-side. <code>no-store</code>.<br>
+        <strong>API ·</strong> <code>GET /api/v1/services?event=evt-HYD-2026-03</code> · <code>GET /api/v1/events/{id}</code> · assignment via service action endpoints.
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Request help</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="has-bottom-nav">
+  <!-- PAGE 06 · Create Service Request · Who: Citizen/Volunteer · API: GET /users/me (prefill) · POST /services -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="05-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">CITIZEN</span></div>
+      <div class="nav-actions"><a href="05-dashboard.html" class="btn btn-ghost btn-sm">← Back to dashboard</a><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="container" style="max-width:880px;">
+    <div class="page-head">
+      <div>
+        <h1 style="margin-bottom:var(--space-1);">Request help</h1>
+        <p class="text-muted" style="margin:0;">Tell us what you need and where. Emergencies are auto-approved.</p>
+      </div>
+    </div>
+
+    <!-- progress steps -->
+    <div class="steps" aria-hidden="true">
+      <div class="step active"><span class="num">1</span> What &amp; how urgent</div>
+      <div class="step active"><span class="num">2</span> Where</div>
+      <div class="step active"><span class="num">3</span> Who &amp; privacy</div>
+    </div>
+
+    <form data-demo-form novalidate>
+      <div class="grid grid-2" style="align-items:start;">
+        <!-- LEFT: what -->
+        <div class="card">
+          <h3 class="mt-0">1 · What do you need?</h3>
+          <div class="form-group">
+            <label class="form-label required" for="service_type">Service type</label>
+            <select id="service_type" required>
+              <option value="" disabled selected>Choose a service…</option>
+              <option value="RESCUE">🛟 RESCUE — trapped / evacuation</option>
+              <option value="MEDICAL">🚑 MEDICAL — injury / ambulance</option>
+              <option value="FOOD">🍲 FOOD — meals / rations</option>
+              <option value="WATER">💧 WATER — drinking water</option>
+              <option value="SHELTER">🏚️ SHELTER — safe place to stay</option>
+              <option value="OTHER">❓ OTHER</option>
+            </select>
+            <p class="form-hint">Sent UPPERCASE to the API (e.g. <code>MEDICAL</code>).</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required" for="priority">Priority</label>
+            <select id="priority" required>
+              <option value="CRITICAL">🔴 CRITICAL — life-threatening</option>
+              <option value="HIGH" selected>🟠 HIGH — urgent</option>
+              <option value="MEDIUM">🟡 MEDIUM — needed soon</option>
+              <option value="LOW">🟢 LOW — when possible</option>
+            </select>
+            <p class="form-hint">CRITICAL / HIGH emergencies are <strong>auto-approved</strong> by the system.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label required" for="description">Describe the situation</label>
+            <textarea id="description" rows="4" minlength="10" maxlength="500" required placeholder="e.g. Elderly person needs an ambulance, water rising fast near the temple."></textarea>
+            <p class="form-hint">10–500 characters.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="num_people">People affected</label>
+            <input type="number" id="num_people" min="1" max="1000" value="1">
+          </div>
+        </div>
+
+        <!-- RIGHT: where + who -->
+        <div class="flex flex-col gap-6">
+          <div class="card">
+            <h3 class="mt-0">2 · Where are you?</h3>
+            <div class="map-canvas" style="min-height:220px;" data-map data-lat="17.4435" data-lng="78.3772" data-zoom="13"
+                 data-markers='[{"lat":17.4435,"lng":78.3772,"priority":"HIGH","title":"Your pinned location","link":false}]'>
+              <span class="map-pin HIGH" style="left:50%;top:50%;"></span>
+              <div class="map-note" style="align-items:end;padding-bottom:var(--space-3);">Tap the map to drop a pin · live map loads here</div>
+            </div>
+            <div class="flex gap-2 mt-4 flex-wrap">
+              <button type="button" class="btn btn-outline btn-sm" data-use-location="coords"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Use my location</button>
+              <input type="text" id="coords" placeholder="lat, lng" style="flex:1;min-width:140px;" aria-label="Coordinates" readonly>
+            </div>
+            <div class="form-group mt-4">
+              <label class="form-label" for="address">Address (optional)</label>
+              <input type="text" id="address" placeholder="Auto-filled from the pin (reverse geocode)">
+              <p class="form-hint">GeoJSON sends <code>[longitude, latitude]</code> — the reverse of how maps show it.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="mt-0">3 · Contact &amp; privacy</h3>
+            <div class="form-group">
+              <label class="form-label" for="contact_phone">Contact phone</label>
+              <input type="tel" id="contact_phone" data-validate="phone" value="+91 98765 43210">
+              <p class="form-hint">Defaults to your profile phone.</p>
+            </div>
+            <div class="form-group">
+              <span class="form-label required">Who can see your name &amp; phone?</span>
+              <div class="privacy-options">
+                <label class="privacy-option">
+                  <input type="radio" name="privacy_level" value="PUBLIC">
+                  <span class="privacy-option-body">
+                    <span class="privacy privacy-PUBLIC">PUBLIC</span>
+                    <span class="form-hint">Your name &amp; phone are visible to everyone on the public map.</span>
+                  </span>
+                </label>
+                <label class="privacy-option">
+                  <input type="radio" name="privacy_level" value="PROTECTED" checked>
+                  <span class="privacy-option-body">
+                    <span class="flex items-center gap-2" style="flex-wrap:wrap;">
+                      <span class="privacy privacy-PROTECTED"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> PROTECTED</span>
+                      <span class="badge badge-neutral">Default</span>
+                    </span>
+                    <span class="form-hint">Hidden from the public; responders get your contact through the system.</span>
+                  </span>
+                </label>
+                <label class="privacy-option">
+                  <input type="radio" name="privacy_level" value="PRIVATE">
+                  <span class="privacy-option-body">
+                    <span class="privacy privacy-PRIVATE"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> PRIVATE</span>
+                    <span class="form-hint">Most restricted &mdash; shared only with the assigned responder and the authority.</span>
+                  </span>
+                </label>
+              </div>
+              <p class="form-hint" style="margin-top:var(--space-2);">Privacy can only be raised later, never lowered.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 justify-end mt-6 flex-wrap">
+        <a href="05-dashboard.html" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-primary btn-lg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Submit request</button>
+      </div>
+    </form>
+
+    <div class="api-note"><strong>Access ·</strong> CITIZEN (default), VOLUNTEER, ORGANIZER, DM_AUTHORITY, ADMIN may create requests (Permission Matrix §3.3); PROVIDER / MANAGER / EVENT_MANAGER / AUDITOR cannot.<br>
+      <strong>API ·</strong> <code>POST /api/v1/services</code> →
+      <code>{ service_type, priority, description, location:{type:"Point",coordinates:[lng,lat]}, address, num_people_affected, privacy_level, contact_phone }</code>.
+      Success <code>201</code> → toast with request id → redirect to <a href="07-service-detail.html">service-detail?id={id}</a>. Status starts at <span class="status status-SUBMITTED">SUBMITTED</span>.
+    </div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="05-dashboard.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Home</a>
+    <a href="09-map.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a>
+    <a href="06-create-service.html" class="active"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request</a>
+    <a href="08-my-services.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Requests</a>
+    <a href="11-profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a>
+  </nav>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

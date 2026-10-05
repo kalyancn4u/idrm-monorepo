@@ -1,0 +1,2 @@
+# Shared ts library
+Placeholder.

@@ -1,0 +1,70 @@
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>

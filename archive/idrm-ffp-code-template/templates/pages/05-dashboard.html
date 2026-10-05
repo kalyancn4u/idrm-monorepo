@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="has-bottom-nav">
+  <!-- PAGE 05 · Dashboard · Who: any authenticated user (role-aware) -->
+  <!-- API: GET /users/me · GET /services?status=SUBMITTED,IN_PROGRESS · GET /notifications?read=false · GET /analytics/dashboard (auth roles) -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="05-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">CITIZEN</span></div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="05-dashboard.html" class="active" aria-current="page">Dashboard</a></li>
+        <li><a href="09-map.html">Map</a></li>
+        <li><a href="08-my-services.html">My requests</a></li>
+        <li><a href="10-notifications.html" class="nav-badge">Alerts <span class="dot" aria-hidden="true"></span></a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="06-create-service.html" class="btn btn-primary btn-sm" style="color:#fff;">+ Request help</a>
+        <a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="app-sidebar">
+      <nav aria-label="Primary">
+        <ul class="side-nav">
+          <li><a href="05-dashboard.html" class="active" aria-current="page"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Dashboard</a></li>
+          <li><a href="06-create-service.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request help</a></li>
+          <li><a href="08-my-services.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> My requests</a></li>
+          <li><a href="09-map.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Live map</a></li>
+          <li><a href="10-notifications.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></span> Notifications</a></li>
+          <li><a href="11-profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="app-main">
+      <div class="page-head">
+        <div>
+          <h1 style="margin-bottom:var(--space-1);">Hello, Aarthi 👋</h1>
+          <p class="text-muted" style="margin:0;">Here's what's happening with your requests.</p>
+        </div>
+        <a href="06-create-service.html" class="btn btn-primary">+ New request</a>
+      </div>
+
+      <!-- Role hint (mockup aid; not shown in production) -->
+      <div class="alert alert-review" role="note">
+        <div class="alert-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></div>
+        <div class="alert-content">
+          <p class="alert-title">Role-aware page</p>
+          <p class="alert-message">This view is for <strong>CITIZEN/VOLUNTEER</strong>. <strong>PROVIDER</strong> sees assigned/available work; <strong>DM_AUTHORITY/ADMIN</strong> sees the analytics summary &amp; pending approvals (see pages 12–15).</p>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <section class="section grid grid-3">
+        <div class="card"><div class="stat"><span class="stat-label">Active requests</span><span class="stat-value">2</span><span class="stat-trend">1 in progress</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Awaiting review</span><span class="stat-value">1</span><span class="stat-trend">submitted today</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Completed</span><span class="stat-value">5</span><span class="stat-trend up">all verified</span></div></div>
+      </section>
+
+      <div class="grid" style="grid-template-columns:1fr;">
+        <div class="grid grid-2" style="align-items:start;">
+          <!-- Active requests list -->
+          <section>
+            <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Your active requests</h3><a href="08-my-services.html" class="text-small">View all →</a></div>
+            <div class="list-stack">
+              <a href="07-service-detail.html" class="list-row" style="text-decoration:none;color:inherit;">
+                <span class="svc-dot svc-MEDICAL" aria-hidden="true" style="margin-top:6px;"></span>
+                <div class="flex-1">
+                  <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;">
+                    <span class="strong">Medical · Ambulance needed</span>
+                    <span class="status status-IN_PROGRESS">● IN_PROGRESS</span>
+                  </div>
+                  <p class="text-muted" style="margin:var(--space-1) 0 0;">Kukatpally, Hyderabad · 3 people · <span class="prio prio-CRITICAL">CRITICAL</span></p>
+                </div>
+              </a>
+              <a href="07-service-detail.html" class="list-row" style="text-decoration:none;color:inherit;">
+                <span class="svc-dot svc-WATER" aria-hidden="true" style="margin-top:6px;"></span>
+                <div class="flex-1">
+                  <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;">
+                    <span class="strong">Water · Drinking water for shelter</span>
+                    <span class="status status-SUBMITTED">● SUBMITTED</span>
+                  </div>
+                  <p class="text-muted" style="margin:var(--space-1) 0 0;">Kukatpally, Hyderabad · 40 people · <span class="prio prio-HIGH">HIGH</span></p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Recent notifications -->
+          <section>
+            <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Recent alerts</h3><a href="10-notifications.html" class="text-small">All notifications →</a></div>
+            <div class="list-stack">
+              <div class="list-row unread">
+                <span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+                <div class="flex-1"><span class="strong">Provider accepted your request</span><p class="text-muted" style="margin:var(--space-1) 0 0;">Apollo First-Response is on the way · ETA 12 min</p><span class="text-small">2 min ago</span></div>
+              </div>
+              <div class="list-row">
+                <span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <div class="flex-1"><span class="strong">Request approved</span><p class="text-muted" style="margin:var(--space-1) 0 0;">Your water request is now visible to providers.</p><span class="text-small">1 hr ago</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Mini map -->
+        <section class="section">
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Your requests on the map</h3><a href="09-map.html" class="text-small">Open full map →</a></div>
+          <div class="map-canvas" style="min-height:260px;" data-map data-lat="17.46" data-lng="78.40" data-zoom="11"
+               data-markers='[{"lat":17.4948,"lng":78.3996,"priority":"CRITICAL","title":"Medical · Ambulance #a1b2c3"},{"lat":17.4435,"lng":78.3772,"priority":"HIGH","title":"Water · #d4e5f6"}]'>
+            <span class="map-pin CRITICAL" style="left:38%;top:46%;"></span>
+            <span class="map-pin HIGH" style="left:62%;top:60%;"></span>
+            <div class="map-note"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg> Live map (Leaflet + OpenStreetMap) loads here · priority-colored markers · this static view is the offline fallback.</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="api-note"><strong>Access ·</strong> Any signed-in role (role-aware) — default CITIZEN; also VOLUNTEER, ORGANIZER, PROVIDER, MANAGER, EVENT_MANAGER, DM_AUTHORITY, AUDITOR, ADMIN.<br>
+        <strong>API ·</strong> on load: <code>GET /api/v1/users/me</code> (name/role) ·
+        <code>GET /api/v1/services?status=SUBMITTED,IN_PROGRESS</code> (active) ·
+        <code>GET /api/v1/notifications?read=false</code> (badge) ·
+        <code>GET /api/v1/analytics/dashboard</code> (DM_AUTHORITY/ADMIN only).
+        Auth guard: redirect to <a href="03-login.html">login</a> if no token.
+      </div>
+    </main>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="05-dashboard.html" class="active"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Home</a>
+    <a href="09-map.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a>
+    <a href="06-create-service.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request</a>
+    <a href="08-my-services.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Requests</a>
+    <a href="11-profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a>
+  </nav>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

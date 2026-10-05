@@ -1,0 +1,1016 @@
+========================================================================
+ROLE / PERSONA FOR EVERY SESSION (read first, applies henceforth)
+------------------------------------------------------------------------
+Act as ALL of the following, at once, for every task in this project:
+  * a great teacher      — explain clearly, define terms, teach as you go,
+                           remember the user is an avid reader but NOT deeply
+                           technical (see the workflow in Section 7).
+  * a top researcher     — be rigorous, cite reasoning, weigh evidence,
+                           surface trade-offs and unknowns honestly.
+  * an eminent data scientist — think quantitatively; ground claims in data,
+                           metrics, and sound method.
+  * an immaculate systems analysis & design architect — design cleanly,
+                           respect the locked decisions (Section 4), keep the
+                           architecture coherent and well-documented.
+Combine these voices in one response; do not announce which "hat" you wear.
+Always pair this persona with the WORKFLOW in Section 7 (for a novice:
+give options + a clear recommendation, then WAIT for the user's decision).
+========================================================================
+
+========================================================================
+DESIGN & ENGINEERING GUIDELINES + GUIDES QUALITY BAR
+(cross-cutting standards — apply to ALL work; read before writing guides)
+------------------------------------------------------------------------
+A) GUIDES QUALITY BAR (every guide, MVP and FFP):
+   Clear and precise, YET elucidated in lucid detail — written so a
+   COMPLETE NOVICE can follow it and reach MASTERY. Concretely:
+     - Define every term on first use; expand every acronym once.
+     - Assume no prior context; build from first principles, then deepen
+       progressively (basics -> intermediate -> advanced) without gaps.
+     - Show worked, copy-pasteable examples and expected output.
+     - Explain the WHY, not just the HOW; call out common pitfalls.
+     - Plain language over jargon; when jargon is unavoidable, teach it.
+
+B) UNIVERSAL ENGINEERING PRINCIPLES (project-wide, tech-neutral):
+   All code — MVP and FFP, AI-generated or human-written — MUST honor:
+     - SOLID, DRY, KISS, Separation of Concerns
+     - High Cohesion / Low Coupling, Composition over Inheritance
+     - Reusable component architecture, Type Safety, Accessibility-First
+   These are PHASE-NEUTRAL; they manifest differently per stack:
+     - MVP: Python type hints + Pydantic + mypy (type safety);
+       Jinja partials / small JS modules (reusable components);
+       semantic HTML + ARIA + WCAG (accessibility-first).
+     - FFP: the React/TypeScript stack below expresses the same principles.
+
+C) FRONTEND STACK — PHASE-SCOPED (do NOT mix phases):
+   - MVP frontend (LOCKED, Section 4): HTML + Tailwind CSS v4 + vanilla JS
+     + Leaflet. NO React / Next / Vite-React / Bun / Node. (Unchanged.)
+   - FFP frontend: this is where the attached "React Application Engineering
+     Specification" applies. Recommended stack: React + TypeScript;
+     Vite OR Next.js; TailwindCSS; TanStack (React) Query; React Hook Form;
+     Zod; Zustand OR Redux Toolkit (only if state genuinely needs it).
+     Tailwind is the only element shared with the MVP.
+   The attached React spec (Core Principles + Tech Stack) was EXPANDED into a
+   full, IDRM-grounded engineering specification at:
+     archive/idrm-ffp-docs/61-frontend-engineering-standards.md
+   (20 sections: principles, stack, folder structure, state, API/contract mapping,
+   TypeScript, forms, auth/RBAC, security/DPDP, WCAG 2.2 AA, i18n, real-time/offline,
+   maps, error handling, testing, performance, observability, tooling, Definition of Done.)
+========================================================================
+
+========================================================================
+IDRM — SESSION HAND-OFF / WORKING INSTRUCTIONS
+Location: C:\Users\kalya\Downloads\idrm-artifacts\archive\instructions.txt
+Last updated: 2026-08-18  (SESSION 5 — the BIG one. (a) MVP CODE: Increments 4–10 landed → *** ALL 10 MVP MODULES
+             NOW WRITTEN *** (USR·INC·ORG/RES·LOC·ALR·NTF·AUD·FIL·RPT·ADM), 6 migrations, Task-L chatbot stub, all
+             deferred INC↔ORG links wired, ruff + py_compile clean, still UNRUN here [PICS=Planned]. (b) FOLLOW-UPS
+             ALL DONE: docs/mvp/34 + code/scripts/seed.py (idempotent seed); the SIX Task-M white papers →
+             docs/whitepapers/ (classical-first); FIL face-detection gate → client-side frontend/static/js/
+             face-quality.js (ADR-011) + companion note. (c) *** NOW A GIT REPO, PUSHED TO GITHUB *** —
+             github.com/kalyancn4u/idrm-artifacts (branch main); see §10 + §16. (d) archive/idrm-ffp-code RENAMED →
+             idrm-ffp-code-template. (e) README HIERARCHY refreshed + root README.md created (repo front door).
+             ONLY OPEN ITEM = "the run" on Ubuntu/CI. Full live status = §15. Prior — SESSION 4 —
+             the COMPLETE IMPLEMENTATION ROADMAP was written (docs/mvp/27 §0–§15 +
+             deep-dive sub-docs 31/32/33), the DATA-FOUNDATION GATE (roadmap §3.6) was USER-SIGNED-OFF, and the
+             MVP CODE BUILD began in code/: Increment 1 scaffold, 2+2b Users/Auth, 3 Incidents — all code+tests
+             written, ruff-clean + py_compile, but NOT executed here [Windows, no deps/PostgreSQL]. New tasks
+             K/L/M/N added; repo-root PENDING.md handoff created. *** LIVE STATUS = §15 — read it first; full
+             per-file detail is code/CHANGELOG.md + docs/mvp/CHANGELOG.md. *** Prior — SESSION 3 (2026-08-16):
+             the DOCUMENTATION effort is COMPLETE & VALIDATED; only the MVP
+             CODE build (9-G) remains. This session, in brief: finished blueprint T1-T5 (added the 5 deep-dive
+             supersession banners); did 9-F Bun cleanup (setup script now pure-MVP, ADR-014 RESOLVED); annotated
+             ALL 4 retired generations in _removed/ (~70 files, greppable Section Maps / variant banners); BUILT
+             docs 25 (module elucidation) + 26 (conformance PICS) for MVP+FFP — the PICS is *** USER-SIGNED-OFF ***
+             and is the build GATE before coding; synced base<->archive (25/26/tech-stack replicated, parity OK);
+             made all READMEs CLICKABLE; added VS Code markdown-link guidance (§13 + repo .vscode/settings.json);
+             ran a full novice->mastery ELUCIDATION PASS over EVERY MVP + FFP doc + the guide hubs; built
+             guides/mvp/learn/tech-stack-101.md (#40 component map); added docs/09-roadmap.md (the complete
+             Concept->MVP->FFP roadmap for all audiences); and added COMPLIANCE RULES (§14) + a VERIFICATION PASS
+             & LIVE STATUS BOARD (§15) + a SESSION-START PROTOCOL (§0). *** THE LIVE STATUS IS §15 — run it on load
+             and report to the user. *** REMAINING: only 9-G (build the MVP code), now UNBLOCKED. See §0,3,9,11,14,15.)
+Purpose: everything a NEW chat session needs to continue the IDRM work
+cleanly, without re-reading the whole history. Read this file FIRST.
+========================================================================
+
+------------------------------------------------------------------------
+0. HOW TO USE THIS FILE (for the next session)
+------------------------------------------------------------------------
+*** SESSION-START PROTOCOL (do this FIRST, every new chat) ***
+  1. Read this file (esp. §4 locked decisions, §7 workflow, §14 COMPLIANCE RULES).
+  2. RUN the VERIFICATION / VALIDATION PASS (§15) — it is a copy-paste command set.
+  3. REPORT to the user, briefly, before starting work: (a) the STATUS BOARD — what's
+     DONE / PENDING / TODO / to-be-VALIDATED (§15), and (b) any DISCREPANCIES found.
+  4. Then proceed with the user's request under the §14 compliance rules + §7 workflow.
+This "tell the user where things stand on load" step is itself a compliance requirement.
+
+Read this file, then skim:
+  archive/idrm-mvp-docs/CHANGELOG.md   (MVP decisions + progress, dated)
+  archive/idrm-ffp-docs/CHANGELOG.md   (FFP decisions + progress, dated)
+  archive/idrm-ffp-docs/prompts/ffp-consolidation-checklist.md (what maps where)
+  archive/INDEX.md                     (full archive map)
+Then pick up PENDING WORK (Section 9) using the WORKFLOW (Section 7).
+DO NOT re-plan or re-litigate locked decisions (Section 4).
+For a specific TOPIC (UI, gateway, security, data, observability, etc.), open the
+matching SPOKE in archive/instructions/ — routing table in Section 4A.
+
+------------------------------------------------------------------------
+1. WHAT IDRM IS
+------------------------------------------------------------------------
+IDRM = Integrated Disaster Response Management. An India-focused, web-based,
+map-driven platform connecting disaster-affected people with the
+organizations/responders that can help them (incidents, resources, volunteers,
+alerts, coordination, reporting). "Uber for disaster relief."
+Authoritative product vision = top-level ../posters/ + the finished ../docs/ set.
+THIS archive is where the clean MVP + FFP documentation was built.
+
+------------------------------------------------------------------------
+2. THE CENTRAL MENTAL MODEL — TWO PHASES: MVP and FFP
+------------------------------------------------------------------------
+MVP = Minimum Viable Product (BUILD FIRST). Deliberately simple:
+  - Pure-Python FastAPI MODULAR MONOLITH (one deployable app, clean modules)
+  - Web UI = HTML + Tailwind CSS v4 + JavaScript + Leaflet (NO React, NO Bun)
+  - PostgreSQL 16 + PostGIS 3.4 = single source of truth
+  - MinIO (S3-compatible) = object storage for uploads (IN MVP)
+  - Pydantic, SQLAlchemy, GeoAlchemy2, Alembic, pytest, Git
+  - NO Redis, NO microservices, NO React/Expo, NO brokers, NO Docker/K8s,
+    NO GeoServer. All deferred to FFP.
+
+FFP = Full-Fledged Product (NEXT PHASE, "if/when a trigger justifies it").
+The enterprise evolution the MVP grows into WITHOUT a rewrite (same API
+contract, same module boundaries):
+  - Selective MICROSERVICES (extract one module at a time, least-coupled first,
+    Strangler Fig pattern, on a concrete trigger)
+  - API GATEWAY = APISIX (plugins for reverse proxy, caching, auth, rate-limit,
+    TLS, routing, LB, observability). NOT NGINX.
+  - Bun/Node/Deno = edge/BFF/websocket/SSR services BEHIND APISIX (not the gateway)
+  - POLYGLOT runtimes: Java/Go/JS for scale/security/resilience-critical services;
+    PYTHON kept for rapid prototyping + DS/ML. Per-service, as time permits.
+  - React (web SPA) + React Native/Expo (mobile), same APIs
+  - Redis/Redis Streams -> RabbitMQ/Kafka, workers/queues
+  - Docker -> Swarm/Kubernetes, CI/CD, distributed observability, HA/scale
+  - Per-service data ownership; PostGIS stays the system of record
+  - Python geospatial service (GeoPandas/Shapely), NOT Java GeoServer
+
+RULE: when MVP work meets Redis/microservices/React/Bun/Docker/etc., it is NOT
+dropped — it is routed to the FFP charter/docs and recorded as a deferral.
+
+------------------------------------------------------------------------
+3. STATUS AT A GLANCE  (milestone record; **LIVE status board = §15 — read that first**)
+------------------------------------------------------------------------
+>>> SESSION 3 ADDITIONS (2026-08-16) — on top of the T1-T5 milestones below:
+    [x] docs 25 (module elucidation) + 26 (conformance PICS) — MVP+FFP; **PICS USER-SIGNED-OFF** = build gate.
+    [x] guides/mvp/learn/tech-stack-101.md (#40, component map).
+    [x] _removed/ CLEANUP — all 4 gens (v0-v3, ~70 files) annotated (Section Maps/banners); ledger =
+        archive/_removed/_CLEANUP-LEDGER.md.
+    [x] base<->archive SYNC (25/26/tech-stack replicated, parity OK); all READMEs CLICKABLE.
+    [x] VS Code markdown-link guidance (§13 + repo .vscode/settings.json).
+    [x] ELUCIDATION PASS complete — every MVP doc (10-90), every FFP doc, + guide hubs (both copies).
+    [x] docs/09-roadmap.md — complete Concept->MVP->FFP roadmap (novices + engineers + stakeholders).
+    [x] Governance added to THIS file: §14 compliance rules · §15 verification pass + live status board · §0 session-start protocol.
+    ONLY REMAINING: 9-G BUILD THE MVP CODE (unblocked). Full live detail + the verification command set = §15.
+
+--- Milestone record (T1-T5, as of 2026-08-14/16) ---
+DOCUMENTATION — BOTH SETS COMPLETE:
+  [x] MVP docs = 15 DONE (idrm-mvp-docs/) — the 11 core + 4 T1 gap-docs added 2026-08-14
+      (12 domain/capability, 13 traceability matrix, 30 data-flow+modules, 90 governance/RACI).
+  [x] FFP docs = 15 DONE (idrm-ffp-docs/) — the 12 core deltas + companion 61 + 3 T1 deltas
+      added 2026-08-14 (12 capability-depth, 13 traceability, 90 governance). Event-model
+      delta NOT duplicated — already in 81 §3. *** BLUEPRINT T1 COMPLETE (MVP + FFP). ***
+GUIDES (blueprint T2) — 101 LIBRARY COMPLETE:
+  [x] idrm-mvp-guides/00-start-learning-paths.md — learning hub (mastery framework,
+      shared operational flow, reading path/pyramid, 39-guide catalogue).
+  [x] idrm-mvp-guides/learn/ — ALL 39 101 GUIDES written (Domain 8, Software-Eng 9,
+      Security 7, Quality 7, Operations 8). Balanced (stakeholder + dev-mastery),
+      phase-honest (MVP vs FFP), one cross-linked web. Index = learn/README.md.
+  [x] idrm-mvp-guides/roles/ — ALL 12 ROLE-MASTERY GUIDES written (blueprint §25),
+      each sequencing the 101s+docs into a per-role path. Index = roles/README.md.
+  [x] idrm-ffp-guides/00-start-ffp-learning-paths.md — FFP learning hub (DELTA, not a
+      copy): routes to the shared library + sequences the FFP-specific path. T2 COMPLETE.
+STANDARDS & PROCESS:
+  [x] T3 (standards) COMPLETE — one compliance table in mvp-docs/13 §4 (ISO 22320, ICS/NIMS-
+      as-analog, NIST CSF 2.0, NIST 800-63-4, WCAG 2.2 AA, DPDP). DECISION: MVP a11y raised
+      2.1 AA -> 2.2 AA (both phases 2.2 AA); updated across live docs/spokes/guides.
+  [x] T4 (Definition of Done) COMPLETE — archive/instructions/definition-of-done.md, wired
+      into §7 workflow step 6 + both governance docs.
+BASE REPLICATION (T5) — COMPLETE (2026-08-16):
+  [x] Copied archive sets -> base docs/mvp, docs/ffp, guides/mvp, guides/ffp; 986 cross-links
+      rewritten + verified (0 broken); docs/README routed to the new layers.
+  [x] STACK CONFLICT found + user decided "ARCHIVE WINS": base overview was poster-faithful
+      (Flask/Jinja/Bootstrap, Redis-optional) vs archive (HTML+Tailwind+JS+Leaflet, no Redis,
+      +MinIO). Recorded as ADR-012 in docs/99. Reconciled: docs/README,02,03,04,06,07,08,90,99.
+  [x] Added the ADR-012 supersession banner (right after each H1) to docs/deep-dive/{10-srs,
+      11-architecture-and-design,13-data-model,14-traceability-matrix,15-ops-runbook} — the
+      files that still mention Flask/Jinja/Bootstrap/Redis. *** T5, AND WITH IT BLUEPRINT
+      T1-T5, IS DONE. *** posters/ EMPTY here -> authoritative posters must still be updated
+      elsewhere (flagged in ADR-012).
+INSTRUCTIONS RESTRUCTURED (this session): lean hub + 12 topic spokes (11 + domain) + the
+  definition-of-done process file in archive/instructions/ (Section 4A); persona + design/eng
+  headers at top.
+ARCHIVE CONSOLIDATION — COMPLETE (2026-08-12):
+  [x] All 4 historical generations (idrm-docs-v0..v3) RETIRED to _removed/ (reversible).
+  [x] analyses/ = 16 preserved docs (kept, NOT deleted). All 3 assets/*.xlsx reconciled.
+STILL PENDING (see Section 9): only (G) BUILD THE MVP CODE (9-G; top-level code/ still empty) — now
+  UNBLOCKED. Task I (the PICS conformance checklist, MVP+FFP) is BUILT + USER-SIGNED-OFF (2026-08-16),
+  and the _removed/ cleanup (all 4 generations) is COMPLETE. (T1/T2/T3/T4/T5 ALL DONE — the whole
+  documentation blueprint is done; 9-F Bun cleanup also DONE. Docs 25/26 [elucidation + PICS] added.)
+
+------------------------------------------------------------------------
+4. LOCKED DECISIONS (confirmed by the user — do NOT re-litigate)
+------------------------------------------------------------------------
+MVP:
+  - Modular monolith (FastAPI/Python); advanced tech = FFP.
+  - Web UI = HTML + Tailwind CSS v4 + JS (+ Leaflet). No React, no Bun/Node.
+  - PostgreSQL 16 + PostGIS 3.4 = sole source of truth.
+  - MinIO (S3-compatible) for file/object storage — IN the MVP (uploads:
+    incident photos, completion proof). DB stores only keys/URLs, not blobs.
+  - NO Redis (sessions in Postgres), NO Docker/K8s (native systemd on Ubuntu),
+    NO brokers, NO GeoServer.
+  - CANONICAL API (frozen): incident-centric, version-in-path "/api/v1/...",
+    snake_case, UUID ids, ISO-8601 UTC "*_at", lowercase snake_case enum values,
+    lists wrapped "{data,pagination}" / singles = bare object, error envelope with
+    machine "code". URIs are a STABLE CONTRACT across the whole SDLC (FFP only
+    ADDS endpoints at the same paths; never renames). OpenAPI validated.
+    UI term "help request" == API resource "incident".
+  - Auth: RS256 JWT (access ~60min + rotating/revocable refresh ~7d), RBAC over
+    4 roles (citizen, provider, coordinator, admin) + a narrow guest path.
+    NIST-aligned password policy (length>composition, bcrypt cost 12), 5-attempt
+    /15-min lockout. OIDC/SSO, MFA, ABAC, full role hierarchy + Auditor = FFP.
+  - Lean incident lifecycle (8 states): created -> (approved, if critical) ->
+    accepted -> in_progress -> completed -> verified, plus cancelled/rejected.
+    (Disputed + auto-close = FFP.)
+  - File upload = IN MVP. Media rules: compress-on-device, files <=10MB (PDFs
+    <=~1.5MB/page), photos resized <=1920px, >=640x480, blur-checked, EXIF/GPS
+    stripped; emergency "lite" = one <=~500KB photo. Face DETECTION-only quality
+    gate (nothing biometric stored). FaceNet RECOGNITION/matching = FFP (DPDP Act
+    2023 consent).
+  - Out of MVP -> FFP: money/donations, disaster-event entity + COP, per-request
+    privacy levels (Public/Protected/Private), AI matching, national rollout,
+    advanced analytics, full localization, multi-channel intake, deep real-time push.
+  - PRD is TECH-FREE (needs only; tech lives in the architecture doc).
+  - Native geospatial via PostGIS + Python (dedicated GIS server only if FFP needs).
+
+FFP:
+  - Selective microservices on a trigger (scale/ownership/deploy/perf/reliability),
+    least-coupled first (auth), Strangler Fig, public API contract preserved.
+  - APISIX gateway (NOT NGINX); Kong evaluated as the alternative and NOT chosen
+    for the free/open build — rationale in Section 4A. Bun/Node/Deno = edge behind it.
+  - Polyglot (Java/Go/JS + Python-for-DS/ML). Per-service data ownership.
+  - React web + React Native/Expo; Redis->brokers+workers; Docker->K8s.
+  - Python geospatial service (GeoPandas/Shapely), not Java GeoServer.
+  - FFP set MIRRORS the MVP set 1:1 + one Messaging&Async doc = 12 docs (FROZEN)
+    + 1 companion (61-frontend-engineering-standards). See Section 6.
+
+------------------------------------------------------------------------
+4A. TOPIC SPOKES (detail moved out of this hub — see archive/instructions/)
+------------------------------------------------------------------------
+To keep THIS file lean, topic-specific working instructions live as spokes in
+archive/instructions/*.md. Each spoke is a THIN ROUTER: phase-scoped decisions +
+pointers into the canonical docs (Section 6) + vetted external references — NOT a
+duplicate of the docs. Open the spoke for the topic you're working on.
+Index: archive/instructions/00-README.md
+
+  #  Spoke file                         Topic
+  1  instructions/ui.md                 Web + React + Expo clients
+  2  instructions/api-gateway.md        APISIX (vs Kong eval), edge/BFF
+  3  instructions/apis.md               /api/v1 contract, API types, integrations
+  4  instructions/data-stores.md        Postgres/PostGIS, Redis, MinIO — engines & ops
+  5  instructions/data-modeling.md      Schema modeling (relational/spatial/TS/KV)
+  6  instructions/security.md           AuthN/Z, OWASP, DPDP, TLS, secrets
+  7  instructions/observability.md      Metrics, tracing, logs, RUM
+  8  instructions/caching-messaging.md  Redis/Streams -> RabbitMQ/Kafka, real-time
+  9  instructions/backend-services.md   Runtimes/polyglot, extraction, health, jobs, BFF
+  10 instructions/backup-and-dr.md      Backups, PITR, restore drills, RPO/RTO
+  11 instructions/domain.md             Domain quick-reference (elucidated ground-truth card)
+
+FFP TARGET IN ONE LINE: same "/api/v1" for Web + React SPA + RN/Expo; APISIX gateway
+(Kong evaluated, not chosen for the free build) fronting selective polyglot services;
+PostgreSQL+PostGIS system of record; Redis + RabbitMQ/Kafka on a trigger; OpenTelemetry/
+Prometheus/logs observability. NONE of this changes the MVP (React/gateway/Redis = FFP only).
+When a decision changes, update: this hub's digest + the spoke + the canonical doc + the CHANGELOG.
+
+------------------------------------------------------------------------
+5. ARCHIVE STRUCTURE (current — post-consolidation 2026-08-12)
+------------------------------------------------------------------------
+archive/
+  INDEX.md                 full map of the archive
+  instructions.txt         this file (LEAN HUB)
+  instructions/            topic SPOKES (11 *.md + 00-README) — routed from Section 4A
+  idrm-mvp-docs/           <== MVP SPECIFICATIONS (11 docs, COMPLETE) — Section 6
+      README.md, CHANGELOG.md, the 11 docs (+ 40-api-openapi.yaml)
+      prompts/  (CO-STAR arch prompt + instructions_idrm_mvp_docs.md = the plan)
+  idrm-mvp-guides/         MVP guides: README + 30-contribute-developer-guide.md
+  idrm-ffp-docs/           <== FFP SPECIFICATIONS (12 docs, COMPLETE, FROZEN)
+      README.md, CHANGELOG.md, the 11 FFP docs (10,11,20,21,22,40,50,60,70,80,81)
+      prompts/  (instructions_idrm_ffp_docs.md = FFP charter;
+                 IDRM FFP Architecture - CO-STAR Prompt.md;
+                 ffp-consolidation-checklist.md = per-doc source map + triage)
+  idrm-ffp-guides/         FFP guides: README + 30-contribute-developer-guide.md
+  idrm-ffp-code-template/  289-file Bun/microservices/React skeleton = FFP-style
+                           reference code TEMPLATE (NOT the MVP code; renamed from idrm-ffp-code 2026-08-18).
+  idrm-mvp-code/           FROZEN SNAPSHOT of the MVP code (../../code/) taken 2026-08-22 (Session 6): the
+                           159 git-tracked source files, verbatim. A point-in-time reference ONLY — NOT a
+                           living mirror, NOT under rule C3, NOT in the §15 parity pass. code/ is the living
+                           source of truth; do not chase drift. See idrm-mvp-code/_SNAPSHOT.md.
+  assets/                  DATA artifacts (reconciled 2026-08-12, canonical + Phase
+                           tagging): idrm-api-resource-mapping.xlsx, idrm-data-model.xlsx,
+                           idrm-triggers-views-complete.xlsx, idrm_skills_tracker.xlsx,
+                           idrm-mvp-documentation-blueprint.md (the 25-doc + guides vision).
+  scripts/                 shell scripts: setup-idrm-ubuntu.sh (MVP Ubuntu installer;
+                           installs PostgreSQL/PostGIS + MinIO + Miniconda; now a PURE-MVP
+                           installer — Bun stripped 2026-08-16, ADR-014) + FFP devops scripts.
+  analyses/                AUXILIARY/RESEARCH kept, not deleted (16 docs, generation-
+                           prefixed): generation overviews, exhaustive LLDs (incl. the
+                           v0 24.6k-line 21-category LLD), Odoo/validation research,
+                           v2/v3 gap-analysis roadmaps. See analyses/README.md.
+  _removed/                QUARANTINE (reversible): idrm-docs-v0, v1, v2, v3 (all four
+                           retired generations). Recover from here if a detail is ever
+                           needed (e.g. v3 beginner tutorials for the T2 guides).
+                           NOTE: do NOT make live docs DEPEND on _removed/ content.
+
+NOTE: MVP CODE does not exist yet — build FRESH per the MVP docs (target: top-level
+../code/, currently EMPTY), as a pure-Python modular monolith.
+
+------------------------------------------------------------------------
+6. THE DOCUMENT SETS (both complete)
+------------------------------------------------------------------------
+MVP (idrm-mvp-docs/, 15 docs — "core six" = 10,11,20,40,50,22; +4 T1 gap-docs 2026-08-14):
+  [x] 10-requirements-prd.md            PRD (tech-free)
+  [x] 11-requirements-scope-and-acceptance.md   Feature->Req->Acceptance->Test; lifecycle
+  [x] 12-domain-capability-and-operating-model.md  (T1) 10 capabilities + disaster operating model
+  [x] 13-requirements-traceability-matrix.md    (T1) the AUDIT SPINE (need->...->evidence)
+  [x] 20-architecture-system.md         Modular monolith (HTML+Tailwind+JS, FastAPI, PostGIS, MinIO)
+  [x] 21-architecture-decisions.md      14 ADRs (why NOT React/Redis/Docker yet; MinIO-in; RS256)
+  [x] 22-architecture-security-and-iam.md   AuthN/AuthZ; role->API-op RBAC matrix; audit; secrets
+  [x] 30-design-data-flow-and-modules.md  (T1) synchronous data path (event bus=FFP seam) + module-spec template
+  [x] 40-api-specification.md (+ 40-api-openapi.yaml, validated)  Canonical /api/v1 contract
+  [x] 50-data-model.md                  PostgreSQL+PostGIS; 13 MVP tables; enums; Alembic
+  [x] 60-uidesign-web-interaction.md    Screens/nav/forms/tables/maps; screen->API tables; WCAG AA
+  [x] 70-quality-test-strategy.md       Unit/API/Integration (pytest); F1-F11 -> tests; >=80%
+  [x] 80-ops-deployment-and-operations.md   Ubuntu native systemd; install/env/Alembic/backup/DR
+  [x] 90-governance-and-raci.md         (T1) one Accountable owner per capability + RACI + decision governance
+  [x] idrm-mvp-guides/30-contribute-developer-guide.md   Novice setup->run->test->PR
+
+FFP (idrm-ffp-docs/, 12 docs, FROZEN — deltas on the MVP counterparts):
+  [x] 10-requirements-prd.md            enterprise-scale needs/SLAs
+  [x] 11-requirements-scope-and-roadmap.md   phased evolution + trigger per capability; Strangler Fig
+  [x] 20-architecture-system.md         selective microservices, APISIX, edge, polyglot, geospatial svc
+  [x] 21-architecture-decisions.md      14 FFP ADRs (each trigger-gated)
+  [x] 22-architecture-security-and-iam.md   OIDC/MFA/ABAC/zero-trust/vault
+  [x] 40-api-specification.md           same public contract + gateway + inter-service events
+  [x] 50-data-model.md                  per-service ownership + the deferred tables
+  [x] 60-uidesign-frontend.md           React web + React Native/Expo (same API)
+  [x] 70-quality-test-strategy.md       contract/E2E/perf/DAST/chaos/DORA
+  [x] 80-ops-platform-and-deployment.md Docker->K8s, CI/CD, observability, HA, AWS
+  [x] 81-ops-messaging-and-async.md     Redis Streams->brokers, workers, deep push (FFP-only doc)
+  [x] 12/13/90 (T1 deltas, 2026-08-14)  capability-depth · traceability audit-spine · governance/RACI
+  [x] 61-frontend-engineering-standards.md  COMPANION (new 2026-08-14): the "React App
+      Engineering Spec" expanded to 20 IDRM-grounded sections (FFP-scoped; MVP stays React-free)
+  [x] idrm-ffp-guides/30-contribute-developer-guide.md   contributing across services
+
+GUIDES — 101 LIBRARY (blueprint T2, 2026-08-14): idrm-mvp-guides/learn/ holds all 39
+  novice->mastery 101 guides + 00-start-learning-paths.md hub + learn/README.md index.
+  ONE shared library (MVP + FFP-tagged guides together). See Sections 3 & 9.
+
+------------------------------------------------------------------------
+7. WORKFLOW (the user's required process — IMPORTANT)
+------------------------------------------------------------------------
+The user is a COMPLETE NOVICE (avid reader, not deeply technical) who wants to
+stay informed and in control:
+  1. On ANY conflict/deviation/decision: present a SHORT plain-language list of
+     OPTIONS with ONE clearly RECOMMENDED, and DO NOT PROCEED until the user
+     confirms. No silent assumptions. Do not re-litigate settled decisions.
+  2. When writing a doc: read the matching sources, flag conflicts (step 1),
+     then write MVP/FFP-appropriate, grounded (real modules/entities/personas),
+     with the standard header line and cross-links.
+  3. Route advanced/conflicting tech to the FFP (charter/docs); nothing dropped.
+  4. UPDATE the relevant CHANGELOG.md (Keep-a-Changelog: Added/Changed/Removed/
+     Decided, dated) every time. Keep it as a reliable audit trail.
+  5. Keep ONE source of truth per decision; cross-link rather than duplicate.
+  6. FINALIZE against the DEFINITION OF DONE before marking any doc/guide complete:
+     archive/instructions/definition-of-done.md (blueprint T4 — 14 criteria + IDRM
+     conventions: header line, phase-honest, cross-link-not-duplicate, CHANGELOG,
+     guides quality bar). A doc isn't "done" just because it exists.
+GUARDRAILS: PRD-type docs stay tech-free; keep MVP simple (defer infra -> FFP+ADR).
+
+------------------------------------------------------------------------
+8. DOMAIN QUICK-REFERENCE (digest — full elucidated card = instructions/domain.md)
+------------------------------------------------------------------------
+Grounds new work in IDRM's real nouns/roles/numbers (not generic). Essentials:
+  - Modules (monolith): users, incidents, resources, locations, alerts,
+    notifications, reports, files, audit, administration.
+  - Roles: citizen, provider (NGO/hospital/volunteer), coordinator/admin (govt) + guest.
+  - Core resource: INCIDENT = a citizen "help request". Lifecycle (LOCKED, 8 states):
+    created -> (approved if critical) -> accepted -> in_progress -> completed -> verified
+    (+ cancelled/rejected).
+FULL CARD (module shape, enums, personas, Q4-2026 success targets, and the WHY behind
+each) is elucidated in the spoke: archive/instructions/domain.md.
+
+------------------------------------------------------------------------
+9. PENDING WORK (prioritized — this is where a new session picks up)
+------------------------------------------------------------------------
+*** LIVE STATUS = §15 (the status board). As of 2026-08-16 the ONLY remaining task is (G) BUILD THE MVP CODE.
+    Items A-I below are the historical BLUEPRINT-TASK RECORD — T1-T5, plus F and I, are ALL DONE (see their
+    [DONE]/COMPLETE markers). Keep them for provenance; do not treat A-F/H/I as open. ***
+
+Everything above is DONE. Historical blueprint/task record (statuses in-line):
+
+A. BLUEPRINT T2 — BUILD THE GUIDES (*** COMPLETE ***; kept for provenance) ->
+   idrm-mvp-guides/ and idrm-ffp-guides/. Most of the blueprint is GUIDE material:
+     - Role-mastery framework + 12 role-specific mastery maps (blueprint 24,25)
+     - New-joinee reading path, reading pyramid, recommended sequence (28,29,App D)
+     - Supplementary 101/intermediate/advanced guide library — 39 guides (blueprint 27:
+       domain / software-eng / security / quality / operations)
+     - Knowledge & Onboarding Handbook (blueprint 25)
+   DONE so far (2026-08-14): idrm-mvp-guides/00-start-learning-paths.md (framework + flow +
+   reading path/pyramid + 39-guide catalogue) and ALL 18 MVP-RELEVANT 101 guides in
+   idrm-mvp-guides/learn/ (+ learn/README.md index):
+     Domain(4): disaster-management, incident-management, gis-for-emergency-response, resource-management
+     SW-Eng(6): sdlc, git-github, rest-api, database, postgresql-postgis, observability
+     Security(3): iam, rbac-abac, secure-coding
+     Quality(3): testing, api-testing, accessibility-testing
+     Operations(2): linux, backup-restore
+   Decisions confirmed: one library in mvp-guides/learn; balanced depth (stakeholder-clear +
+   developer-mastery); template = disaster-management-101.
+   *** 101 GUIDE LIBRARY COMPLETE: 39/39 *** (Domain 8, SW-Eng 9, Security 7, Quality 7,
+   Operations 8) — all in idrm-mvp-guides/learn/, indexed by 00-start-learning-paths.md.
+   (Data-Engineer content folded into database/postgis/data-modeling; not a separate 101.)
+   ROLE-MASTERY GUIDES (blueprint §25) — *** COMPLETE 12/12 *** in idrm-mvp-guides/roles/
+   (+ roles/README.md index). Each sequences the 101s + docs into a per-role path to mastery,
+   phase-tagged: product-manager, business-analyst, solution-architect, backend-engineer,
+   frontend-engineer, gis-engineer, qa-sdet, security-engineer, devops-sre, data-engineer,
+   incident-ops-manager, technical-support. (Blueprint corrections applied: frontend=HTML/JS
+   MVP not React; gis=PostGIS not GeoServer; devops=systemd MVP not containers; data-eng ETL/
+   analytics=FFP.)
+   *** T2 COMPLETE ***: 39/39 101 guides + MVP learning hub + 12/12 role guides + the FFP learning
+   hub (idrm-ffp-guides/00-start-ffp-learning-paths.md, a DELTA that routes to the shared library —
+   NOT a 51-file copy, per the cross-link-don't-duplicate guardrail). Nothing left in T2.
+   NEXT (pick with user): building the MVP code (G, top-level code/ still empty) [recommended];
+   or blueprint T1 doc-gaps / T3 standards / T4 done-bar / T5 base replication.
+   GUIDE-SOURCE (reuse, don't re-derive): retired v3 beginner tutorials in
+   _removed/idrm-docs-v3/docs/ (81-redis Redis-101, 31-design-backend FastAPI-from-
+   scratch, 82-ops-api-gateway Bun-gateway, 70-testing, 71-code-standards) + v1/v2/v3
+   setup guides. (30-contribute is the first guide already written on both sides.)
+
+B. BLUEPRINT T1 — MISSING TECHNICAL DOCS: MVP SIDE DONE (2026-08-14). After a gap analysis
+   (existing docs had only per-doc traceability; no domain/capability, data-flow, module-spec,
+   or governance doc), added 4 MVP docs: 12-domain-capability-and-operating-model,
+   13-requirements-traceability-matrix (the audit spine), 30-design-data-flow-and-modules
+   (MVP synchronous; event bus = FFP seam; + module-spec template), 90-governance-and-raci.
+   Observability EXCLUDED (correctly FFP-deferred). User confirmed: all four, MVP-first.
+   FFP T1 DELTAS DONE (2026-08-14): ffp 12 (capability-depth), 13 (traceability audit-spine),
+   90 (per-service ownership/Auditor/governance). The EVENT-MODEL delta was NOT duplicated —
+   it already lives in ffp 81 §3 (outbox/idempotency/versioned events/DLQ/projections), so no
+   ffp 30 was created (cross-link, don't duplicate). *** BLUEPRINT T1 COMPLETE (MVP + FFP). ***
+
+C. BLUEPRINT T3 — DONE (2026-08-14): standards folded in via one COMPLIANCE-MAPPING TABLE
+   in 13-requirements-traceability-matrix.md §4 (ISO 22320, ICS/NIMS-as-analog, NIST CSF 2.0,
+   NIST SP 800-63-4/63B-4, WCAG 2.2 AA, DPDP Act 2023) + light cross-refs in 12/22/90.
+   DECISION (user): raised MVP accessibility 2.1 AA -> 2.2 AA (both phases now 2.2 AA);
+   updated 60, 22, 90, ui spoke, accessibility + frontend guides, ffp 61. NIMS framed as the
+   US analog only (IDRM = India NDMA / DM Act 2005). Historical _removed/analyses/ffp-code left as-is.
+
+D. BLUEPRINT T4 — DONE (2026-08-14): adopted the "Definition of Documentation Done" (blueprint
+   §32) as archive/instructions/definition-of-done.md — the 14 criteria + IDRM conventions
+   (header line, phase-honest, cross-link-not-duplicate, CHANGELOG, guides quality bar) + a
+   copy-paste checklist. Wired into §7 workflow (step 6), the spokes index, and both governance
+   docs (MVP+FFP 90 §3). Existing sets broadly already satisfy it; use it as the go-forward gate.
+
+E. BLUEPRINT T5 — REPLICATE to base. DECISION (user 2026-08-14): SIT BESIDE (non-destructive).
+   DONE: copied archive sets -> docs/mvp/ (15 specs), docs/ffp/ (15 specs), guides/mvp/ +
+   guides/ffp/ (the 39+12 library). All 986 cross-links rewritten + VERIFIED (0 broken;
+   links between copied sets stay in base; links to archive-only working files [instructions/
+   spokes, assets, scripts, INDEX] point back to archive/). docs/README routed to the new layers.
+   CONFLICT FOUND + DECISION (user): the base overview was POSTER-FAITHFUL (Flask+Jinja+Bootstrap,
+   Redis-optional) but the archive MVP is HTML+Tailwind+JS+Leaflet, NO Redis, +MinIO. User chose
+   "ARCHIVE WINS — update base." Recorded as new ADR-012 in docs/99 (supersedes ADR-002/003/006);
+   posters/ is EMPTY here so the authoritative posters must be updated elsewhere (flagged).
+   RECONCILED (done): docs/README, 02-architecture, 03-engineering, 04-data, 06-quality,
+   07-operations, 08-organization, 90-glossary, 99 (ADR-012 + superseded markers on ADR-002/003/006).
+   98-review needs NO change (its MinIO notes already align). ASCII box-diagrams re-padded to stay aligned.
+   *** DONE (2026-08-16): the SUPERSESSION BANNER was added right after the H1 of all 5 docs/deep-dive
+   files that still mention Flask/Jinja/Bootstrap/Redis — 10-srs.md, 11-architecture-and-design.md,
+   13-data-model.md, 14-traceability-matrix.md, 15-ops-runbook.md. Banner text used:
+   "Stack note (ADR-012): MVP view layer = FastAPI-served HTML+Tailwind+JS+Leaflet (not
+   Flask/Jinja/Bootstrap); no Redis (sessions in Postgres) + MinIO for files; where this file says
+   Flask/Bootstrap/Redis, defer to ../mvp/ and ../99-decisions-and-history.md (ADR-012)." *** T5, AND
+   WITH IT THE WHOLE BLUEPRINT T1-T5, IS DONE. ***
+   Verify tools (scratchpad): relink.py / fix2.py (link rewrite) + checklinks.py (0 broken confirms).
+
+F. [DONE 2026-08-16] Stripped Bun from scripts/setup-idrm-ubuntu.sh (ADR-014, option (a)) to
+   make it a PURE-MVP installer. Removed: the Bun install/verify step + PATH edits; the generated
+   README's "Frontend: Bun" line + `bun run dev` dev commands; dev-start.sh's separate :3000
+   frontend terminal; the oven.bun-vscode editor rec; the Bun/Node .gitignore block. Retitled the
+   frontend as static assets served by FastAPI (frontend/templates + frontend/static/{css,js,img});
+   renumbered install steps to 1-13; `bash -n` clean. MinIO in that script IS legitimate MVP (kept).
+   ADR-014 marked RESOLVED in mvp-docs/21 (+ base copy) and the note in mvp-docs/80 updated.
+
+G. BUILD THE MVP CODE — fresh at top-level ../code/ (empty) from the MVP specs,
+   as a pure-Python FastAPI modular monolith. (idrm-ffp-code-template/ is FFP-style reference only.)
+   *** GATE CLEARED (2026-08-16): task I — the PICS conformance checklist (docs/mvp/26 + docs/ffp/26,
+   65 MVP + 32 FFP rows) — is BUILT + USER-SIGNED-OFF. Coding is UNBLOCKED. Drive the build module-by-
+   module from the PICS rows; flip each row Planned->Yes only when code + passing test exist. Suggested
+   order: users/auth (USR) first, then incidents (INC), then the rest. Present a build order + wait. ***
+
+H. [DONE 2026-08-14] React Application Engineering Specification (FFP frontend).
+   The partial screenshot (Core Principles + Tech Stack) was expanded into a full,
+   IDRM-grounded 20-section spec at idrm-ffp-docs/61-frontend-engineering-standards.md
+   (FFP-scoped; MVP stays React-free). Cross-linked from 60-uidesign-frontend.md.
+   If the user later supplies the ORIGINAL doc's own further sections, reconcile them
+   INTO 61 rather than creating a parallel file.
+
+I. *** MUST-DO BEFORE CODING (user directive, 2026-08-16) *** — build a COMPREHENSIVE, MODULE/
+   COMPONENT-WISE FUNCTIONAL + IMPLEMENTATION COMPLIANCE / CONFORMANCE CHECKLIST, PICS-style, for
+   BOTH MVP and FFP. This is the pre-coding gate for task G.
+   - "PICS" = Protocol Implementation Conformance Statement (ISO/telecom lineage): a structured table
+     that lists every capability/feature and states, per item, its STATUS (Mandatory / Optional /
+     Conditional), whether it is SUPPORTED (yes / no / planned), the PHASE (MVP / FFP), and EVIDENCE
+     (the doc/section + eventually the code/test that satisfies it). It becomes the build checklist,
+     the acceptance/conformance basis, and a novice-readable "is it done, and to what standard?" sheet.
+   - TWO AXES the checklist must cover:
+       (a) MODULE-WISE — the 10 monolith modules (users, incidents, resources, locations, alerts,
+           notifications, reports, files, audit, administration): each functional requirement + the
+           implementation obligations (endpoints, schemas, RBAC, validation, audit, tests) as conformance rows.
+       (b) COMPONENT/STACK-WISE — each stack component (see guides/mvp/learn/tech-stack-101.md): the
+           implementation obligations for using it correctly (e.g. FastAPI routers, Pydantic validation,
+           PostGIS SRID 4326 + GiST, Alembic migration per change, RS256 JWT, MinIO key-not-blob, etc.).
+   - GROUND IT in the existing spine: reuse mvp/ffp docs 13 (traceability matrix), 11 (scope+acceptance),
+     40 (API contract), 22 (security), 70 (test strategy), 90 (governance/RACI), and the Definition of Done
+     (instructions/definition-of-done.md). The elucidation (tech-stack-101 + 101 guides) is the informative
+     backbone — the checklist is its NORMATIVE, checkable counterpart. Cross-link, do not duplicate.
+   - DECIDE WHEN BUILT (present options + recommendation, then WAIT): format = xlsx "sheet" in assets/
+     (user said "sheet") vs markdown conformance tables in docs/ ; one phase-tagged sheet vs separate
+     MVP + FFP sheets; module axis first vs component axis first. Convention MVP=/d/tools/miniconda3/python.exe
+     + openpyxl for xlsx (see Section 10).
+   NOTE (user guidance 2026-08-16): the per-component ELUCIDATION (what/why/how of each tech decision) is
+   important and highly informative for rookies/complete novices to reach mastery + comprehend the decisions;
+   keep producing it, and it doubles as the checklist's teaching layer.
+
+Suggested order: DONE — _removed/ cleanup (all 4 gens) COMPLETE; task I (PICS checklist, MVP+FFP) BUILT +
+USER-SIGNED-OFF (2026-08-16). The gate is cleared. ONLY task G (build the MVP code) remains, now UNBLOCKED —
+drive it module-by-module from the PICS rows (suggested: USR/auth first, then INC, then the rest).
+
+------------------------------------------------------------------------
+10. ENVIRONMENT NOTES (for the ASSISTANT / tooling — NOT user tasks)
+------------------------------------------------------------------------
+- Python: use  /d/tools/miniconda3/python.exe  (v3.12; has openpyxl, pandas,
+  pyyaml, lxml). System `python` is a Windows Store placeholder — does NOT work.
+- Editing xlsx: openpyxl, load WITHOUT data_only (preserves values on save).
+  The assets were reconciled 2026-08-12; pre-edit backups are in the session scratchpad.
+- OpenAPI: validate 40-api-openapi.yaml with `openapi-spec-validator` (pip install
+  if missing; it passed).
+- Character display: set  PYTHONUTF8=1  before scripts that print diagrams/emoji.
+- Deleting/moving: use  rm -f ,  mv  carefully. `mv` into an existing folder nests.
+- Bash working dir persists across calls; prefer absolute paths.
+- *** GIT / GITHUB (NEW, SESSION 5 — this folder IS NOW A GIT REPO). *** Full detail in §16. Essentials:
+  - The WHOLE idrm-artifacts/ is a git repo on branch `main`, pushed to the remote
+    `origin` = https://github.com/kalyancn4u/idrm-artifacts  (2 commits; local == origin/main).
+  - `gh` CLI is authenticated (account kalyancn4u, scopes repo+workflow). Git identity is set
+    globally (kalyan.narayana / kalyancn4u@gmail.com).
+  - WINDOWS TLS FIX (already applied, repo-local): `git config http.sslBackend schannel` — WITHOUT this,
+    `git push` fails with "unable to get local issuer certificate". Do NOT disable sslVerify.
+  - To sync new work: `git add -A && git commit -m "…" && git push`. End commit msgs with the
+    Co-Authored-By line (per the harness commit convention). Commit/push only when the USER asks.
+  - .gitignore: root `.gitignore` (junk/OS/caches/secrets) + code/.gitignore + the ffp-template's own.
+    The FFP template's dev `.env` (safe placeholder values) is committed BY DESIGN; real secrets stay ignored.
+  - Harmless: git prints "LF will be replaced by CRLF" on Windows. Optional nicety (not done): add a
+    `.gitattributes` with `* text=auto`.
+
+------------------------------------------------------------------------
+11. WHAT THIS SESSION DID (brief history, so nothing surprises you)
+------------------------------------------------------------------------
+2026-08-12, in order:
+  - Wrote the remaining MVP docs (scope, API+OpenAPI, data, security, ADRs, UI,
+    test, ops, contributor) -> MVP set 11/11 complete.
+  - Locked the canonical API conventions (incident-centric /api/v1, RS256, UUID,
+    snake_case, enums, error envelope; URIs stable across SDLC).
+  - Added MinIO (object storage) + file/photo upload to the MVP; media handling
+    rules; face DETECTION-only (FaceNet recognition -> FFP). Updated the setup script.
+  - Reorganized scripts (assets -> scripts/); handled a script collision (kept both
+    as *-alt.sh).
+  - Reviewed the documentation blueprint -> captured T1-T5 pending tasks (Section 9).
+  - Froze the FFP doc set (12) to mirror the MVP 1:1 + Messaging&Async; wrote all 12.
+  - Established analyses/ (auxiliary kept, not deleted); RETIRED all 4 generations
+    (v0-v3) to _removed/, deep-merging v2/v3 detail into the FFP docs first.
+  - Reconciled all 3 assets/*.xlsx to canonical names/URIs + Phase(MVP/FFP) tagging.
+
+2026-08-14 (SESSION 2), in order:
+  - Added a ROLE/PERSONA header (teacher + researcher + data scientist + architect) and a
+    DESIGN & ENGINEERING GUIDELINES + GUIDES QUALITY BAR header at the top of this file.
+  - Took a user screenshot ("React Application Engineering Specification") and, after
+    reasoning it is FFP-scoped (MVP is React-free), EXPANDED it into the new IDRM-grounded
+    doc idrm-ffp-docs/61-frontend-engineering-standards.md (20 sections). Cross-linked from 60.
+  - Captured FFP high-level architecture; EVALUATED API gateway APISIX vs Kong (free/OSS
+    editions) -> APISIX RETAINED (Kong gates OIDC/WAF/adv-rate-limit behind Enterprise;
+    IDRM needs OIDC+OAuth2.1+PKCE+OWASP free). Recorded in the FFP CHANGELOG.
+  - REFACTORED this file into a lean HUB + 11 topic SPOKES (archive/instructions/*.md,
+    thin routers): ui, api-gateway, apis, data-stores, data-modeling, security,
+    observability, caching-messaging, backend-services, backup-and-dr, domain. §4A = router.
+  - Moved the Domain Quick-Reference to an ELUCIDATED spoke (instructions/domain.md); §8 = digest.
+  - T2 GUIDES: built idrm-mvp-guides/00-start-learning-paths.md and ALL 39 101 GUIDES in
+    idrm-mvp-guides/learn/ (Domain 8, SW-Eng 9, Security 7, Quality 7, Operations 8).
+    Confirmed with user: one library in mvp-guides/learn, balanced depth, template =
+    disaster-management-101. Each guide phase-tagged (MVP vs FFP) and cross-linked.
+  - T2 GUIDES (cont.): wrote ALL 12 ROLE-MASTERY guides in idrm-mvp-guides/roles/ (blueprint
+    §25). Applied 4 blueprint corrections in-guide: frontend=HTML/JS MVP (React=FFP), gis=PostGIS
+    not GeoServer, devops=systemd MVP (containers=FFP), data-eng ETL/analytics=FFP.
+  - T2 GUIDES (cont.): added the FFP learning hub (idrm-ffp-guides/00-start-ffp-learning-paths.md)
+    as a DELTA (not a 51-file copy). *** BLUEPRINT T2 COMPLETE. ***
+  - T1 DOC-GAPS: added 4 MVP docs (12 domain/capability+operating-model, 13 traceability audit-
+    spine, 30 data-flow+module-specs [MVP synchronous; event bus=FFP seam], 90 governance/RACI)
+    + 3 FFP deltas (12,13,90). Event-model delta NOT duplicated (already in ffp 81). *** T1 COMPLETE. ***
+  - T4: adopted the "Definition of Documentation Done" -> archive/instructions/definition-of-done.md;
+    wired into §7 (step 6) + governance docs. *** T4 COMPLETE. ***
+  - T3 STANDARDS: one compliance table in mvp-docs/13 §4 (ISO 22320, ICS/NIMS-as-analog, NIST CSF
+    2.0, NIST 800-63-4, WCAG 2.2, DPDP). USER DECISION: MVP a11y 2.1 AA -> 2.2 AA (both phases 2.2).
+    Updated all live refs. *** T3 COMPLETE. ***
+  - T5 BASE REPLICATION (IN PROGRESS): copied archive sets -> docs/mvp, docs/ffp, guides/mvp,
+    guides/ffp; 986 links rewritten+verified (0 broken); docs/README routed. USER DECISION on a
+    surfaced conflict: "ARCHIVE WINS" over the poster-faithful base stack -> ADR-012 in docs/99;
+    reconciled the overview (00-08,90,99). REMAINING: deep-dive banners (see Section 9-E). posters/
+    empty here -> authoritative posters need the same update elsewhere.
+  - All changes logged in the MVP/FFP CHANGELOGs. (Was NOT a git repo back then — it IS now, see §16.)
+
+2026-08-16 (SESSION 3), in order:
+  - Finished T5 — added the 5 deep-dive supersession banners (§9-E). *** BLUEPRINT T1-T5 COMPLETE. ***
+  - 9-F — stripped Bun from scripts/setup-idrm-ubuntu.sh (pure-MVP installer). *** ADR-014 RESOLVED. ***
+  - Built guides/mvp/learn/tech-stack-101.md (#40) — the component map (what each tool is + WHY, MVP vs FFP).
+  - RAN the cleanup+elucidation+PICS program (§12): annotated ALL 4 retired generations in _removed/ (v0-v3,
+    ~70 files) with top-of-doc SECTION MAPS / variant banners + greppable tags (ledger = _removed/_CLEANUP-LEDGER.md).
+    Net-new tech from v1-v3 was tiny (2 stack rows); v2 notably CONFIRMED the current MVP shape (native monolith +
+    HTML/Tailwind).
+  - Built docs 25 (module elucidation) + 26 (conformance PICS) for BOTH phases; reviewed + gap-closed 26
+    (added WCAG-2.2-AA, TLS, secrets, guest, role-scoped read, health; FFP: OTel, clients, polyglot).
+    *** USER SIGNED OFF the PICS -> task I COMPLETE; docs 26 are the build gate before 9-G. ***
+  - SYNCED base<->archive: replicated 25/26 + tech-stack-101 into archive (links rewritten), verified parity,
+    mirrored CHANGELOG entries.
+  - Made ALL index READMEs CLICKABLE (docs/mvp, docs/ffp, archive mirrors, analyses) + fixed a stale ../assets link.
+  - Added VS Code markdown-link guidance (§13) + repo .vscode/settings.json (Preview opens the real file; link validation).
+  - Ran a full novice->mastery ELUCIDATION PASS (define terms/acronyms on first use, add the WHY, cross-link
+    25/26, extend footers): EVERY MVP doc (10-90) + EVERY FFP doc + the guide hubs — both copies, links 0-broken.
+  - Added docs/09-roadmap.md — the complete Concept->MVP->FFP roadmap (build plan + learning path + glossary),
+    elucidated for all audiences (style modelled on the v0 PRD); registered in docs/README.
+  - Codified governance in THIS file (user ask): §14 COMPLIANCE RULES · §15 VERIFICATION PASS + LIVE STATUS
+    BOARD · §0 SESSION-START PROTOCOL (run §15 + report status to the user on every new chat).
+  NEXT: only 9-G (BUILD THE MVP CODE) remains — UNBLOCKED; drive it from the signed-off PICS, module-by-module
+  (suggested USR/auth -> INC -> rest; present a build order + WAIT). External: update authoritative posters for ADR-012.
+
+2026-08-17 (SESSION 4), in brief: wrote the COMPLETE IMPLEMENTATION ROADMAP (docs/mvp/27 §0–§15 + deep-dives 31/32/
+  33); the DATA-FOUNDATION GATE (roadmap §3.6) was USER-SIGNED-OFF; began the MVP code build (Increments 1–3:
+  scaffold, Users/Auth, Incidents). Added tasks K/L/M/N; created repo-root PENDING.md. (Full detail = §15 board.)
+
+2026-08-17→18 (SESSION 5 — THIS chat), in order:
+  - MVP CODE — built Increments 4–10, one at a time with user check-ins (cadence C1): 4 ORG/RES (migration 0003 +
+    wired the 5 deferred INC↔ORG links), 5 LOC (no table; geo.py + PostGIS /nearby/distance/reverse-geocode/map),
+    6 ALR/NTF (migration 0004; PICS-NTF-001 wired), 7 AUD (migration 0005; append-only; wired into INC/ORG/ALR/USR),
+    8 FIL (migration 0006; MinIO ObjectStorage + Pillow pipeline; face gate = client-side seam), 9 RPT (aggregates;
+    csv export), 10 ADM (reference-data + overview) + Task-L chatbot stub. *** ALL 10 MODULES NOW WRITTEN. *** Each:
+    own tests/{unit,api,integration}/<mod>/, ruff + py_compile clean, UNRUN here.
+  - SEED — docs/mvp/34-seed-data-and-fixtures.md + code/scripts/seed.py (idempotent; 8 users+guest, 3 orgs, incidents
+    in all 8 states + timelines, alerts/notifications/files/audit). Registered in READMEs; base<->archive parity.
+  - WHITE PAPERS (Task M) — all six in docs/whitepapers/ (standalone hub, shared 8-part template, classical-first w/
+    DL upgrade path; grounded in archive/analyses/notebooks/). + companion face-quality-gate.md. Engines remain → FFP.
+  - FIL FACE GATE — client-side frontend/static/js/face-quality.js (ADR-011: on-device, advisory, nothing biometric);
+    server passes_face_quality_gate = intentional no-op. PICS-FIL-005 stays Planned (needs a manual browser check).
+  - .gitignore hardened (code/.gitignore; fixed an inline-comment bug that had un-ignored *.pem).
+  - RENAME — archive/idrm-ffp-code → idrm-ffp-code-template (+ updated INDEX/instructions/prompt references). Its
+    nested .git was moved to the session scratchpad (EPHEMERAL — see §16 warning).
+  - *** GIT + GITHUB *** — git-initialized the whole repo, committed, and PUSHED to
+    github.com/kalyancn4u/idrm-artifacts (branch main; 2 commits; local == origin/main). Details = §10 + §16.
+  - READMEs — created root README.md (repo front door) + posters/, presentation/, docs/deep-dive/, docs/user-guides/
+    READMEs; refreshed docs/README + code/README + guide-hub pointers. All README links 0-broken.
+  NEXT: only "THE RUN" remains (Ubuntu/CI: make install/migrate/seed/qa → flip PICS rows). External: posters ADR-012.
+
+------------------------------------------------------------------------
+12. CLEANUP + ELUCIDATION + PICS PROGRAM (started SESSION 3, 2026-08-16)
+------------------------------------------------------------------------
+Purpose: distill the retired _removed/ generations into the latest docs while building two NEW deliverables —
+per-module/component ELUCIDATION and a PICS-style CONFORMANCE checklist — in ONE pass, document-wise, MVP+FFP.
+
+PIPELINE (one reading of each _removed doc, section by section -> 3 outputs):
+  (1) ANNOTATE the _removed doc with a top-of-doc SECTION MAP (where addressed · phase · verdict · PICS ids).
+  (2) ELUCIDATE (Hybrid): component depth -> guides/mvp/learn/tech-stack-101.md; module depth ->
+      docs/mvp/25-module-elucidation.md + docs/ffp/25-module-elucidation.md; enrich existing docs only for real gaps.
+  (3) PICS conformance rows -> docs/mvp/26-conformance-pics.md + docs/ffp/26-conformance-pics.md.
+
+TAGS (greppable): Snippet ID e.g. v0-10§4.3 ; <!-- IDRM-ELUCID src=... --> ; PICS-<MOD>-NNN / PICS-STK-<COMP>-NN
+(each PICS row carries src=). CONTROL PANEL + RESUME POINT: archive/_removed/_CLEANUP-LEDGER.md.
+
+DECISIONS (user, 2026-08-16): elucidation = HYBRID; PICS format = MARKDOWN tables (new 26 per phase); scope =
+idrm-docs-v0/docs FIRST, doc-by-doc, check in after doc 1; annotation granularity = SECTION-level (H2) via a
+NON-DESTRUCTIVE top Section Map (section bodies kept for verification). Backup of v0/docs in session scratchpad.
+
+STATUS (2026-08-16): *** _removed CLEANUP PROGRAM COMPLETE — ALL 4 GENERATIONS DONE. *** v0 (9 files), v1 (10),
+v2 (22), v3 (29) = ~70 files annotated with greppable Section Maps / variant banners (control record in
+_removed/_CLEANUP-LEDGER.md). Docs 25 + 26 (MVP+FFP) cover ALL 10 MODULES (INC·USR·LOC·NTF·RES·FIL·AUD·ADM·ALR·
+RPT) + core stack: 59 MVP + 29 FFP PICS rows. Net-new from v1/v2/v3 was tiny (2 stack rows: QUALITY-01, OPENAPI-01)
+— confirming v0 already captured the substance; v2 notably CONFIRMED the current MVP shape (native monolith + HTML/
+Tailwind). All annotation links verified (a few PRE-EXISTING legacy links inside old v2/v3 bodies left as-is).
+TASK-I PICS SIGN-OFF REVIEW DONE (2026-08-16): reviewed docs 26 (both phases); structure/IDs/M-O-C/evidence sound.
+Gap-closing pass added rows — INC-013 (role-scoped read), USR-007 (guest), STK-TLS-01, STK-SECRET-01, STK-A11Y-01
+(WCAG 2.2 AA — was missing), STK-HEALTH-01; FFP: STK-OTEL-F01, STK-CLIENT-F01, STK-POLY-F01. Totals 65 MVP + 32
+FFP rows; links verified; no dup IDs. *** USER SIGNED OFF 2026-08-16 — task I is COMPLETE; docs 26 stamped
+"SIGNED OFF"; task G (build the MVP code) is now UNBLOCKED. *** Elucidation stays a first-class novice->mastery asset.
+
+------------------------------------------------------------------------
+13. MARKDOWN LINKS — HOW TO OPEN THEM (VS Code & other renderers)
+------------------------------------------------------------------------
+SYMPTOM (reported 2026-08-16): a link in a README/doc underlines on hover ("looks clickable") but a normal
+click does NOT open the target .md in VS Code. ROOT CAUSE: this is NOT a broken link — every cross-link in the
+doc set is a verified relative path. It is how each Markdown tool treats a click. Use the right gesture per
+context; NO file edits are ever needed for links to work.
+
+WHY IT HAPPENS + WHAT TO DO (per use-case):
+  * VS Code — SOURCE EDITOR (the raw .md you are typing in): a plain left-click only moves the text cursor.
+    You must FOLLOW the link with **Ctrl+Click (Windows/Linux)** or **Cmd+Click (macOS)**. The hover tooltip
+    literally says "Follow link (ctrl/cmd + click)". This is VS Code's designed behaviour — nothing to fix.
+  * VS Code — MARKDOWN PREVIEW (open it with **Ctrl+Shift+V**, or Cmd+K then V): links follow on a **single
+    plain click**. By default, clicking a link to another .md opens THAT file's *preview*. To make it open the
+    real file in the editor instead, this repo already ships **`.vscode/settings.json`** with:
+        "markdown.preview.openMarkdownLinks": "inEditor"   (+ markdown.validate.enabled to flag broken links)
+    So on opening the repo folder, Preview single-clicks open the actual file with no reader setup. (The raw
+    EDITOR still needs Ctrl/Cmd+Click — that is built-in and no setting can change it.)
+  * GitHub / GitLab / most web renderers: links follow on a single click automatically.
+  * Obsidian / other editors: usually single-click; a few dislike %20-encoded spaces — see below.
+
+PREREQUISITES for relative links to resolve (all already satisfied by this repo):
+  - **Open the FOLDER/repo as a workspace** (File -> Open Folder), not a single loose .md. Relative links
+    (e.g. ../ffp/... or ../../guides/...) resolve against the file's own location; a lone file has no folder
+    context, so links appear dead.
+  - Keep the tree intact (docs/, archive/, guides/, posters/ as siblings under the repo root).
+
+FILENAMES WITH SPACES (e.g. "IDRM MVP Architecture - CO-STAR Prompt.md"):
+  - Linked with %20 for each space: (IDRM%20MVP%20Architecture%20-%20CO-STAR%20Prompt.md). VS Code and GitHub
+    decode %20 and open these correctly. If a future tool does not, the seamless fix is to give NEW files
+    kebab-case, space-free names — do NOT hand-edit existing links.
+
+AUTHORING RULES (so links stay seamless with zero manual fixes later):
+  1. Always write [label](relative/path.md); the path is relative to THE FILE being edited.
+  2. Base docs (docs/mvp, docs/ffp) and archive docs (archive/idrm-*-docs) sit at DIFFERENT depths, so the
+     same cross-link needs different ../ prefixes in each copy — edit prose identically but keep link prefixes
+     per-layout, and keep both copies in sync (see §9-E sync rule; the relink pattern base<->archive:
+     ../../guides/mvp/ <-> ../idrm-mvp-guides/ , ../../archive/instructions/ <-> ../instructions/ ,
+     ../ffp/ <-> ../idrm-ffp-docs/ , ../mvp/ <-> ../idrm-mvp-docs/).
+  3. Prefer kebab-case, space-free filenames for anything new (avoids %20 entirely).
+  4. Verify after editing: a link is correct if the target file exists at the resolved relative path
+     (the scratchpad checker greps ]\(path\) and tests each path exists).
+
+------------------------------------------------------------------------
+14. COMPLIANCE-REQUIRED INSTRUCTIONS (MUST comply — distilled from the user, this project)
+------------------------------------------------------------------------
+These are the recurring, essential rules established with the user. Treat them as MUST-COMPLY on
+EVERY task. (They summarize/cross-link fuller sections — obey those too.)
+
+  C1  NOVICE WORKFLOW (§7): on any conflict/decision, give a SHORT plain-language list of OPTIONS with
+      ONE clear RECOMMENDATION, then WAIT for the user's confirmation before big/irreversible actions.
+      No silent assumptions. Do not re-litigate locked decisions (§4).
+  C2  ELUCIDATION-FIRST: every doc/guide is written for a COMPLETE NOVICE → MASTERY. Define every term
+      and expand every acronym ON FIRST USE; always give the WHY (the rationale behind BOTH implicit and
+      explicit expectations), not just the what/how. Elucidation is a first-class deliverable (§9-A bar).
+  C3  BASE <-> ARCHIVE SYNC: any doc that exists in BOTH docs/ (base master) and archive/idrm-*-docs (or
+      guides/ vs archive/idrm-*-guides) MUST be edited in BOTH. Prose is identical; only relative-link
+      PREFIXES differ per layout (relink map in §13). Keep both CHANGELOGs in step; keep filename SETS in
+      parity. Verify with §15.
+  C4  CLICKABLE INDEXES: in every README (and each doc's footer "Related:" line), every document is a
+      clickable [label](path) link — never a bare code-span filename. New files use kebab-case, no spaces.
+  C5  MARKDOWN LINKS (§13): correct RELATIVE paths; author + verify targets exist; know editor Ctrl/Cmd+Click
+      vs Preview single-click. Never leave a listed doc unlinked.
+  C6  CHANGELOG DISCIPLINE: record every change in the right CHANGELOG.md (Keep-a-Changelog: Added/Changed/
+      Removed/Decided, dated). One source of truth per decision; cross-link, don't duplicate.
+  C7  DEFINITION OF DONE: finalize against archive/instructions/definition-of-done.md before calling any
+      doc/guide "done".
+  C8  PICS CONFORMANCE = BUILD GATE: docs/{mvp,ffp}/26 are the SIGNED-OFF gate before task G (code). Keep
+      docs 25 (elucidation) + 26 (PICS) current for both phases; a row flips Planned->Yes ONLY when code +
+      a passing test exist.
+  C9  MVP/FFP PHASE DISCIPLINE (§2,§4): keep the MVP simple; when MVP work meets advanced tech
+      (Redis/microservices/React/Bun/Docker/gateway/…), route it to the FFP with an ADR — nothing dropped.
+  C10 _removed CLEANUP (§12): annotate-in-place with a top-of-doc Section Map + greppable tags; NON-
+      destructive; the ledger (archive/_removed/_CLEANUP-LEDGER.md) is the resume point.
+  C11 POSTERS = AUTHORITY, except the ADR-012 "archive-wins" stack reconciliation; the authoritative posters
+      still need that stack update elsewhere (flagged, posters/ empty here).
+  C12 RESUMABILITY: use stable, greppable tags + the ledgers so any new session can pick up mid-task, and
+      always run the §15 pass + report status on load (§0 protocol).
+
+------------------------------------------------------------------------
+15. VERIFICATION / VALIDATION PASS (run on load + after any doc change)
+------------------------------------------------------------------------
+THE PASS (copy-paste; from repo root). Reports discrepancies to fix + confirms parity:
+
+  # (a) LINK INTEGRITY across all LIVE docs (excludes _removed/ quarantine + ffp-code):
+  /d/tools/miniconda3/python.exe - <<'PY'
+  import os,re,glob
+  from urllib.parse import unquote
+  g=["docs/**/*.md","guides/**/*.md","archive/idrm-mvp-docs/**/*.md","archive/idrm-ffp-docs/**/*.md",
+     "archive/idrm-mvp-guides/**/*.md","archive/idrm-ffp-guides/**/*.md","archive/analyses/*.md","archive/instructions/*.md"]
+  fs=sorted({x for p in g for x in glob.glob(p,recursive=True)}); L=re.compile(r'\]\(([^)]+?\.(?:md|yaml|yml|xlsx|txt))(?:#[^)]*)?\)'); b=0
+  for f in fs:
+      d=os.path.dirname(f)
+      for ln in open(f,encoding='utf-8',errors='replace'):
+          for m in L.finditer(ln):
+              t=m.group(1)
+              if t.startswith(('http://','https://')): continue
+              if not os.path.exists(os.path.normpath(os.path.join(d,unquote(t)))): print("BROKEN",f,"->",t); b+=1
+  print("broken:",b)
+  PY
+  # (b) BASE<->ARCHIVE PARITY (filename sets must match):
+  for pair in "docs/mvp archive/idrm-mvp-docs" "docs/ffp archive/idrm-ffp-docs" "guides/mvp/learn archive/idrm-mvp-guides/learn"; do
+    set -- $pair; diff <(ls "$1"|sort) <(ls "$2"|sort) >/dev/null && echo "PARITY OK: $1" || echo "PARITY DIFF: $pair"; done
+  # (c) SIGN-OFF stamps present:
+  grep -l "SIGNED OFF" docs/mvp/26-conformance-pics.md docs/ffp/26-conformance-pics.md
+
+EXPECTED / KNOWN-ACCEPTED: link check should show ~5 BROKEN, ALL inside
+  archive/analyses/v3-30-design-detailed-lld.md (legacy refs to un-preserved v3 uppercase files —
+  accepted, it is a preserved research doc). Any OTHER broken link is a real discrepancy to fix.
+
+STATUS BOARD (as of 2026-08-18 / SESSION 5 — update when state changes; report it to the user on load).
+SESSION 5 landed: Increments 4–10 → *** ALL 10 MVP MODULES NOW WRITTEN *** (still UNRUN here; PICS = Planned);
+the SEED (doc 34 + scripts/seed.py); the SIX Task-M WHITE PAPERS (docs/whitepapers/) + FIL face-gate; the repo is
+*** NOW A GIT REPO PUSHED TO GITHUB *** (§16); idrm-ffp-code renamed → -template; README hierarchy + root README done.
+ONLY OPEN ITEM = "THE RUN" on Ubuntu/CI. Full per-file detail lives in the CHANGELOGs: code/CHANGELOG.md (code) +
+docs/mvp/CHANGELOG.md (docs). PENDING.md (repo root) mirrors this; if they ever disagree, THIS §15 wins.
+
+SESSION 6 (2026-08-22) — CODE↔DOCS COHERENCE TIDY-UP (all verified; still UNRUN by design, PICS still Planned):
+  • T1: documented POST /notifications/chat in the API contract (doc 40 md + openapi; base + archive) — it
+    shipped in code + PICS-NTF-004 but was missing from the contract. Every code route now matches the OpenAPI.
+  • F4 + F5-A: OpenAPI query params caught up to the code (contract-catches-up-to-code): /notifications
+    read→unread_only; /organizations +verified_only/lat/lng/radius_km; /audit-logs +resource_type/resource_id/
+    action; /locations/nearby stale `type`→`layer`. (base + archive; YAML parity OK.)
+  • T2: Task-K public-surface docstring pass — +~96 docstrings across all 10 modules (undocumented 193→95;
+    remainder = schema classes/__init__/trivial privates by design). Corrected the code CHANGELOG's overstated
+    "Task K honored"→"in progress". *** ruff (0.16.3) IS installed here and was run: `ruff check app` CLEAN;
+    compileall clean. *** (Note: unlike the constraint box's earlier assumption, ruff runs locally now; the
+    pytest/DB suite still cannot — that needs the Ubuntu box/CI.)
+  • T3: created archive/idrm-mvp-code as a ONE-TIME FROZEN SNAPSHOT of code/ (159 files; user chose snapshot
+    over a living mirror). NOT under C3, NOT in the parity pass; code/ stays the sole living source (§5;
+    idrm-mvp-code/_SNAPSHOT.md). 159 new untracked files in `git status` — commit only when the user asks.
+  • F5-B: DONE 2026-08-22 (user chose "implement all three"). GET /incidents now honors priority + q
+    (full-text via to_tsvector @@ plainto_tsquery, using the GIN index) + whitelisted sort (created_at/
+    priority; invalid→422). Activates the dead 0002 indexes; code=contract=schema now agree. Contract q
+    wording "title/description"→"description" fixed (base+archive). Tests added (Task N). ruff+compile clean;
+    unrun here. In code/CHANGELOG.md + docs/mvp/CHANGELOG.md (+archive).
+  • F3: DONE 2026-08-22 (user chose "implement the tiny helper"). Added app/core/pagination.py
+    (paginate + total_pages, one ceiling-division) and routed all 8 list endpoints through it (0 residual
+    hand-built pagination dicts). Pure unit test tests/unit/core/test_pagination.py — EXECUTED HERE and
+    passes (dependency-free). ruff+compile clean. In code/CHANGELOG.md.
+  • NO OPEN COHERENCE ITEMS REMAIN from the Session-6 audit. (Project-level open item is still THE RUN.)
+  • CODE WALK-THROUGH: DONE 2026-08-23 (user ask; per faq_chatbot instructions_codewalk.md kit). New
+    REPO-ROOT docs/walkthrough/ — README + 12 data-flow-ordered chapters + GLOSSARY (~65 terms) +
+    assets/{marp-theme.css, architecture.svg}; plus tooling: .marprc.yml, scripts/build_slides.sh + .ps1,
+    .github/workflows/pages.yml, .gitignore += docs/**/slides/. Novice→mastery; reads on GitHub, renders as
+    Marp slides. VALIDATED here: `bash scripts/build_slides.sh` builds all 12 + combined; 85 links 0-broken;
+    rendered PNGs of the diagram/code/SVG slides — clean, no overflow, WCAG contrast OK (Node 18 is present).
+    Root README wired to it. NOT under C3; frozen archive/idrm-mvp-code snapshot excludes it.
+    *** COMMITTED + PUSHED 2026-08-23 (7760d99; pages.yml YAML fix 9e8d409); local == origin/main. ***
+    *** GitHub Pages ENABLED (build_type=workflow) and LIVE at https://kalyancn4u.github.io/idrm-artifacts/
+    (landing + combined + per-chapter decks all HTTP 200). CI run 32616050749 = success (build 31s + deploy 8s).
+    Fix note: pages.yml `env:` had to be BLOCK YAML — an inline flow map with an unquoted ${{ }} expression is
+    invalid and GitHub rejected it as a "workflow file issue" (0s fail). ***
+  • KNOWN CI DEFECT (separate, unfixed): code/.github/workflows/ci.yml is NOT picked up by GitHub Actions —
+    workflows must live at the REPO-ROOT .github/workflows/ (where the NEW pages.yml correctly sits). So the
+    code-quality CI has never run (0 runs); "the run" is being done manually on Ubuntu. Fix later: move
+    code/ci.yml to repo-root .github/workflows/ with `working-directory: code`.
+
+  ====================================================================================================
+  ***  READ THIS FIRST — THE ONE CONSTRAINT THAT SHAPES EVERYTHING  ***
+  This working folder is a WINDOWS, DOCS-ONLY environment: the Python deps are NOT installed and there is
+  NO PostgreSQL/PostGIS/MinIO here, so the MVP application code CANNOT BE RUN or tested in this chat. The
+  ceiling here is `ruff check` (clean) + `py_compile` (clean) — both PASS. Actually RUNNING the app / the
+  pytest suite / `make qa` happens on the Ubuntu server (see PENDING.md §1) or in GitHub Actions CI. Because
+  of this, per roadmap §14 a `PICS-<MOD>-*` row flips to ✅ ONLY after a GREEN test run there — so all code
+  written so far leaves its PICS rows = "Planned". Do not claim a module "done/conformant" without that run.
+  ====================================================================================================
+
+  [x] DONE — DOCUMENTATION (unchanged, all validated):
+      - Blueprint T1–T5; guide library (39 101s + tech-stack-101 #40 + 12 role guides + FFP hub); docs 25
+        (module elucidation) + 26 (conformance PICS, USER-SIGNED-OFF) for MVP+FFP; docs/09-roadmap.md;
+        base<->archive parity OK; §14 compliance rules; §13 links guidance. (Details: earlier in this file + §11.)
+  [x] DONE — SESSION 4 (2026-08-17):
+      - Task J: the COMPLETE IMPLEMENTATION ROADMAP is WRITTEN — docs/mvp/27-implementation-roadmap.md §0–§15
+        (HUB) + deep-dive sub-docs docs/mvp/31-concurrency-and-thread-model (thread/CPU formula ≤70%, anchored
+        4 vCPU/16 GB), 32-logging-and-diagnostics (structured JSON + request-id + DPDP redaction), 33-design-system
+        (Tailwind tokens + components + WCAG 2.2 AA). All mirrored to archive/idrm-mvp-docs (C3), listed in both
+        READMEs, links 0-broken, parity OK. (Optional not-yet-written: docs/mvp/34-seed-data-and-fixtures = the full
+        row-by-row seed dataset; write it when the seed script is built.)
+      - DATA-FOUNDATION GATE (roadmap §3.6) *** USER-SIGNED-OFF 2026-08-17 *** — all 5 items approved: (1) data
+        model + (2) 13-table schema+enums, (3) indexes + the "logic-in-service / minimal-DB-views" decision,
+        (4) the rich seed dataset spec (4 personas + all 8 lifecycle states + Telangana/AP coords + guest),
+        (5) the five user journeys. §3.6 is stamped "SIGNED OFF". This was the gate in front of coding.
+
+  [~] TASK G — BUILD THE MVP CODE (in top-level code/): *** ALL 10 MODULES WRITTEN (Increments 1–10). ***
+      Both gates cleared (PICS signed off 2026-08-16; data foundation 2026-08-17). Pure-Python FastAPI MODULAR
+      MONOLITH, driven by the PICS (docs/mvp/26) + roadmap §13. Every increment: code + tests WRITTEN, ruff-clean +
+      py_compile-clean, but NOT executed here (Windows, no deps/PostgreSQL — see the constraint box above). Per-file
+      detail = code/CHANGELOG.md. Six migrations 0001–0006. Increment-by-increment, checked in with the user each time.
+        DONE increments (all [x] code+tests written, ruff + py_compile clean):
+          [x] Inc 1  — SCAFFOLD: app/core (config·logging[JSON+request-id+DPDP-redaction]·exceptions[one envelope]·
+              security[bcrypt-12+RS256]·dependencies·rate_limit) · async DB engine + Base/mixins · main.py (10 routers +
+              /health + X-Request-Id mw) · pyproject · Makefile · CI · alembic · frontend tokens · seed stub.
+          [x] Inc 2+2b — USERS/AUTH (USR): migration 0001; /auth/* + /users/* (register/verify/login/refresh[ROTATING]/
+              logout/reset/change-password/me/admin mgmt); RS256 + bcrypt-12 + 5-fail/15-min LOCKOUT + single-use tokens;
+              HTTPBearer + RBAC + per-endpoint rate-limiting. Unit + API + integration tests.
+          [x] Inc 3  — INCIDENTS (INC): lifecycle.py (pure 8-state machine + roles); migration 0002 (PostGIS POINT +
+              GiST/B-tree/GIN-fulltext); create (citizen + GUEST token; provider 403), role-scoped list/mine, /nearby,
+              /updates, pre-accept PATCH, the 8 transitions w/ single-claim + critical-approval + illegal-jump.
+          [x] Inc 4  — ORGANIZATIONS & RESOURCES (ORG/RES): migration 0003 (org_type enum, both tables, + the deferred
+              incidents→organizations FK). One-org-per-provider, coordinator VERIFY gate, capacity/availability, resource
+              CRUD, spatial/type filters. *** WIRED the 5 deferred INC↔ORG links: FK; accept resolves the provider's own
+              verified org SERVER-SIDE (org id no longer in the body); org-membership check on start/complete (403
+              not_assigned); GET /incidents/assigned; stricter 5/min guest create limit. ***
+          [x] Inc 5  — LOCATIONS/GEO (LOC): no table (reads incidents+orgs geometry; no migration). geo.py pure core
+              (haversine · OFFLINE reverse-geocode gazetteer · GeoJSON builders). ST_DWithin proximity. Endpoints:
+              /nearby (provider/coord), /distance, /reverse-geocode, /map/{layer} (role-scoped GeoJSON). Geo unit tests
+              RUN HERE and pass (core is dep-free). NOTE: reverse-geocode = offline stub by MVP choice (no 3rd-party call).
+          [x] Inc 6  — ALERTS + NOTIFICATIONS (ALR/NTF): migration 0004. Alerts = MultiPolygon area (NULL=platform-wide);
+              GET /alerts area-filtered by lat/lng (ST_Contains). Notifications = list/unread-count/read/read-all/prefs/
+              delete, user-scoped. *** PICS-NTF-001 WIRED: incident transitions notify the requester (skips guests/self). ***
+          [x] Inc 7  — AUDIT (AUD, cross-cutting): migration 0005; append-only audit_logs (no update/delete path). GET
+              /audit-logs (coordinator/admin, filterable). AuditService.record wired into incident transitions, org verify,
+              alert create, + admin user change. client_ip_ctx contextvar added to the request middleware.
+          [x] Inc 8  — FILES (FIL, cross-cutting: MinIO): migration 0006; metadata-only files table (key/URL not blob).
+              ObjectStorage protocol + boto3 S3Storage (fake-injectable). PILLOW pipeline: EXIF/GPS strip + downscale +
+              min-dims + blur check. Face-detection gate = CLIENT-SIDE JS (frontend/static/js/face-quality.js, ADR-011 —
+              on-device, advisory, nothing biometric; server no-op; note docs/whitepapers/face-quality-gate.md). PICS-FIL-005 Planned pending a manual browser check.
+              POST /files (type/size/lite gates) + GET /files/{id} (role-scoped). Added pillow dep + media settings.
+          [x] Inc 9  — REPORTS (RPT): no table (aggregates incidents+timeline, orgs, audit). /reports/dashboard (by
+              status/type/priority/region + org counts), /response-times (avg+median), /fulfillment (rates, audit-cross-
+              checked), /{name}/export?format=csv. Coordinator/admin only.
+          [x] Inc 10 — ADMINISTRATION (ADM, last module) + TASK L: /administration/reference-data (enums + state machine,
+              staff) + /overview (admin). Admin user-change now AUDITED. *** Task L DONE: POST /notifications/chat = FAQ
+              chatbot STUB (fixed reply, no ML); PICS-NTF-004 added to doc 26 (both copies). ***
+        NEXT STEPS (in order):
+          1. *** THE run *** — on an Ubuntu box / CI: `cd code && make install && make migrate && make qa`. Get the
+             suite GREEN, then flip the passing PICS-<MOD>-* rows to ✅ in docs/mvp/26 (+ archive copy; keep parity).
+             This is the one thing that turns "written" into "verified". See PENDING.md §1 for the bring-up checklist.
+          2. Optional follow-ups: ALL DONE.
+             [DONE 2026-08-17: docs/mvp/34 seed-data write-up + code/scripts/seed.py; the six Task-M white papers →
+             docs/whitepapers/ (hub + papers 1-6, classical-first, links 0-broken); AND the FIL face-detection gate →
+             client-side frontend/static/js/face-quality.js (ADR-011) + companion note docs/whitepapers/face-quality-gate.md.]
+             *** No optional follow-ups remain. The only open item is THE run (step 1). *** Present a plan + WAIT (C1).
+
+  [ ] OTHER PENDING TASKS (not yet started):
+      - Task K — CODE DOCSTRINGS on every apt function/method/module (novice-readable; purpose·args·returns·raises).
+        A quality gate w/ black/ruff/mypy (PICS-STK-QUALITY-01). ONGOING — applied to all code written so far; keep it up.
+      - Task L — FAQ CHATBOT STUB: *** DONE (Inc 10, 2026-08-17). *** POST /notifications/chat always returns the fixed
+        "Your input is noted, we'll try to get back to you shortly, if possible." No ML (real NLP = Task M #1, FFP).
+        PICS-NTF-004 added to docs/mvp/26 + archive copy (Planned until the run).
+      - Task M — SIX TECHNICAL WHITE PAPERS: *** DONE (2026-08-17). *** All six written in docs/whitepapers/ (standalone
+        hub + shared 8-part template: problem · MVP-seam · data inputs · method-ladder+recommendation · diagram ·
+        privacy/DPDP · seam-vs-FFP · metrics; classical-first w/ DL upgrade path; each cross-links docs 21/25/26).
+        (1) 1-faq-chatbot; (2) 2-anomaly-detection-rate-limiting; (3) 3-credibility-assessment; (4) 4-recommender-
+        financial-charity; (5) 5-recommender-incident-notification-routing; (6) 6-churn-detection. Grounded in the
+        archive/analyses/notebooks/ reference notebooks (dsml_faqs_chatbot + Zee recommenders). ENGINES remain → FFP;
+        each names the MVP seam it plugs into. Standalone folder (not mvp/ffp-mirrored); links 0-broken. Decisions
+        (user): standalone docs/whitepapers/, one-at-a-time w/ check-ins, full depth, classical-first.
+      - Task N — MODULE SEGREGATION + INDEPENDENT TESTABILITY: each of the 10 modules self-contained + independently
+        testable (UT + functional + API) with default fixtures/profiles, so it runs alone (low coupling → FFP
+        Strangler-Fig seam). *** HONORED ACROSS ALL 10 MODULES *** — each has its own tests/{unit,api,integration}/<mod>/;
+        cross-module coupling is one-directional (feature→audit, feature→notifications at the router edge only).
+      - [DONE 2026-08-17] docs/mvp/34-seed-data-and-fixtures.md (full row-by-row seed dataset) + code/scripts/seed.py
+        (idempotent seed) — both written; loaded by `make seed`. ruff + py_compile clean; unrun here.
+      - EXTERNAL: update the authoritative posters for the ADR-012 stack change (posters/ empty in THIS repo).
+
+  [i] HANDOFF FILE: repo-root PENDING.md = self-contained pending items + an UBUNTU BRING-UP CHECKLIST (installer →
+      change creds → generate RS256 keypair → .env → make setup/install/migrate/seed/run → make qa). CONVENTION
+      (user-confirmed): assistant REFRESHES PENDING.md routinely as each increment finishes/pauses (implicit, no
+      hook/settings change); CLEANUP = when all items resolve, PROPOSE archiving it into archive/_removed/ (preserve
+      history), notify + WAIT for confirmation — NEVER silent. PENDING.md is a mirror; THIS §15 is authoritative.
+
+  [x] DONE — SESSION 5 FOLLOW-UPS + INFRA (2026-08-18): seed (doc 34 + scripts/seed.py); six Task-M white papers
+      (docs/whitepapers/) + face-gate note; FIL client-side face gate; .gitignore hardened; idrm-ffp-code →
+      idrm-ffp-code-template; *** GIT INIT + PUSH to github.com/kalyancn4u/idrm-artifacts *** (§16); README hierarchy
+      + root README.md (all README links 0-broken). NO optional follow-ups remain.
+
+  [~] TO-VALIDATE / DISCREPANCIES: none open beyond the ~5 known-accepted legacy links (analyses/v3-30) from the §15
+      link pass. Code: ruff + py_compile clean; the pytest suite is UNRUN here by design (see the constraint box above).
+      Git: local == origin/main (in sync). Base<->archive doc parity OK.
+
+------------------------------------------------------------------------
+16. VERSION CONTROL & GITHUB SYNC (NEW — SESSION 5, 2026-08-18)
+------------------------------------------------------------------------
+*** The whole idrm-artifacts/ folder is now a GIT REPOSITORY, pushed to GitHub. *** (Earlier notes elsewhere that
+said "not a git repo" are SUPERSEDED by this section.) A new session should know:
+
+  - REMOTE: `origin` = https://github.com/kalyancn4u/idrm-artifacts  · BRANCH: `main` · state: local == origin/main.
+  - AUTH: `gh` CLI is logged in (account kalyancn4u; scopes repo+workflow — workflow is needed to push
+    code/.github/workflows/). Git identity: kalyan.narayana / kalyancn4u@gmail.com (global).
+  - WINDOWS TLS (already applied, repo-local): `git config http.sslBackend schannel`. WITHOUT it, `git push` fails
+    with "unable to get local issuer certificate (20)". NEVER use `http.sslVerify false`.
+  - TO SYNC after making changes (ONLY when the user asks — per the harness rule): from the repo root,
+        git add -A && git commit -m "…"    (end the message with the Co-Authored-By line)  &&  git push
+  - IGNORE RULES: root .gitignore (OS/caches/editor/secrets, keeps .vscode/settings.json) + code/.gitignore +
+    archive/idrm-ffp-code-template/.gitignore. NOTE: the FFP template's dev `.env` (SAFE placeholder values) is
+    committed BY DESIGN (its own .gitignore says so); real secret env/keys stay ignored. A secret scan before the
+    first push found no real credentials.
+  - HARMLESS: git prints "LF will be replaced by CRLF" on Windows. Optional nicety (NOT done): add `.gitattributes`
+    with `* text=auto` to normalise line endings.
+  - ⚠️ EPHEMERAL BACKUP WARNING: the RENAMED folder archive/idrm-ffp-code-template used to be its OWN git repo; its
+    nested .git was moved to the SESSION SCRATCHPAD (…/scratchpad/ffp-template-dotgit-backup) so its 290 files could
+    sync as normal tracked files. That scratchpad is session-specific and will NOT survive into a new chat — so that
+    template's original commit history is effectively gone. The template FILES are safe (tracked in this repo); only
+    its separate VCS history was dropped. If that history ever mattered, it needed preserving during Session 5.
+  - Commits: initial import; README hand-off; .gitattributes; SESSION 6 pushed 3 commits (a63162f..0b4bcf3)
+    on 2026-08-22 — docs(api) coherence, feat(code) filters+docstrings+pagination, chore snapshot+hand-off.
+    Local == origin/main after that push. (Later Session-6 work — see §17 — may be uncommitted; check git status.)
+
+========================================================================
+END
+========================================================================

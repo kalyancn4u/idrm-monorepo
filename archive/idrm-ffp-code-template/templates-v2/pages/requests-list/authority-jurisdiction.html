@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Approval queue (DM Authority · Jurisdiction)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+</head>
+<body>
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- REQUESTS LIST · DM_AUTHORITY · Scope: Jurisdiction (the §3.3 "View all · <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>" cell) · Render: FastAPI (F) -->
+  <div class="role-strip role-DM_AUTHORITY" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="../role-dashboard/dm-authority.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role">DM_AUTHORITY</span>
+        </div>
+        <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span>
+      </div>
+      <div class="nav-actions">
+        <a href="../role-dashboard/dm-authority.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+        <a href="../shared/profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-head"><div><h1 style="margin-bottom:var(--space-1);">Approval queue</h1><p class="text-muted" style="margin:0;">Every request in your jurisdiction awaiting a decision.</p></div></div>
+
+    <div class="scope-banner scope-jurisdiction" role="note">
+      <span class="scope-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>
+      <div class="scope-body">
+        <span class="scope-tag">Scope · Jurisdiction (full)</span>
+        <p>You see <strong>all</strong> requests within your boundary and their full requestor details. Emergencies are pre-APPROVED by the system (flagged for review). Approve / reject here moves them through the lifecycle.</p>
+      </div>
+    </div>
+
+    <div class="flex gap-2 flex-wrap mb-4" data-chips>
+      <button class="chip active">SUBMITTED</button>
+      <button class="chip">Auto-approved (review)</button>
+      <button class="chip">DISPUTED</button>
+      <button class="chip">CRITICAL</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Type</th><th>Priority</th><th>Requestor</th><th>Privacy</th><th>Status</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="../service-detail/dm-authority.html">#a1b2c3</a></td>
+            <td><span class="svc-dot svc-MEDICAL"></span> MEDICAL</td><td><span class="prio prio-CRITICAL">CRITICAL</span></td>
+            <td>Aarthi N.</td><td><span class="privacy privacy-PROTECTED">PROTECTED</span></td><td><span class="status status-SUBMITTED">SUBMITTED</span></td>
+            <td><div class="flex gap-2"><button class="btn btn-primary btn-sm" onclick="idrmToast('Approved (mockup)','success')">Approve</button><button class="btn btn-danger btn-sm" onclick="idrmToast('Rejected (mockup)','error')">Reject</button></div></td>
+          </tr>
+          <tr>
+            <td><a href="../service-detail/dm-authority.html">#d4e5f6</a></td>
+            <td><span class="svc-dot svc-FOOD"></span> FOOD</td><td><span class="prio prio-MEDIUM">MEDIUM</span></td>
+            <td>Kondapur shelter</td><td><span class="privacy privacy-PUBLIC">PUBLIC</span></td><td><span class="status status-SUBMITTED">SUBMITTED</span></td>
+            <td><div class="flex gap-2"><button class="btn btn-primary btn-sm" onclick="idrmToast('Approved (mockup)','success')">Approve</button><button class="btn btn-danger btn-sm" onclick="idrmToast('Rejected (mockup)','error')">Reject</button></div></td>
+          </tr>
+          <tr>
+            <td><a href="../service-detail/dm-authority.html">#7a8b9c</a></td>
+            <td><span class="svc-dot svc-RESCUE"></span> RESCUE</td><td><span class="prio prio-CRITICAL">CRITICAL</span></td>
+            <td>Anon (OTP)</td><td><span class="privacy privacy-PROTECTED">PROTECTED</span></td><td><span class="status status-APPROVED">auto</span></td>
+            <td><span class="text-small muted">auto-approved — review credibility</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="api-note">
+      <strong>Access ·</strong> DM_AUTHORITY (jurisdiction) + ADMIN (all). AUDITOR sees the same list but read-only (no Decision column).<br>
+      <strong>Scope ·</strong> Jurisdiction — server <code>WHERE</code> on the jurisdiction polygon; full PII included because the caller is the authority (access logged).<br>
+      <strong>Render ·</strong> <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> — sensitive queue + decision writes; the Decision column is rendered only for roles that hold "approve". <code>no-store</code>.<br>
+      <strong>API ·</strong> <code>GET /api/v1/services?status=SUBMITTED&amp;jurisdiction=mine</code> · <code>POST /api/v1/services/{id}/approve</code> · <code>/reject</code>.
+    </div>
+  </div>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

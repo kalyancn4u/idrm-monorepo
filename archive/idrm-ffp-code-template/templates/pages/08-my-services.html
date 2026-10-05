@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — My requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body class="has-bottom-nav">
+  <!-- PAGE 08 · My Services · Who: any authenticated user · API: GET /services (filtered by requestor) -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="05-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">CITIZEN</span></div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="05-dashboard.html">Dashboard</a></li>
+        <li><a href="09-map.html">Map</a></li>
+        <li><a href="08-my-services.html" class="active" aria-current="page">My requests</a></li>
+        <li><a href="10-notifications.html">Alerts</a></li>
+      </ul>
+      <div class="nav-actions"><a href="06-create-service.html" class="btn btn-primary btn-sm" style="color:#fff;">+ Request</a><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-head">
+      <div><h1 style="margin-bottom:var(--space-1);">My requests</h1><p class="text-muted" style="margin:0;">All the help you've requested, newest first.</p></div>
+      <a href="06-create-service.html" class="btn btn-primary">+ New request</a>
+    </div>
+
+    <!-- Filters -->
+    <div class="card card-pad-sm mb-6">
+      <div class="flex gap-3 items-center flex-wrap">
+        <div class="input-group has-icon-left" style="flex:1;min-width:200px;"><span class="input-icon-left" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input type="search" placeholder="Search description or address…" aria-label="Search requests"></div>
+        <select aria-label="Status filter" style="width:auto;min-width:150px;">
+          <option value="">All statuses</option>
+          <option>SUBMITTED</option><option>APPROVED</option><option>ACCEPTED</option>
+          <option>IN_PROGRESS</option><option>COMPLETED</option><option>VERIFIED</option>
+          <option>REJECTED</option><option>CANCELLED</option><option>EXPIRED</option><option>DISPUTED</option>
+        </select>
+        <select aria-label="Type filter" style="width:auto;min-width:140px;">
+          <option value="">All types</option>
+          <option>RESCUE</option><option>MEDICAL</option><option>FOOD</option><option>WATER</option><option>SHELTER</option><option>OTHER</option>
+        </select>
+        <input type="date" aria-label="From date" style="width:auto;">
+      </div>
+    </div>
+
+    <!-- Results table (scrolls horizontally on small screens) -->
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead><tr><th>Request</th><th>Type</th><th>Priority</th><th>Status</th><th>Location</th><th>Updated</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="strong">#a1b2c3</span><br><span class="text-small">Ambulance needed urgently</span></td>
+            <td><span class="svc-dot svc-MEDICAL"></span> MEDICAL</td>
+            <td><span class="prio prio-CRITICAL">CRITICAL</span></td>
+            <td><span class="status status-IN_PROGRESS">IN_PROGRESS</span></td>
+            <td>Kukatpally, Hyderabad</td>
+            <td class="text-muted">2 min ago</td>
+            <td><a href="07-service-detail.html" class="btn btn-ghost btn-sm">View →</a></td>
+          </tr>
+          <tr>
+            <td><span class="strong">#d4e5f6</span><br><span class="text-small">Drinking water for shelter</span></td>
+            <td><span class="svc-dot svc-WATER"></span> WATER</td>
+            <td><span class="prio prio-HIGH">HIGH</span></td>
+            <td><span class="status status-SUBMITTED">SUBMITTED</span></td>
+            <td>Kukatpally, Hyderabad</td>
+            <td class="text-muted">1 hr ago</td>
+            <td><a href="07-service-detail.html" class="btn btn-ghost btn-sm">View →</a></td>
+          </tr>
+          <tr>
+            <td><span class="strong">#778899</span><br><span class="text-small">Cooked meals for 12</span></td>
+            <td><span class="svc-dot svc-FOOD"></span> FOOD</td>
+            <td><span class="prio prio-MEDIUM">MEDIUM</span></td>
+            <td><span class="status status-VERIFIED">VERIFIED</span></td>
+            <td>Vijayawada</td>
+            <td class="text-muted">Yesterday</td>
+            <td><a href="07-service-detail.html" class="btn btn-ghost btn-sm">View →</a></td>
+          </tr>
+          <tr>
+            <td><span class="strong">#112233</span><br><span class="text-small">Tarpaulin &amp; bedding</span></td>
+            <td><span class="svc-dot svc-SHELTER"></span> SHELTER</td>
+            <td><span class="prio prio-LOW">LOW</span></td>
+            <td><span class="status status-CANCELLED">CANCELLED</span></td>
+            <td>Guntur</td>
+            <td class="text-muted">2 days ago</td>
+            <td><a href="07-service-detail.html" class="btn btn-ghost btn-sm">View →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between items-center mt-6 flex-wrap gap-3">
+      <span class="text-muted">Showing 1–4 of 12</span>
+      <div class="flex gap-2">
+        <button class="btn btn-outline btn-sm" disabled>← Prev</button>
+        <button class="chip active">1</button><button class="chip">2</button><button class="chip">3</button>
+        <button class="btn btn-outline btn-sm">Next →</button>
+      </div>
+    </div>
+
+    <!-- Empty state reference (hidden; shown when 0 results) -->
+    <div class="state-container mt-8 hidden">
+      <div class="state-icon" aria-hidden="true">📭</div>
+      <div class="state-title">No requests yet</div>
+      <div class="state-description">When you request help, it'll show up here.</div>
+      <a href="06-create-service.html" class="btn btn-primary">Create your first request</a>
+    </div>
+
+    <div class="api-note"><strong>Access ·</strong> Any signed-in role (shows your own requests) — default CITIZEN.<br><strong>API ·</strong> <code>GET /api/v1/services?status=&amp;service_type=&amp;page=1&amp;per_page=20</code> (server filters by your <code>requestor_id</code>). Always render <strong>loading + empty + error</strong> states.</div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="05-dashboard.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Home</a>
+    <a href="09-map.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a>
+    <a href="06-create-service.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request</a>
+    <a href="08-my-services.html" class="active"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Requests</a>
+    <a href="11-profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a>
+  </nav>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

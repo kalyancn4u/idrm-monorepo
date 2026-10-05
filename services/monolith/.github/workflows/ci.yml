@@ -1,0 +1,41 @@
+name: CI
+on:
+  push: { branches: [ main ] }
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: idrm_user
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: idrm_db
+        ports: [ "5432:5432" ]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      minio:
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: idrm
+          MINIO_ROOT_PASSWORD: idrm-secret
+          MINIO_DEFAULT_BUCKETS: idrm-uploads
+        ports: [ "9000:9000" ]
+    env:
+      DATABASE_URL: postgresql+asyncpg://idrm_user:test@localhost:5432/idrm_db
+      S3_ENDPOINT: http://localhost:9000
+      S3_BUCKET: idrm-uploads
+      S3_ACCESS_KEY: idrm
+      S3_SECRET_KEY: idrm-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: make install
+      - run: make migrate
+      - run: make lint typecheck
+      - run: make coverage
+      - run: pip-audit

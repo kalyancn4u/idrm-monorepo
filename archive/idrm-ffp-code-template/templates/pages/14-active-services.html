@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Active services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body>
+  <!-- PAGE 14 · Active Services · Who: PROVIDER · API: GET /services?status=ACCEPTED,IN_PROGRESS&provider=me · POST /{id}/complete -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="12-provider-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">PROVIDER</span></div>
+      <button class="nav-toggle" data-nav-toggle="prov-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="prov-nav">
+        <li><a href="12-provider-dashboard.html">Overview</a></li>
+        <li><a href="13-available-services.html">Available</a></li>
+        <li><a href="14-active-services.html" class="active" aria-current="page">Active</a></li>
+        <li><a href="09-map.html">Map</a></li>
+      </ul>
+      <div class="nav-actions"><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-head">
+      <div><h1 style="margin-bottom:var(--space-1);">Active assignments</h1><p class="text-muted" style="margin:0;">Work your org has accepted. Update status as you go.</p></div>
+    </div>
+
+    <div data-tabs>
+      <div class="tabs" role="tablist" aria-label="Filter assignments">
+        <button class="tab active" data-tab="all" role="tab" aria-selected="true">All (3)</button>
+        <button class="tab" data-tab="accepted" role="tab" aria-selected="false">Accepted (1)</button>
+        <button class="tab" data-tab="progress" role="tab" aria-selected="false">In progress (2)</button>
+      </div>
+
+      <div data-tab-panel="all" class="list-stack">
+        <!-- Row: ACCEPTED -> can start -->
+        <div class="list-row">
+          <span class="svc-dot svc-MEDICAL" style="margin-top:6px;"></span>
+          <div class="flex-1">
+            <div class="flex justify-between gap-2 flex-wrap items-center"><span class="strong">First aid · #cc77dd</span><span class="status status-ACCEPTED">ACCEPTED</span></div>
+            <p class="text-muted" style="margin:var(--space-1) 0;">KPHB · 10 people · accepted 09:50 · ETA 10:20</p>
+            <div class="flex gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="window.idrmToast('Marked IN_PROGRESS','success')">▶ Start work</button>
+              <a href="07-service-detail.html" class="btn btn-outline btn-sm">Open</a>
+            </div>
+          </div>
+        </div>
+        <!-- Row: IN_PROGRESS -> can complete -->
+        <div class="list-row">
+          <span class="svc-dot svc-MEDICAL" style="margin-top:6px;"></span>
+          <div class="flex-1">
+            <div class="flex justify-between gap-2 flex-wrap items-center"><span class="strong">Ambulance · #a1b2c3</span><span class="status status-IN_PROGRESS">IN_PROGRESS</span></div>
+            <p class="text-muted" style="margin:var(--space-1) 0;">Kukatpally · 3 people · started 10:11</p>
+            <div class="flex gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="window.idrmToast('Marked COMPLETED — requestor asked to confirm','success')">✓ Mark complete</button>
+              <button class="btn btn-outline btn-sm" onclick="window.idrmToast('Issue reported (DISPUTED)','warning')">⚠ Report issue</button>
+              <a href="07-service-detail.html" class="btn btn-ghost btn-sm">Open</a>
+            </div>
+          </div>
+        </div>
+        <!-- Row: IN_PROGRESS -->
+        <div class="list-row">
+          <span class="svc-dot svc-RESCUE" style="margin-top:6px;"></span>
+          <div class="flex-1">
+            <div class="flex justify-between gap-2 flex-wrap items-center"><span class="strong">Evacuation · #ee44aa</span><span class="status status-IN_PROGRESS">IN_PROGRESS</span></div>
+            <p class="text-muted" style="margin:var(--space-1) 0;">Miyapur · 6 people · started 09:30</p>
+            <div class="flex gap-2 flex-wrap">
+              <button class="btn btn-primary btn-sm" onclick="window.idrmToast('Marked COMPLETED','success')">✓ Mark complete</button>
+              <a href="07-service-detail.html" class="btn btn-ghost btn-sm">Open</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-tab-panel="accepted" class="hidden"><p class="text-muted">Filtered to <span class="status status-ACCEPTED">ACCEPTED</span> (mockup — same data, filtered client/server-side).</p></div>
+      <div data-tab-panel="progress" class="hidden"><p class="text-muted">Filtered to <span class="status status-IN_PROGRESS">IN_PROGRESS</span> (mockup).</p></div>
+    </div>
+
+    <div class="api-note"><strong>Access ·</strong> PROVIDER (default), MANAGER, ADMIN — your org's accepted / active work.<br><strong>API ·</strong> <code>GET /api/v1/services?status=ACCEPTED,IN_PROGRESS&amp;provider=me</code>. Transitions: <code>POST /services/{id}/complete</code> (→ COMPLETED). Provider can also flag a problem → <span class="status status-DISPUTED">DISPUTED</span> for authority review.</div>
+  </div>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

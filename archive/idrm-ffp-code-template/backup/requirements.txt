@@ -1,0 +1,229 @@
+# =============================================================================
+# FILE    : src/backend/requirements.txt
+# PROJECT : IDRM (Integrated Disaster Response Management) — MVP
+#
+# PURPOSE : Lists all Python packages installed via pip inside the
+#           "idrm-mvp" conda environment.
+#
+# ── HOW TO USE ───────────────────────────────────────────────────────────────
+#
+#   PREFERRED — let conda handle everything (reads this file automatically):
+#     conda env create  -f environment.yml          # first time
+#     conda env update  -f environment.yml --prune  # after pulling new code
+#
+#   MANUAL — re-install pip packages inside an already-active conda env:
+#     conda activate idrm-mvp
+#     pip install -r src/backend/requirements.txt
+#
+#   CHECK what is installed:
+#     conda activate idrm-mvp && pip list
+#
+# ── WHERE DO THE GEOSPATIAL LIBRARIES LIVE? ──────────────────────────────────
+#
+#   SHAPELY  →  NOT here — it is in environment.yml (conda tier).
+#               Reason: shapely bundles a GEOS C library. Installing it via
+#               conda-forge guarantees binary compatibility with the rest of
+#               the conda environment. Installing it here via pip could cause
+#               GEOS version conflicts on machines that also have QGIS or
+#               other geospatial tools installed.
+#
+#   GEOALCHEMY2  →  HERE (pip tier).
+#               Reason: GeoAlchemy2 is pure Python — it contains no C code.
+#               It simply teaches SQLAlchemy to understand PostGIS column
+#               types (GEOMETRY, GEOGRAPHY) and functions (ST_Distance, etc.).
+#               Pure Python packages are always fine to install via pip.
+#
+# ── VERSION POLICY ────────────────────────────────────────────────────────────
+#
+#   We use >= (minimum bound) so pip installs the latest compatible version.
+#   This means development environments always get security updates.
+#
+#   For a fully reproducible production deployment, generate a lock file:
+#
+#     conda activate idrm-mvp
+#     pip freeze > requirements.lock.txt
+#
+#   Then deploy using the lock file:
+#     pip install -r requirements.lock.txt
+#
+#   ⚠ NEVER commit .lock.txt to git unless it is the production lock.
+#     Development lock files contain absolute paths and are not portable.
+#
+# ── ADDING A NEW PACKAGE ─────────────────────────────────────────────────────
+#
+#   1. Decide: does it have a C native dependency? → conda. Otherwise → pip.
+#   2. Add it to this file with a comment explaining what it does.
+#   3. Also add it to environment.yml under the pip: section.
+#   4. Run: pip install -r src/backend/requirements.txt  (inside idrm-mvp env)
+#   5. Test: conda activate idrm-mvp && python -c "import <package>"
+#
+# =============================================================================
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WEB FRAMEWORK
+# ─────────────────────────────────────────────────────────────────────────────
+
+# FastAPI: async web framework for building REST APIs with Python type hints.
+# Auto-generates OpenAPI (Swagger) docs at http://localhost:8000/docs
+# Latest stable: 0.136.x (April 2026). We require >= 0.115.0 (LTS-era).
+fastapi>=0.115.0
+
+# uvicorn: ASGI server that runs FastAPI.
+# [standard] extras add:
+#   watchfiles   — auto-reloads the server when you save a .py file
+#   websockets   — WebSocket support (used by IDRM live alerts)
+#   httptools    — faster HTTP parser (C extension, has PyPI binary wheel)
+uvicorn[standard]>=0.30.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DATABASE — ORM & DRIVERS
+# ─────────────────────────────────────────────────────────────────────────────
+
+# SQLAlchemy 2.x: Python ORM (Object-Relational Mapper).
+# Maps Python classes to PostgreSQL tables.
+# [asyncio] extra: enables async/await syntax for all database operations.
+# ⚠ SQLAlchemy 2.x API is NOT backward compatible with 1.x.
+sqlalchemy[asyncio]>=2.0.30
+
+# asyncpg: async PostgreSQL driver.
+# SQLAlchemy uses asyncpg under the hood when you use async sessions.
+# Significantly faster than psycopg2 for concurrent requests.
+asyncpg>=0.29.0
+
+# psycopg2-binary: synchronous PostgreSQL driver.
+# Alembic (migrations) cannot use async drivers, so it needs psycopg2.
+# The -binary variant bundles libpq so no system postgresql-dev headers needed.
+# ⚠ Production best practice: use psycopg2 (without -binary) and install
+#   postgresql-server-dev-16 from apt for a proper compiled version.
+psycopg2-binary>=2.9.9
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DATABASE — GEOSPATIAL EXTENSION (PostGIS)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# GeoAlchemy2: PostGIS support for SQLAlchemy.
+# Adds spatial column types: Geometry, Geography, Raster.
+# Adds PostGIS functions you can use in SQLAlchemy queries:
+#   ST_Distance, ST_Within, ST_DWithin, ST_AsGeoJSON, etc.
+#
+# WHY pip (not conda)?
+#   GeoAlchemy2 is 100% pure Python — no C/C++ code, no native library deps.
+#   It delegates all geometry work to PostGIS (in the database) and to
+#   shapely (already in conda). Pure Python = pip is the right installer.
+geoalchemy2>=0.14.2
+
+# NOTE: shapely is NOT listed here because it is managed by conda-forge.
+# See environment.yml for shapely>=2.0.6 under the conda dependencies section.
+# Running `pip install shapely` would risk installing a GEOS version that
+# conflicts with the one conda-forge already set up.
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DATABASE — MIGRATIONS
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Alembic: database schema migration tool for SQLAlchemy.
+# Every change to a SQLAlchemy model must have a matching Alembic migration
+# so the change can be applied to the database in a controlled, reversible way.
+#
+# Common commands (run inside the idrm-mvp env):
+#   alembic init alembic                        — one-time init
+#   alembic revision --autogenerate -m "msg"    — create new migration
+#   alembic upgrade head                        — apply all pending migrations
+#   alembic downgrade -1                        — roll back one migration
+alembic>=1.13.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# VALIDATION & CONFIGURATION
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Pydantic v2: data validation using Python type hints.
+# FastAPI uses Pydantic models to validate request bodies and serialize
+# response data. Invalid input automatically returns a 422 HTTP error.
+# ⚠ Pydantic v2 is NOT backward compatible with v1 (released June 2023).
+pydantic>=2.7.0
+
+# pydantic-settings: reads .env files into Pydantic BaseSettings models.
+# Gives type-safe, validated access to environment variables.
+# Example: DB_URL, SECRET_KEY, REDIS_HOST are all validated at startup.
+pydantic-settings>=2.3.0
+
+# python-dotenv: loads .env files into os.environ at application startup.
+# The .env file is git-ignored and must be created manually on each machine.
+# See: start-here/COMPLETE-SETUP-GUIDE.md for the .env template.
+python-dotenv>=1.0.1
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AUTHENTICATION
+# ─────────────────────────────────────────────────────────────────────────────
+
+# python-jose: JWT (JSON Web Token) library.
+# IDRM uses JWTs for stateless auth: login → get token → send token with every
+# request → server verifies token without hitting the database.
+# [cryptography] extra adds RSA/EC key support beyond the default HS256.
+python-jose[cryptography]>=3.3.0
+
+# passlib: password hashing library.
+# [bcrypt] extra enables the bcrypt algorithm — the recommended choice for
+# storing user passwords. bcrypt is deliberately slow to make brute-force hard.
+# Never store plain-text passwords. Never use MD5 or SHA1 for passwords.
+passlib[bcrypt]>=1.7.4
+
+# python-multipart: parses multipart/form-data HTTP requests.
+# Required by FastAPI for any endpoint that accepts Form() or File() parameters.
+# Without this, file upload endpoints will return a 422 error.
+python-multipart>=0.0.9
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HTTP CLIENT
+# ─────────────────────────────────────────────────────────────────────────────
+
+# httpx: async-capable HTTP client (like requests but with async/await).
+# Two uses in IDRM:
+#   1. Outbound HTTP calls from FastAPI to external services (maps, SMS, etc.)
+#   2. FastAPI's TestClient uses httpx under the hood for integration tests.
+httpx>=0.27.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CODE QUALITY — FORMATTING & LINTING
+# ─────────────────────────────────────────────────────────────────────────────
+
+# black: opinionated code auto-formatter.
+# Reformats Python code to a consistent style. Run: black .
+# Configured via pyproject.toml (line-length = 88 by default).
+# The VSCodium extension ms-python.black-formatter runs this on file save.
+black>=24.0.0
+
+# flake8: PEP-8 style linter.
+# Reports style violations (line too long, unused import, etc.). Run: flake8 .
+# Unlike black, flake8 only reports — it does not auto-fix.
+flake8>=7.0.0
+
+# mypy: static type checker.
+# Reads Python type annotations and catches type errors before runtime.
+# Run: mypy .
+# Requires a mypy.ini or [mypy] section in pyproject.toml.
+mypy>=1.9.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TESTING
+# ─────────────────────────────────────────────────────────────────────────────
+
+# pytest: test discovery and runner. Run: pytest
+# Automatically finds files named test_*.py or *_test.py.
+# Configure via pytest.ini or [tool.pytest.ini_options] in pyproject.toml.
+pytest>=8.0.0
+
+# pytest-asyncio: makes pytest understand async def test_*() functions.
+# FastAPI route handlers are async, so tests that call them must be async too.
+# Add @pytest.mark.asyncio to each async test, or set asyncio_mode = "auto"
+# in pytest.ini to apply it globally.
+pytest-asyncio>=0.23.0

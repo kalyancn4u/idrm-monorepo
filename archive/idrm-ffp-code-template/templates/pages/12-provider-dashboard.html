@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Provider dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body>
+  <!-- PAGE 12 · Provider Dashboard · Who: PROVIDER (role guard) · API: GET /users/me · GET /services?provider=me -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="12-provider-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">PROVIDER</span></div>
+      <button class="nav-toggle" data-nav-toggle="prov-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="prov-nav">
+        <li><a href="12-provider-dashboard.html" class="active" aria-current="page">Overview</a></li>
+        <li><a href="13-available-services.html">Available</a></li>
+        <li><a href="14-active-services.html">Active</a></li>
+        <li><a href="09-map.html">Map</a></li>
+      </ul>
+      <div class="nav-actions"><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="app-sidebar">
+      <nav aria-label="Provider">
+        <ul class="side-nav">
+          <li><a href="12-provider-dashboard.html" class="active" aria-current="page"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span> Overview</a></li>
+          <li><a href="13-available-services.html"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span> Available</a></li>
+          <li><a href="14-active-services.html"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span> Active work</a></li>
+          <li><a href="09-map.html"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a></li>
+          <li><a href="11-profile.html"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Org profile</a></li>
+        </ul>
+      </nav>
+      <hr class="divider">
+      <p class="text-small">Capacity used</p>
+      <div style="height:8px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:60%;background:var(--color-primary);"></div></div>
+      <p class="text-small mt-2">3 of 5 concurrent requests</p>
+    </aside>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div><h1 style="margin-bottom:var(--space-1);">Apollo First-Response</h1><p class="text-muted" style="margin:0;">Hospital · MEDICAL, RESCUE · <span class="badge badge-success">✓ Verified</span></p></div>
+        <a href="13-available-services.html" class="btn btn-primary">Browse available →</a>
+      </div>
+
+      <section class="section grid grid-4">
+        <div class="card"><div class="stat"><span class="stat-label">Available to accept</span><span class="stat-value">8</span><span class="stat-trend">within 10 km</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Active now</span><span class="stat-value">3</span><span class="stat-trend">1 en route</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Completed (30d)</span><span class="stat-value">142</span><span class="stat-trend up">▲ 12%</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Avg. rating</span><span class="stat-value">4.8★</span><span class="stat-trend">from 120 reviews</span></div></div>
+      </section>
+
+      <div class="grid grid-2" style="align-items:start;">
+        <section>
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">New nearby requests</h3><a href="13-available-services.html" class="text-small">See all 8 →</a></div>
+          <div class="list-stack">
+            <div class="list-row">
+              <span class="svc-dot svc-MEDICAL" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Ambulance · #a1b2c3</span><span class="prio prio-CRITICAL">CRITICAL</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0;">Kukatpally · 1.2 km · 3 people · <span class="status status-APPROVED">APPROVED</span></p>
+                <button class="btn btn-primary btn-sm" onclick="window.idrmToast('Accepted #a1b2c3 — requestor notified live','success')">Accept</button>
+              </div>
+            </div>
+            <div class="list-row">
+              <span class="svc-dot svc-RESCUE" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Evacuation help · #ee44aa</span><span class="prio prio-HIGH">HIGH</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0;">Miyapur · 3.4 km · 6 people · <span class="status status-APPROVED">APPROVED</span></p>
+                <button class="btn btn-primary btn-sm" onclick="window.idrmToast('Accepted #ee44aa','success')">Accept</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Your active assignments</h3><a href="14-active-services.html" class="text-small">Manage →</a></div>
+          <div class="list-stack">
+            <a href="07-service-detail.html" class="list-row" style="text-decoration:none;color:inherit;">
+              <span class="svc-dot svc-MEDICAL" style="margin-top:6px;"></span>
+              <div class="flex-1"><div class="flex justify-between gap-2 flex-wrap"><span class="strong">Ambulance · #a1b2c3</span><span class="status status-IN_PROGRESS">IN_PROGRESS</span></div><span class="text-small">Kukatpally · started 10:11</span></div>
+            </a>
+            <a href="07-service-detail.html" class="list-row" style="text-decoration:none;color:inherit;">
+              <span class="svc-dot svc-MEDICAL" style="margin-top:6px;"></span>
+              <div class="flex-1"><div class="flex justify-between gap-2 flex-wrap"><span class="strong">First aid · #cc77dd</span><span class="status status-ACCEPTED">ACCEPTED</span></div><span class="text-small">Kphb · accepted 09:50</span></div>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="api-note"><strong>Access ·</strong> PROVIDER (default) and MANAGER (provider-org); ADMIN can view all. Requires a provider role.<br><strong>API ·</strong> <code>GET /api/v1/users/me</code> (org/role guard: <code>PROVIDER</code>) · <code>GET /api/v1/services?provider=me</code> · nearby open work via <code>GET /api/v1/geo/nearby</code> filtered by the org's service types.</div>
+    </main>
+  </div>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

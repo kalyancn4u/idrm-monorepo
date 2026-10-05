@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Live map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="has-bottom-nav">
+  <!-- PAGE 09 · Live Map · Who: any authenticated user (public can view read-only) -->
+  <!-- API: GET /geo/nearby?latitude&longitude&radius · GET /geo/cluster?zoom&bounds · WS service_requests · Leaflet + OSM tiles -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="05-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">CITIZEN</span></div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="05-dashboard.html">Dashboard</a></li>
+        <li><a href="09-map.html" class="active" aria-current="page">Map</a></li>
+        <li><a href="08-my-services.html">My requests</a></li>
+        <li><a href="10-notifications.html">Alerts</a></li>
+      </ul>
+      <div class="nav-actions"><a href="06-create-service.html" class="btn btn-primary btn-sm" style="color:#fff;">+ Request</a><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-head">
+      <div><h1 style="margin-bottom:var(--space-1);">Live map</h1><p class="text-muted" style="margin:0;">Real-time requests near you. Markers are colored by priority.</p></div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="flex gap-2 flex-wrap mb-4" data-chips>
+      <span class="chip active">All types</span>
+      <span class="chip"><span class="svc-dot svc-MEDICAL"></span> Medical</span>
+      <span class="chip"><span class="svc-dot svc-FOOD"></span> Food</span>
+      <span class="chip"><span class="svc-dot svc-WATER"></span> Water</span>
+      <span class="chip"><span class="svc-dot svc-SHELTER"></span> Shelter</span>
+      <span class="chip"><span class="svc-dot svc-RESCUE"></span> Rescue</span>
+    </div>
+
+    <div class="grid" style="grid-template-columns:1fr;gap:var(--space-4);">
+      <div class="grid grid-2" style="align-items:start;gap:var(--space-6);">
+        <!-- MAP -->
+        <div style="grid-column:1 / -1;">
+          <div class="flex gap-2 flex-wrap mb-3">
+            <button class="chip" data-use-location><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Find near me</button>
+            <span class="chip">Radius: 10 km</span>
+            <span class="chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Search area</span>
+          </div>
+          <div class="map-canvas" style="min-height:440px;" data-map data-lat="17.45" data-lng="78.40" data-zoom="11"
+               data-markers='[{"lat":17.4948,"lng":78.3996,"priority":"CRITICAL","title":"Medical · #a1b2c3"},{"lat":17.4969,"lng":78.3428,"priority":"HIGH","title":"Water · #d4e5f6"},{"lat":17.4479,"lng":78.3915,"priority":"MEDIUM","title":"Food · #99aabb"},{"lat":17.4401,"lng":78.3489,"priority":"LOW","title":"Shelter · #112233"},{"lat":17.4374,"lng":78.4487,"priority":"HIGH","title":"Rescue · #ee44aa"}]'>
+            <!-- static fallback (shown only if Leaflet/CDN is unavailable) -->
+            <span class="map-pin CRITICAL" style="left:28%;top:40%;"></span>
+            <span class="map-pin HIGH" style="left:46%;top:62%;"></span>
+            <span class="map-pin MEDIUM" style="left:66%;top:38%;"></span>
+            <span class="map-pin LOW" style="left:74%;top:70%;"></span>
+            <span class="map-cluster" style="left:54%;top:30%;">15</span>
+            <div class="map-note" style="align-items:end;justify-items:start;padding:var(--space-3);"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg> Live map (Leaflet 1.9.4 + OpenStreetMap) loads here · click a marker for details · this static view is the offline fallback.</div>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex gap-4 flex-wrap mt-3 text-small">
+            <span><span class="map-pin CRITICAL" style="position:static;display:inline-block;width:12px;height:12px;transform:none;"></span> CRITICAL</span>
+            <span><span class="map-pin HIGH" style="position:static;display:inline-block;width:12px;height:12px;transform:none;"></span> HIGH</span>
+            <span><span class="map-pin MEDIUM" style="position:static;display:inline-block;width:12px;height:12px;transform:none;"></span> MEDIUM</span>
+            <span><span class="map-pin LOW" style="position:static;display:inline-block;width:12px;height:12px;transform:none;"></span> LOW</span>
+          </div>
+        </div>
+
+        <!-- Detail drawer (opens on marker click) -->
+        <div class="drawer">
+          <div class="flex justify-between items-center mb-2">
+            <span class="eyebrow">Selected request</span>
+            <span class="status status-APPROVED">APPROVED</span>
+          </div>
+          <h3 class="mt-0" style="margin-bottom:var(--space-2);"><span class="svc-dot svc-MEDICAL"></span> Medical · #a1b2c3</h3>
+          <p class="text-muted">Kukatpally, Hyderabad · 3 people · <span class="prio prio-CRITICAL">CRITICAL</span></p>
+          <p class="text-body">Elderly person needs an ambulance; water rising near the temple.</p>
+          <a href="07-service-detail.html" class="btn btn-primary btn-block mt-2">Open full detail →</a>
+        </div>
+
+        <!-- Nearby list -->
+        <div>
+          <h3 class="mt-0">Nearby (10 km)</h3>
+          <div class="list-stack">
+            <a href="07-service-detail.html" class="list-row" style="text-decoration:none;color:inherit;">
+              <span class="svc-dot svc-WATER" style="margin-top:6px;"></span>
+              <div class="flex-1"><div class="flex justify-between gap-2 flex-wrap"><span class="strong">Water · #d4e5f6</span><span class="prio prio-HIGH">HIGH</span></div><span class="text-small">Kukatpally · 1.2 km</span></div>
+            </a>
+            <a href="07-service-detail.html" class="list-row" style="text-decoration:none;color:inherit;">
+              <span class="svc-dot svc-FOOD" style="margin-top:6px;"></span>
+              <div class="flex-1"><div class="flex justify-between gap-2 flex-wrap"><span class="strong">Food · #99aabb</span><span class="prio prio-MEDIUM">MEDIUM</span></div><span class="text-small">Miyapur · 3.4 km</span></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-note"><strong>Access ·</strong> Any signed-in role — default CITIZEN; Public may view the public map read-only (Permission Matrix: "View public map").<br>
+      <strong>API ·</strong> initial <code>GET /api/v1/geo/nearby?latitude=..&amp;longitude=..&amp;radius=10</code> ·
+      zoomed out <code>GET /api/v1/geo/cluster?zoom=..&amp;bounds=s,w,n,e</code> ·
+      live markers via WebSocket <code>service_requests</code>. GeoJSON coords are <code>[lng, lat]</code>; Leaflet wants <code>[lat, lng]</code> — swap them.
+    </div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="05-dashboard.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Home</a>
+    <a href="09-map.html" class="active"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a>
+    <a href="06-create-service.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request</a>
+    <a href="08-my-services.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Requests</a>
+    <a href="11-profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a>
+  </nav>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

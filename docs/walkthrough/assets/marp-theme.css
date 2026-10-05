@@ -1,0 +1,97 @@
+/* @theme walkthrough */   /* the name here must match `theme: walkthrough` in the build */
+
+@import 'default';
+
+:root {
+  color-scheme: light;   /* pin light so the imported theme's light-dark() tokens
+                            never flip our fixed dark text onto a dark slide. */
+  --ink:    #1f2328;   /* primary text — 15:1 on white                */
+  --muted:  #565d66;   /* citation body — ~5.8:1 on white             */
+  --faint:  #5b6570;   /* labels / markers / footer — ~5.7:1 (WCAG AA) */
+  --accent: #3b5bdb;   /* single accent hue — ~5.7:1                   */
+  --rule:   #d7dbe0;   /* hairlines                                    */
+  --rule-2: #c3c9d0;   /* stronger hairline                            */
+  --code-bg:#f6f8fa;   /* code / zebra background                      */
+}
+
+/* ---------- Slide surface ---------- */
+section {
+  width: 1280px;
+  height: 940px;               /* taller than 16:9 -> more vertical room */
+  padding: 44px 60px;
+  font-size: 21px;             /* body baseline — legible in a room */
+  line-height: 1.5;
+  color: var(--ink);
+  justify-content: center;
+  overflow: hidden;            /* final safety net */
+}
+
+/* ---------- Headings ---------- */
+h1 { font-size: 46px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 .26em; }
+h2 {                            /* slide title */
+  font-size: 31px; font-weight: 700; letter-spacing: -0.3px;
+  margin: 0 0 .55em; padding-bottom: .24em;
+  border-bottom: 2px solid var(--rule-2);
+}
+h3 { font-size: 21px; font-weight: 600; color: var(--muted); margin: .7em 0 .25em; }
+
+/* ---------- Body ---------- */
+p  { margin: .4em 0; }
+ul, ol { margin: .35em 0 .45em 1.1em; padding-left: .35em; }
+li { margin: .28em 0; }
+li::marker { color: var(--accent); }        /* accent bullets tie the deck together */
+strong { font-weight: 700; }
+em { color: inherit; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(59, 91, 219, .3); }
+
+/* ---------- Inline & block code ---------- */
+:not(pre) > code {
+  font-size: 0.9em; background: var(--code-bg);
+  border: 1px solid var(--rule); border-radius: 5px; padding: .04em .34em;
+}
+pre {
+  font-size: 14.5px; line-height: 1.45; margin: .5em 0; padding: .6em .85em;
+  background: var(--code-bg); border: 1px solid var(--rule); border-radius: 8px;
+  overflow-x: auto;
+}
+pre code { font-size: inherit; background: none; border: none; padding: 0; }
+
+/* Scoped escape hatches (apply per slide with an HTML comment, e.g. <!-- _class: dense -->) */
+section.diagram-text pre { font-size: 12.5px; line-height: 1.34; }   /* one tall block */
+section.dense { font-size: 19px; }                                    /* whole slide */
+section.dense pre { font-size: 13px; }
+section.dense blockquote, section.dense blockquote li { font-size: 13.5px; }
+
+/* ---------- Tables ---------- */
+table { font-size: 16.5px; border-collapse: collapse; margin: .5em 0; }
+th, td { padding: 6px 13px; text-align: left; border-bottom: 1px solid var(--rule); }
+thead th { border-bottom: 2px solid var(--rule-2); font-weight: 700; }
+tbody tr:nth-child(even) { background: rgba(27, 31, 36, .025); }
+
+/* ---------- Citations (the "> Footnotes" blockquote) ---------- */
+blockquote {
+  margin: .85em 0 0; padding: .45em 0 0; border: 0;
+  border-top: 1px solid var(--rule);   /* subordinate band, separated by a hairline */
+  color: var(--muted); font-size: 15px; line-height: 1.4;
+}
+blockquote > p { margin: 0 0 .15em; }                     /* the "FOOTNOTES" label line */
+blockquote > p strong {                                    /* the label ONLY, not [n] refs */
+  color: var(--faint); font-weight: 700; text-transform: uppercase;
+  letter-spacing: .7px; font-size: 12.5px;
+}
+blockquote ul { margin: .1em 0 0 1.15em; padding-left: .3em; list-style: disc; }
+blockquote li { font-size: 15px; margin: .16em 0; color: var(--muted); }
+blockquote li::marker { color: var(--faint); font-size: .85em; }
+blockquote li strong { color: var(--accent); font-weight: 700; }   /* the [n] reference */
+blockquote code { font-size: .95em; background: rgba(27, 31, 36, .05); border-color: transparent; }
+blockquote a { color: var(--accent); }
+
+/* ---------- Media ---------- */
+img { max-width: 100%; max-height: 500px; height: auto; }
+
+/* ---------- Chrome: footer + pagination ---------- */
+footer { font-size: 13px; color: var(--faint); opacity: 1; }
+section::after { font-size: 14px; color: var(--faint); }
+
+/* Optional stage colour for in-browser reading (soft grey surround behind tall slides). */
+html body { background: #d7dbe1; }

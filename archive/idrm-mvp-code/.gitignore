@@ -1,0 +1,45 @@
+# ── Secrets & config ──────────────────────────────────────────────
+# Never commit real secrets. The RS256 JWT keys, DB/MinIO creds, and .env live outside VCS.
+# (.env.example is the checked-in template and is kept via the negation below.)
+.env
+.env.*
+!.env.example
+# RS256 JWT keypair (jwt_private.pem / jwt_public.pem) and any other keys
+*.pem
+*.key
+
+# ── Python ────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# ── Tooling caches / reports ──────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# ── Runtime / local artifacts ─────────────────────────────────────
+*.log
+# Local uploads if MinIO is ever pointed at a repo-local data dir (bytes belong in MinIO, not VCS).
+/minio-data/
+
+# ── OS / editor ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*~

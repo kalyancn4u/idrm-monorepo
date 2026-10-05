@@ -1,0 +1,10 @@
+[Unit]
+Description=IDRM Database Migration (one-shot)
+After=postgresql.service
+
+[Service]
+Type=oneshot
+User=idrm
+WorkingDirectory=/opt/idrm/services/monolith
+EnvironmentFile=/etc/idrm/idrm.env
+ExecStart=/opt/idrm/.venv/bin/alembic upgrade head

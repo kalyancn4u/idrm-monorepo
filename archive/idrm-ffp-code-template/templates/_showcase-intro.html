@@ -1,0 +1,277 @@
+<!-- ============================================================
+     SHOWCASE INTRO (injected at top of idrm-templates-showcase.html)
+     Header + Table of Contents + beige Plan/Pages/Workflows band.
+     ============================================================ -->
+<div class="container">
+  <div class="flex justify-between items-center flex-wrap gap-4" style="margin-bottom:var(--space-2);">
+    <h1 style="margin-bottom:0;">IDRM — Page Templates &amp; Workflows</h1>
+    <span class="badge badge-success">Slate + Emerald · Light · WCAG AA/AAA</span>
+  </div>
+  <p class="text-muted" style="margin-bottom:var(--space-2);">A single, standalone reference: the build plan, the page catalogue, the end-user workflows, and all 15 responsive page templates concatenated below — each separated by a sky-blue line.</p>
+  <p class="text-small">Generated for the IDRM MVP web surface (citizen + provider + authority). Self-contained — all CSS/JS is inlined; the Inter web-font plus the Leaflet/Chart.js libraries are fetched from CDNs (with graceful fallbacks). Body line-height is 1.75×.</p>
+  <p class="text-small" style="margin-top:var(--space-2);"><strong>Latest refinements:</strong> fixed a footer text-encoding glitch; replaced circled-number unicode with on-brand number badges; swapped navigation/UI emoji for inline <strong>Lucide</strong> SVG icons (kept emoji inside dropdown options and for status/alert glyphs); de-cluttered the mobile hamburger menu; clearer "Contact &amp; privacy" options; and a refined, calmer heading scale.</p>
+
+  <!-- ===== TABLE OF CONTENTS ===== -->
+  <nav class="card mt-6" data-toc aria-label="Table of contents">
+    <h3 class="mt-0">📑 Contents</h3>
+    <div class="grid grid-3" style="gap:var(--space-4);">
+      <div>
+        <p class="eyebrow">Reference</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-1);">
+          <li><a href="#plan"><span class="num-badge">1</span>The plan &amp; outline</a></li>
+          <li><a href="#design"><span class="num-badge">2</span>Design system at a glance</a></li>
+          <li><a href="#catalogue"><span class="num-badge">3</span>Page catalogue (15)</a></li>
+          <li><a href="#lifecycle"><span class="num-badge">4</span>Request lifecycle</a></li>
+          <li><a href="#workflows"><span class="num-badge">5</span>User workflows (use-cases)</a></li>
+          <li><a href="#legend"><span class="num-badge">6</span>Status / priority legend</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow">Public &amp; auth pages</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-1);">
+          <li><a href="#tpl-01-home">01 · Home (public)</a></li>
+          <li><a href="#tpl-02-register">02 · Register</a></li>
+          <li><a href="#tpl-03-login">03 · Login</a></li>
+          <li><a href="#tpl-04-forgot-password">04 · Forgot password</a></li>
+          <li><a href="#tpl-05-dashboard">05 · Dashboard</a></li>
+          <li><a href="#tpl-06-create-service">06 · Create request</a></li>
+          <li><a href="#tpl-07-service-detail">07 · Service detail</a></li>
+          <li><a href="#tpl-08-my-services">08 · My requests</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow">Map / provider / admin</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-1);">
+          <li><a href="#tpl-09-map">09 · Live map</a></li>
+          <li><a href="#tpl-10-notifications">10 · Notifications</a></li>
+          <li><a href="#tpl-11-profile">11 · Profile</a></li>
+          <li><a href="#tpl-12-provider-dashboard">12 · Provider dashboard</a></li>
+          <li><a href="#tpl-13-available-services">13 · Available services</a></li>
+          <li><a href="#tpl-14-active-services">14 · Active services</a></li>
+          <li><a href="#tpl-15-admin-dashboard">15 · Admin dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- ===== BEIGE PLAN / PAGES / WORKFLOWS BAND ===== -->
+<div class="doc-band">
+  <div class="container">
+
+    <!-- <span class="num-badge">1</span>PLAN -->
+    <section class="section" id="plan">
+      <h2 style="border-color:var(--color-border-beige);"><span class="num-badge">1</span>The plan &amp; outline</h2>
+      <div class="grid grid-2" style="align-items:start;">
+        <div class="doc-card">
+          <h3 class="mt-0">What this is</h3>
+          <p class="text-body">A complete set of <strong>sample page templates</strong> for the IDRM MVP web surface, built in the attached Slate + Emerald design language. Use them as a visual spec and a starting point for the real HTML/Tailwind (citizen) and React (admin) builds.</p>
+          <p class="text-body">Every template is a <strong>visual mockup with realistic data</strong>. The exact backend calls each page makes are written in a dashed “<span class="strong">API ·</span>” note on the page and in code comments — nothing here needs a running server.</p>
+          <p class="text-small">Authoring happens on Windows; building/running happens on the Ubuntu target. These files open in any browser, offline.</p>
+        </div>
+        <div class="doc-card">
+          <h3 class="mt-0">What ships in <code>templates/</code></h3>
+          <pre style="background:#0f172a;border-radius:var(--radius-lg);"><code><span class="token comment"># standalone reference (this file)</span>
+idrm-templates-showcase.html
+<span class="token comment"># the design-system artifact that inspired it</span>
+visual_hierarchy_slate_emerald_REFERENCE.html
+<span class="token comment"># the resumable plan + task log</span>
+FLOW-ANALYSIS-PLAN.md
+assets/
+  idrm-design-system.css   <span class="token comment"># tokens + components</span>
+  idrm-templates.js        <span class="token comment"># interactions</span>
+pages/
+  01-home.html … 15-admin-dashboard.html</code></pre>
+        </div>
+      </div>
+      <div class="doc-card mt-6">
+        <h4 class="mt-0">How it was built (so anyone can resume)</h4>
+        <div class="steps" style="margin-bottom:0;">
+          <span class="step done"><span class="num">✓</span> Read instructions + FS</span>
+          <span class="flow-arrow">→</span>
+          <span class="step done"><span class="num">✓</span> Confirm scope/styling</span>
+          <span class="flow-arrow">→</span>
+          <span class="step done"><span class="num">✓</span> Shared CSS + JS</span>
+          <span class="flow-arrow">→</span>
+          <span class="step done"><span class="num">✓</span> 15 pages</span>
+          <span class="flow-arrow">→</span>
+          <span class="step done"><span class="num">✓</span> Concatenate + document</span>
+        </div>
+        <p class="text-small mt-4" style="margin-bottom:0;">Full context, decisions and a task checklist live in <code>templates/FLOW-ANALYSIS-PLAN.md</code>.</p>
+      </div>
+    </section>
+
+    <!-- <span class="num-badge">2</span>DESIGN -->
+    <section class="section" id="design">
+      <h2 style="border-color:var(--color-border-beige);"><span class="num-badge">2</span>Design system at a glance</h2>
+      <div class="grid grid-3">
+        <div class="doc-card"><h4 class="mt-0">🎨 Color</h4><p class="text-muted">Slate neutrals + Emerald primary. Page <code>#f8fafc</code>, surfaces white, headings <code>#0f172a</code>, body <code>#334155</code>, primary <code>#059669</code> (use <code>#047857</code> for small text/buttons to clear AA).</p></div>
+        <div class="doc-card"><h4 class="mt-0">🔤 Type &amp; rhythm</h4><p class="text-muted">Inter. Scale 12→36px. <strong>Body line-height 1.75×</strong> (per spec); headings tighter for hierarchy. Spacing on a 4px grid.</p></div>
+        <div class="doc-card"><h4 class="mt-0">📱 Responsive</h4><p class="text-muted">Mobile-first; verified at 360 / 768 / 1280. Nav collapses to a burger; citizen pages get a bottom tab-bar; tables scroll; tap targets ≥ 44px.</p></div>
+        <div class="doc-card"><h4 class="mt-0">♿ Accessible</h4><p class="text-muted">Semantic HTML, one h1/page, visible focus rings, <code>role="alert"</code>, labelled fields. Status &amp; priority never rely on color alone — always text + icon.</p></div>
+        <div class="doc-card"><h4 class="mt-0">🧩 Components</h4><p class="text-muted">Buttons, cards, forms, badges, alerts, tables, timelines, stat cards, map canvas, drawers, toasts — all from shared tokens (no new hex).</p></div>
+        <div class="doc-card"><h4 class="mt-0">🔌 Data</h4><p class="text-muted">UPPERCASE enums; GET/POST only with action endpoints (<code>/approve</code>, <code>/accept</code>…). Canonical roles per FS §3.3.</p></div>
+      </div>
+    </section>
+
+    <!-- <span class="num-badge">3</span>CATALOGUE -->
+    <section class="section" id="catalogue">
+      <h2 style="border-color:var(--color-border-beige);"><span class="num-badge">3</span>Page catalogue</h2>
+      <div class="table-wrapper" style="background:var(--color-bg-beige-soft);">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Page</th><th>Who sees it</th><th>Purpose</th><th>Key API hooks</th></tr></thead>
+          <tbody>
+            <tr><td>01</td><td><a href="#tpl-01-home">Home</a></td><td>Public</td><td>Landing, CTAs, hotlines, how-it-works</td><td>—</td></tr>
+            <tr><td>02</td><td><a href="#tpl-02-register">Register</a></td><td>Public</td><td>Create account (CITIZEN/VOLUNTEER/PROVIDER)</td><td><code>POST /auth/register</code></td></tr>
+            <tr><td>03</td><td><a href="#tpl-03-login">Login</a></td><td>Public</td><td>Sign in; 15-min token refresh</td><td><code>POST /auth/login</code></td></tr>
+            <tr><td>04</td><td><a href="#tpl-04-forgot-password">Forgot password</a></td><td>Public</td><td>Request link → set new password</td><td><code>/auth/forgot-password</code></td></tr>
+            <tr><td>05</td><td><a href="#tpl-05-dashboard">Dashboard</a></td><td>Auth (role-aware)</td><td>Active requests, alerts, mini-map</td><td><code>/users/me · /services</code></td></tr>
+            <tr><td>06</td><td><a href="#tpl-06-create-service">Create request</a></td><td>Citizen/Volunteer</td><td>Type, priority, map pin, privacy</td><td><code>POST /services</code></td></tr>
+            <tr><td>07</td><td><a href="#tpl-07-service-detail">Service detail</a></td><td>Requestor/Provider/Auth</td><td>Status timeline, provider, rating</td><td><code>GET /services/{id}</code> + actions</td></tr>
+            <tr><td>08</td><td><a href="#tpl-08-my-services">My requests</a></td><td>Auth</td><td>Filterable, paginated list</td><td><code>GET /services</code></td></tr>
+            <tr><td>09</td><td><a href="#tpl-09-map">Live map</a></td><td>Auth (public view-only)</td><td>Priority markers, clusters, filters</td><td><code>/geo/nearby · /geo/cluster</code></td></tr>
+            <tr><td>10</td><td><a href="#tpl-10-notifications">Notifications</a></td><td>Auth</td><td>Alerts, mark read</td><td><code>GET /notifications</code></td></tr>
+            <tr><td>11</td><td><a href="#tpl-11-profile">Profile</a></td><td>Auth</td><td>Details, password, language</td><td><code>GET/POST /users/me</code></td></tr>
+            <tr><td>12</td><td><a href="#tpl-12-provider-dashboard">Provider dashboard</a></td><td>PROVIDER</td><td>Capacity, available, active</td><td><code>/services?provider=me</code></td></tr>
+            <tr><td>13</td><td><a href="#tpl-13-available-services">Available services</a></td><td>PROVIDER</td><td>Accept open requests</td><td><code>POST /services/{id}/accept</code></td></tr>
+            <tr><td>14</td><td><a href="#tpl-14-active-services">Active services</a></td><td>PROVIDER</td><td>Start / complete work</td><td><code>POST /services/{id}/complete</code></td></tr>
+            <tr><td>15</td><td><a href="#tpl-15-admin-dashboard">Admin dashboard</a></td><td>DM_AUTHORITY/ADMIN</td><td>KPIs, approvals, audit, users</td><td><code>/analytics/dashboard</code> + approve/reject</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- <span class="num-badge">4</span>LIFECYCLE -->
+    <section class="section" id="lifecycle">
+      <h2 style="border-color:var(--color-border-beige);"><span class="num-badge">4</span>Request lifecycle</h2>
+      <div class="doc-card">
+        <p class="text-body">Every service request moves through these states. Emergency/urgent requests are <strong>auto-approved</strong> by the system.</p>
+        <div class="flex items-center flex-wrap gap-2" style="line-height:2.4;">
+          <span class="status status-SUBMITTED">SUBMITTED</span><span class="flow-arrow">→</span>
+          <span class="status status-APPROVED">APPROVED</span><span class="flow-arrow">→</span>
+          <span class="status status-ACCEPTED">ACCEPTED</span><span class="flow-arrow">→</span>
+          <span class="status status-IN_PROGRESS">IN_PROGRESS</span><span class="flow-arrow">→</span>
+          <span class="status status-COMPLETED">COMPLETED</span><span class="flow-arrow">→</span>
+          <span class="status status-VERIFIED">VERIFIED</span>
+        </div>
+        <p class="text-small mt-4">Branches: <span class="status status-REJECTED">REJECTED</span> <span class="status status-CANCELLED">CANCELLED</span> <span class="status status-EXPIRED">EXPIRED</span> (terminal) · <span class="status status-DISPUTED">DISPUTED</span> (from IN_PROGRESS/COMPLETED → back to IN_PROGRESS or REJECTED).</p>
+      </div>
+    </section>
+
+    <!-- <span class="num-badge">5</span>WORKFLOWS -->
+    <section class="section" id="workflows">
+      <h2 style="border-color:var(--color-border-beige);"><span class="num-badge">5</span>User workflows — use-case scenarios</h2>
+      <p class="text-muted">Step-by-step journeys per role. Each step names the page it happens on and the resulting status.</p>
+
+      <div class="scenario">
+        <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Scenario A — A citizen requests help (the core loop)</h4>
+        <p class="text-muted"><strong>Actor:</strong> Citizen · <strong>Goal:</strong> get an ambulance during a flood.</p>
+        <ol>
+          <li>Lands on <a href="#tpl-01-home">Home</a> → taps <em>Request help</em>.</li>
+          <li>Creates an account on <a href="#tpl-02-register">Register</a> (or <a href="#tpl-03-login">Login</a>).</li>
+          <li>Arrives at the <a href="#tpl-05-dashboard">Dashboard</a> → <em>+ New request</em>.</li>
+          <li>On <a href="#tpl-06-create-service">Create request</a>: picks <code>MEDICAL</code> + <code>CRITICAL</code>, drops a map pin, sets privacy → submits. <span class="status status-SUBMITTED">SUBMITTED</span> → auto <span class="status status-APPROVED">APPROVED</span>.</li>
+          <li>Watches <a href="#tpl-07-service-detail">Service detail</a> as a provider accepts and arrives. <span class="status status-ACCEPTED">ACCEPTED</span> → <span class="status status-IN_PROGRESS">IN_PROGRESS</span> → <span class="status status-COMPLETED">COMPLETED</span>.</li>
+          <li>Confirms completion and rates ★. <span class="status status-VERIFIED">VERIFIED</span>.</li>
+        </ol>
+      </div>
+
+      <div class="scenario">
+        <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Scenario B — A citizen tracks &amp; manages requests</h4>
+        <p class="text-muted"><strong>Actor:</strong> Citizen · <strong>Goal:</strong> review and cancel a no-longer-needed request.</p>
+        <ol>
+          <li>Opens <a href="#tpl-08-my-services">My requests</a> → filters by status/type.</li>
+          <li>Opens a <a href="#tpl-07-service-detail">Service detail</a> still <span class="status status-SUBMITTED">SUBMITTED</span>.</li>
+          <li>Taps <em>Cancel request</em> with a reason → <span class="status status-CANCELLED">CANCELLED</span> (allowed only while SUBMITTED/APPROVED).</li>
+          <li>Reads updates anytime on <a href="#tpl-10-notifications">Notifications</a>.</li>
+        </ol>
+      </div>
+
+      <div class="scenario">
+        <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg> Scenario C — A provider delivers relief</h4>
+        <p class="text-muted"><strong>Actor:</strong> Provider (NGO/hospital) · <strong>Goal:</strong> accept and complete nearby work.</p>
+        <ol>
+          <li>Signs in to the <a href="#tpl-12-provider-dashboard">Provider dashboard</a> (capacity, counts).</li>
+          <li>Browses <a href="#tpl-13-available-services">Available services</a> matching their service types within radius → <em>Accept</em> (sets ETA). <span class="status status-APPROVED">APPROVED</span> → <span class="status status-ACCEPTED">ACCEPTED</span>.</li>
+          <li>On <a href="#tpl-14-active-services">Active services</a>: <em>Start work</em> → <span class="status status-IN_PROGRESS">IN_PROGRESS</span>, then <em>Mark complete</em> → <span class="status status-COMPLETED">COMPLETED</span>.</li>
+          <li>Requestor verifies; the assignment closes. (A problem can be flagged → <span class="status status-DISPUTED">DISPUTED</span>.)</li>
+        </ol>
+      </div>
+
+      <div class="scenario">
+        <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Scenario D — An authority approves &amp; coordinates</h4>
+        <p class="text-muted"><strong>Actor:</strong> DM_AUTHORITY (Event Admin — GO or vetted NGO) · <strong>Goal:</strong> clear the queue and resolve a dispute.</p>
+        <ol>
+          <li>Opens the <a href="#tpl-15-admin-dashboard">Admin dashboard</a> → <em>Approval queue</em>.</li>
+          <li><em>Approve</em> valid non-urgent requests (urgent ones were auto-approved) or <em>Reject</em> with a reason. <span class="status status-APPROVED">APPROVED</span> / <span class="status status-REJECTED">REJECTED</span>.</li>
+          <li>For a <span class="status status-DISPUTED">DISPUTED</span> item: <em>Reassign</em> → <span class="status status-IN_PROGRESS">IN_PROGRESS</span>, or mark <em>Invalid</em> → <span class="status status-REJECTED">REJECTED</span>.</li>
+          <li>Monitors KPIs, breakdowns and the audit log.</li>
+        </ol>
+      </div>
+
+      <div class="scenario">
+        <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Scenario E — An admin oversees the platform</h4>
+        <p class="text-muted"><strong>Actor:</strong> ADMIN · <strong>Goal:</strong> manage users and watch system health.</p>
+        <ol>
+          <li>On the <a href="#tpl-15-admin-dashboard">Admin dashboard</a>: reviews KPIs and the audit trail.</li>
+          <li>Searches <em>Users</em>, verifies providers, grants elevated roles (<code>POST /users/{id}/role</code>).</li>
+          <li>Uses the full React admin suite (port 5174) for exports, heatmaps and deep management.</li>
+        </ol>
+      </div>
+
+      <div class="scenario">
+        <h4>👁️ Scenario F — The public (not logged in)</h4>
+        <p class="text-muted"><strong>Actor:</strong> Public visitor · <strong>Goal:</strong> understand the situation; decide to act.</p>
+        <ol>
+          <li>Reads <a href="#tpl-01-home">Home</a> and views the <a href="#tpl-09-map">Live map</a> read-only.</li>
+          <li>To request help or volunteer, is prompted to <a href="#tpl-02-register">Register</a> (enters Scenario A / C).</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- <span class="num-badge">6</span>LEGEND -->
+    <section class="section" id="legend" style="margin-bottom:0;">
+      <h2 style="border-color:var(--color-border-beige);"><span class="num-badge">6</span>Status / priority / type legend</h2>
+      <div class="grid grid-3">
+        <div class="doc-card">
+          <h4 class="mt-0">Status (10)</h4>
+          <div class="flex gap-2 flex-wrap">
+            <span class="status status-SUBMITTED">SUBMITTED</span><span class="status status-APPROVED">APPROVED</span>
+            <span class="status status-ACCEPTED">ACCEPTED</span><span class="status status-IN_PROGRESS">IN_PROGRESS</span>
+            <span class="status status-COMPLETED">COMPLETED</span><span class="status status-VERIFIED">VERIFIED</span>
+            <span class="status status-REJECTED">REJECTED</span><span class="status status-DISPUTED">DISPUTED</span>
+            <span class="status status-CANCELLED">CANCELLED</span><span class="status status-EXPIRED">EXPIRED</span>
+          </div>
+        </div>
+        <div class="doc-card">
+          <h4 class="mt-0">Priority (4)</h4>
+          <div class="flex gap-2 flex-wrap">
+            <span class="prio prio-CRITICAL">CRITICAL</span><span class="prio prio-HIGH">HIGH</span>
+            <span class="prio prio-MEDIUM">MEDIUM</span><span class="prio prio-LOW">LOW</span>
+          </div>
+          <h4>Privacy (3)</h4>
+          <div class="flex gap-2 flex-wrap">
+            <span class="privacy privacy-PUBLIC">PUBLIC</span><span class="privacy privacy-PROTECTED"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> PROTECTED</span><span class="privacy privacy-PRIVATE"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> PRIVATE</span>
+          </div>
+        </div>
+        <div class="doc-card">
+          <h4 class="mt-0">Service type (6)</h4>
+          <div class="flex flex-col gap-1 text-small">
+            <span><span class="svc-dot svc-RESCUE"></span> RESCUE</span>
+            <span><span class="svc-dot svc-MEDICAL"></span> MEDICAL</span>
+            <span><span class="svc-dot svc-FOOD"></span> FOOD</span>
+            <span><span class="svc-dot svc-WATER"></span> WATER</span>
+            <span><span class="svc-dot svc-SHELTER"></span> SHELTER</span>
+            <span><span class="svc-dot svc-OTHER"></span> OTHER</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="container">
+  <h2>📄 The page templates</h2>
+  <p class="text-muted">All 15 templates follow, each in a framed preview separated by a sky-blue line. In-template navigation/CTA links open the matching standalone file in <code>pages/</code>.</p>
+</div>

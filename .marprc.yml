@@ -1,0 +1,3 @@
+options:
+  markdown:
+    breaks: false     # single newlines are spaces, not <br> (match GitHub; avoid early wraps)

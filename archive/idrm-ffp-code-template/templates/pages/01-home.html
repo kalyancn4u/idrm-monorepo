@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Home (Public Landing)</title>
+  <meta name="description" content="Integrated Disaster Response Management — request help, find relief, coordinate response.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body>
+  <!-- PAGE 01 · Home · Who: Public (no login) · API: none (redirect to dashboard if token present) -->
+
+  <!-- ===== NAVBAR (public variant) ===== -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="01-home.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role public">Public</span></div>
+      <button class="nav-toggle" data-nav-toggle="primary-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="primary-nav">
+        <li><a href="01-home.html" class="active" aria-current="page">Home</a></li>
+        <li><a href="09-map.html">Live Map</a></li>
+        <li><a href="#how">How it works</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="03-login.html" class="btn btn-outline btn-sm">Sign in</a>
+        <a href="02-register.html" class="btn btn-primary btn-sm" style="color:#fff;">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Government-backed disaster relief · Hyderabad &amp; Vijayawada pilot</span>
+      <h1 class="mt-2">Help arrives faster when crisis is&nbsp;coordinated.</h1>
+      <p class="hero-lead mt-4">IDRM connects citizens in crisis with nearby NGOs, hospitals and volunteers on a single live map — so the right help reaches the right place, fast.</p>
+      <div class="hero-cta">
+        <a href="02-register.html" class="btn btn-primary btn-lg"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Request help now</a>
+        <a href="02-register.html" class="btn btn-outline btn-lg">Register as a provider</a>
+        <a href="09-map.html" class="btn btn-ghost btn-lg">View public map →</a>
+      </div>
+      <div class="alert alert-error mt-8" role="alert" aria-live="assertive" style="max-width:640px;">
+        <div class="alert-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="alert-content">
+          <p class="alert-title">Life-threatening emergency?</p>
+          <p class="alert-message">Call <strong>108</strong> (ambulance) or <strong>112</strong> (all-emergency) immediately. IDRM coordinates relief — it does not replace emergency services.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- ===== LIVE STATS ===== -->
+    <section class="section grid grid-4">
+      <div class="card"><div class="stat"><span class="stat-label">Requests resolved</span><span class="stat-value">12,480</span><span class="stat-trend up">▲ 8% this week</span></div></div>
+      <div class="card"><div class="stat"><span class="stat-label">Active now</span><span class="stat-value">87</span><span class="stat-trend">across 2 districts</span></div></div>
+      <div class="card"><div class="stat"><span class="stat-label">Avg. response</span><span class="stat-value">18.5<small style="font-size:1rem;"> min</small></span><span class="stat-trend up">▼ faster</span></div></div>
+      <div class="card"><div class="stat"><span class="stat-label">Verified providers</span><span class="stat-value">214</span><span class="stat-trend">NGOs &amp; hospitals</span></div></div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="section" id="how">
+      <h2>How IDRM works</h2>
+      <div class="grid grid-3">
+        <div class="card card-hover">
+          <div class="stat-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></div>
+          <h3>1 · Request</h3>
+          <p class="text-body">Pin your location on the map, pick a service type (medical, food, water, shelter…) and describe what you need. Three taps or fewer.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="stat-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>2 · Match</h3>
+          <p class="text-body">Authorities approve the request (instantly for emergencies) and the nearest available provider accepts and heads your way.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="stat-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h3>3 · Track</h3>
+          <p class="text-body">Watch status update live — accepted, in progress, completed — then confirm and rate the help you received.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHO IT'S FOR ===== -->
+    <section class="section">
+      <h2>Built for everyone in the response</h2>
+      <div class="grid grid-3">
+        <div class="card"><h4 class="mt-0"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Citizens &amp; volunteers</h4><p class="text-muted">Request help for yourself or report needs in your area. Works on cheap phones and slow networks.</p></div>
+        <div class="card"><h4 class="mt-0"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg> Providers (NGOs / hospitals)</h4><p class="text-muted">See nearby approved requests that match your services and capacity, accept, and deliver.</p></div>
+        <div class="card"><h4 class="mt-0"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Authorities &amp; admins</h4><p class="text-muted">Declare disaster events, approve requests, coordinate providers, and monitor the whole picture.</p></div>
+      </div>
+    </section>
+
+    <!-- ===== CTA BAND ===== -->
+    <section class="section card card-elevated text-center" style="padding:var(--space-12);">
+      <h2 style="border:0;margin-top:0;">Every minute counts.</h2>
+      <p class="text-body" style="max-width:48ch;margin:0 auto var(--space-6);">Create a free account to request help or to start delivering relief in your community.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="02-register.html" class="btn btn-primary btn-lg">Create account</a>
+        <a href="03-login.html" class="btn btn-outline btn-lg">Sign in</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="container" style="padding-top:0;"><div class="api-note"><strong>Access ·</strong> Public (no login) — anyone can view the landing page and the public map; sign in to request help or deliver relief.</div></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="inner footer-grid">
+      <div>
+        <a href="01-home.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+        <p class="text-muted mt-2" style="max-width:42ch;">Integrated Disaster Response Management — a government-backed platform connecting citizens, NGOs, hospitals and volunteers.</p>
+      </div>
+      <div><h5>Platform</h5><ul><li><a href="09-map.html">Live map</a></li><li><a href="02-register.html">Register</a></li><li><a href="03-login.html">Sign in</a></li></ul></div>
+      <div><h5>Emergency</h5><ul><li>Ambulance: <strong>108</strong></li><li>All-emergency: <strong>112</strong></li><li>Disaster cell: <strong>1070</strong></li></ul></div>
+    </div>
+    <div class="inner text-small" style="border-top:1px solid var(--color-border-light);">© 2026 IDRM · Slate + Emerald design system · WCAG AA/AAA · Languages: English · हिंदी · తెలుగు</div>
+  </footer>
+
+  <script src="../assets/idrm-templates.js"></script>
+  <script>
+    /* Real app: if a session token exists, skip the landing page.
+       if (sessionStorage.getItem('access_token')) window.location.href = '05-dashboard.html'; */
+  </script>
+</body>
+</html>

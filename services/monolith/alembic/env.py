@@ -1,0 +1,62 @@
+"""Alembic migration environment (async), wired to the app's settings and metadata.
+
+Migration 0001 (baseline) is added with the first models (users) in roadmap §13.3; until then
+there are no versions and ``alembic upgrade head`` is a no-op. Import module models here as they
+are created so autogenerate can see them.
+"""
+
+from __future__ import annotations
+
+import asyncio
+from logging.config import fileConfig
+
+from sqlalchemy import pool
+from sqlalchemy.ext.asyncio import async_engine_from_config
+
+from alembic import context
+from app.core.config import get_settings
+from app.infrastructure.database.base import Base
+
+# Import each module's models so Base.metadata is complete (extend as modules land).
+from app.modules.incidents import models as _incidents_models  # noqa: E402,F401
+from app.modules.users import models as _users_models  # noqa: E402,F401
+
+config = context.config
+config.set_main_option("sqlalchemy.url", get_settings().database_url)
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+target_metadata = Base.metadata
+
+
+def do_run_migrations(connection) -> None:  # type: ignore[no-untyped-def]
+    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_async_migrations() -> None:
+    connectable = async_engine_from_config(
+        config.get_section(config.config_ini_section, {}),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
+    await connectable.dispose()
+
+
+def run_migrations_offline() -> None:
+    context.configure(
+        url=config.get_main_option("sqlalchemy.url"),
+        target_metadata=target_metadata,
+        literal_binds=True,
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    asyncio.run(run_async_migrations())

@@ -1,0 +1,16 @@
+{
+  "name": "idrm-api-gateway",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "IDRM Bun API Gateway — proxies /api/* to the FastAPI backend; adds CORS, security headers (G1), rate limiting (G2), JWT auth (G3) and WebSocket fan-out (G4).",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  }
+}

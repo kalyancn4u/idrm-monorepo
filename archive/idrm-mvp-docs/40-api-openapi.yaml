@@ -1,0 +1,1500 @@
+openapi: 3.0.3
+info:
+  title: IDRM API
+  description: >-
+    Integrated Disaster Response Management — MVP API contract.
+    Canonical, incident-centric scheme under /api/v1. URIs are a stable contract
+    across the SDLC: the FFP adds endpoints at these same paths, never renaming
+    MVP ones. Human-readable companion: 40-api-specification.md.
+  version: "1.0.0"
+  contact:
+    name: IDRM Development Team
+  license:
+    name: Proprietary (government-endorsed)
+
+servers:
+  - url: /api/v1
+    description: Version-in-path base; host is environment-specific.
+
+tags:
+  - name: auth
+    description: Authentication & session (F1)
+  - name: users
+    description: User accounts & profile (F1)
+  - name: incidents
+    description: Help requests — create, view, lifecycle (F2–F5, F7, F8)
+  - name: organizations
+    description: Provider organizations & resources (F3, F4, F8)
+  - name: locations
+    description: Geo / proximity (F3, F4)
+  - name: alerts
+    description: Coordinator broadcasts (F8)
+  - name: notifications
+    description: Per-user notifications (F6)
+  - name: reports
+    description: Metrics & exports (F8, F10)
+  - name: audit
+    description: Append-only audit trail (F9)
+  - name: files
+    description: Photo/document uploads referenced by incidents (F2, F5)
+  - name: system
+    description: Health / liveness
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ---------------- Auth (F1) ----------------
+  /auth/register:
+    post:
+      tags: [auth]
+      summary: Register a new account (AC-1.1, AC-1.2)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+      responses:
+        '201':
+          description: Created; verification email sent.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id: { type: string, format: uuid }
+                  message: { type: string }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /auth/verify-email:
+    post:
+      tags: [auth]
+      summary: Verify email via token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties: { token: { type: string } }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '410': { $ref: '#/components/responses/Gone' }
+  /auth/resend-verification:
+    post:
+      tags: [auth]
+      summary: Resend verification link
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties: { email: { type: string, format: email } }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /auth/login:
+    post:
+      tags: [auth]
+      summary: Authenticate and receive tokens (AC-1.3)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+      responses:
+        '200':
+          description: Authenticated.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenPair' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /auth/refresh:
+    post:
+      tags: [auth]
+      summary: Exchange a refresh token for a new access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties: { refresh_token: { type: string } }
+      responses:
+        '200':
+          description: New access token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: { type: string }
+                  token_type: { type: string, example: bearer }
+                  expires_in: { type: integer, example: 3600 }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /auth/logout:
+    post:
+      tags: [auth]
+      summary: End the session (AC-1.3)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties: { refresh_token: { type: string } }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /auth/forgot-password:
+    post:
+      tags: [auth]
+      summary: Request a password-reset link
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties: { email: { type: string, format: email } }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /auth/reset-password:
+    post:
+      tags: [auth]
+      summary: Reset a password using a token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, new_password]
+              properties:
+                token: { type: string }
+                new_password: { type: string, format: password, minLength: 8 }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '410': { $ref: '#/components/responses/Gone' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /auth/change-password:
+    post:
+      tags: [auth]
+      summary: Change password while logged in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [current_password, new_password]
+              properties:
+                current_password: { type: string, format: password }
+                new_password: { type: string, format: password, minLength: 8 }
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # ---------------- Users (F1) ----------------
+  /users/me:
+    get:
+      tags: [users]
+      summary: Current user profile
+      responses:
+        '200':
+          description: The authenticated user.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    patch:
+      tags: [users]
+      summary: Update own profile (email/role immutable here)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                phone: { type: string, example: "+919876543210" }
+                language: { type: string, enum: [en, hi, te] }
+      responses:
+        '200':
+          description: Updated user.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /users:
+    get:
+      tags: [users]
+      summary: List/manage users (AC-1.5)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/Sort' }
+        - in: query
+          name: role
+          schema: { $ref: '#/components/schemas/Role' }
+      responses:
+        '200':
+          description: Paged users.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/User' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /users/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/Id' }
+    get:
+      tags: [users]
+      summary: Get a single user (coordinator/admin)
+      responses:
+        '200':
+          description: The user.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [users]
+      summary: Change a user's role/status (admin only, audited)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role: { $ref: '#/components/schemas/Role' }
+                status: { type: string, enum: [active, suspended] }
+      responses:
+        '200':
+          description: Updated user.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------------- Incidents (F2–F8) ----------------
+  /incidents:
+    get:
+      tags: [incidents]
+      summary: List incidents (role-scoped map/list source, F3)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/Sort' }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/IncidentStatus' }
+        - in: query
+          name: service_type
+          schema: { $ref: '#/components/schemas/ServiceType' }
+        - in: query
+          name: priority
+          schema: { $ref: '#/components/schemas/Priority' }
+        - in: query
+          name: q
+          description: Free-text search over the description (PostgreSQL full-text).
+          schema: { type: string, maxLength: 100 }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [incidents]
+      summary: Create a help request; anonymous allowed for emergencies (F2, AC-1.4)
+      security:
+        - bearerAuth: []
+        - {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IncidentCreate' }
+      responses:
+        '201':
+          description: Created in state `created`. `tracking_token` present for guest submissions.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Incident'
+                  - type: object
+                    properties:
+                      tracking_token:
+                        type: string
+                        description: Present only for anonymous/guest submissions.
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /incidents/mine:
+    get:
+      tags: [incidents]
+      summary: Requester's own requests (AC-7.1)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/Sort' }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/IncidentStatus' }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /incidents/assigned:
+    get:
+      tags: [incidents]
+      summary: Provider's claimed requests
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/Sort' }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/IncidentStatus' }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /incidents/nearby:
+    get:
+      tags: [incidents]
+      summary: Proximity search, nearest first (AC-4.1)
+      parameters:
+        - { $ref: '#/components/parameters/Latitude' }
+        - { $ref: '#/components/parameters/Longitude' }
+        - in: query
+          name: radius_km
+          required: true
+          schema: { type: number, minimum: 0.1, maximum: 200 }
+        - in: query
+          name: service_type
+          schema: { $ref: '#/components/schemas/ServiceType' }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentList' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /incidents/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/Id' }
+    get:
+      tags: [incidents]
+      summary: Get one request (F3, F7)
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [incidents]
+      summary: Edit description/priority before it is accepted (AC-5.3)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description: { type: string }
+                priority: { $ref: '#/components/schemas/Priority' }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /incidents/{id}/updates:
+    parameters:
+      - { $ref: '#/components/parameters/Id' }
+    get:
+      tags: [incidents]
+      summary: Status/audit timeline for a request (F5, F7)
+      responses:
+        '200':
+          description: Ordered updates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/IncidentUpdate' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /incidents/{id}/approve:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Coordinator approves a critical request (AC-8.2) [created→approved]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: { note: { type: string } }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /incidents/{id}/reject:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Coordinator rejects a request with a reason (AC-8.3) [→rejected]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties: { reason: { type: string } }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /incidents/{id}/accept:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Provider claims a request; single-claim guarantee (AC-4.3, AC-4.4) [→accepted]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: { eta: { type: string, format: date-time } }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '409':
+          description: Already accepted by another provider, or illegal transition.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /incidents/{id}/assign:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Coordinator manually assigns a provider (F8) [→accepted]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [organization_id]
+              properties: { organization_id: { type: string, format: uuid } }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /incidents/{id}/start:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Assigned provider starts work (AC-5.1) [accepted→in_progress]
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /incidents/{id}/complete:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Assigned provider marks complete (AC-5.2) [in_progress→completed]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [notes]
+              properties:
+                notes: { type: string }
+                photos:
+                  type: array
+                  items: { type: string, format: uri }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /incidents/{id}/verify:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Requester confirms completion; rating optional (AC-7.2, AC-7.3) [completed→verified]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating: { type: integer, minimum: 1, maximum: 5 }
+                review: { type: string }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /incidents/{id}/cancel:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [incidents]
+      summary: Withdraw a request before delivery [→cancelled]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties: { reason: { type: string } }
+      responses:
+        '200': { $ref: '#/components/responses/IncidentOne' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+
+  # ---------------- Organizations & resources (F3, F4, F8) ----------------
+  /organizations:
+    get:
+      tags: [organizations]
+      summary: List provider organizations
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - in: query
+          name: service_type
+          schema: { $ref: '#/components/schemas/ServiceType' }
+        - in: query
+          name: verified_only
+          description: When true, return only coordinator-verified providers.
+          schema: { type: boolean, default: false }
+        - in: query
+          name: latitude
+          description: With longitude + radius_km, filter providers by proximity (nearest first).
+          schema: { type: number, minimum: -90, maximum: 90 }
+        - in: query
+          name: longitude
+          schema: { type: number, minimum: -180, maximum: 180 }
+        - in: query
+          name: radius_km
+          schema: { type: number, exclusiveMinimum: 0, maximum: 500 }
+      responses:
+        '200':
+          description: Paged organizations.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/Organization' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [organizations]
+      summary: Register a provider organization (pending verification)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrganizationCreate' }
+      responses:
+        '201':
+          description: Registered; awaiting verification.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /organizations/mine:
+    get:
+      tags: [organizations]
+      summary: The provider's own organization
+      responses:
+        '200':
+          description: Own org.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /organizations/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [organizations]
+      summary: Organization profile
+      responses:
+        '200':
+          description: Org.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [organizations]
+      summary: Update services/details (own or coordinator)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                services:
+                  type: array
+                  items: { $ref: '#/components/schemas/ServiceType' }
+                description: { type: string }
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /organizations/{id}/verify:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [organizations]
+      summary: Coordinator/admin verifies an org, enabling it to claim (AC-8.4)
+      responses:
+        '200':
+          description: Verified.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /organizations/{id}/capacity:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    patch:
+      tags: [organizations]
+      summary: Set concurrent-request capacity (AC-4.5)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [capacity]
+              properties: { capacity: { type: integer, minimum: 0 } }
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /organizations/{id}/availability:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    patch:
+      tags: [organizations]
+      summary: Toggle in/out of matching
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [available]
+              properties:
+                available: { type: boolean }
+                until: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /resources:
+    get:
+      tags: [organizations]
+      summary: Provider assets shown on the map (F3)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+      responses:
+        '200':
+          description: Paged resources.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/Resource' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [organizations]
+      summary: Declare a provider asset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Resource' }
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Resource' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # ---------------- Locations / geo (F3, F4) ----------------
+  /locations/nearby:
+    get:
+      tags: [locations]
+      summary: PostGIS proximity across incidents and providers
+      parameters:
+        - { $ref: '#/components/parameters/Latitude' }
+        - { $ref: '#/components/parameters/Longitude' }
+        - in: query
+          name: radius_km
+          required: true
+          schema: { type: number, minimum: 0.1, maximum: 200 }
+        - in: query
+          name: layer
+          description: Which entities to include.
+          schema: { type: string, enum: [all, incidents, providers], default: all }
+      responses:
+        '200':
+          description: Nearby entities, nearest first.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { type: object } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /locations/distance:
+    post:
+      tags: [locations]
+      summary: Distance in km between two points
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [from, to]
+              properties:
+                from: { $ref: '#/components/schemas/Location' }
+                to: { $ref: '#/components/schemas/Location' }
+      responses:
+        '200':
+          description: Distance.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { distance_km: { type: number } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /locations/reverse-geocode:
+    get:
+      tags: [locations]
+      summary: Coordinates to a human-readable address
+      parameters:
+        - { $ref: '#/components/parameters/Latitude' }
+        - { $ref: '#/components/parameters/Longitude' }
+      responses:
+        '200':
+          description: Address.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { address: { type: string } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /locations/map/{layer}:
+    parameters:
+      - in: path
+        name: layer
+        required: true
+        schema: { type: string, enum: [incidents, providers, resources] }
+    get:
+      tags: [locations]
+      summary: GeoJSON map layer
+      responses:
+        '200':
+          description: A GeoJSON FeatureCollection.
+          content:
+            application/geo+json:
+              schema:
+                type: object
+                properties:
+                  type: { type: string, example: FeatureCollection }
+                  features: { type: array, items: { type: object } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------------- Alerts & notifications (F6, F8) ----------------
+  /alerts:
+    get:
+      tags: [alerts]
+      summary: Active alerts for the user's area
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+      responses:
+        '200':
+          description: Paged alerts.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/Alert' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [alerts]
+      summary: Coordinator broadcasts an area alert (F8)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AlertCreate' }
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Alert' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /notifications:
+    get:
+      tags: [notifications]
+      summary: The user's notifications (F6)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - in: query
+          name: unread_only
+          description: When true, return only unread notifications.
+          schema: { type: boolean, default: false }
+      responses:
+        '200':
+          description: Paged notifications.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/Notification' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /notifications/unread-count:
+    get:
+      tags: [notifications]
+      summary: Unread badge count
+      responses:
+        '200':
+          description: Count.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { count: { type: integer } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /notifications/{id}/read:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [notifications]
+      summary: Mark one notification read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /notifications/read-all:
+    post:
+      tags: [notifications]
+      summary: Mark all read
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /notifications/chat:
+    post:
+      tags: [notifications]
+      summary: FAQ chatbot stub (Task L, PICS-NTF-004)
+      description: >-
+        Non-intelligent MVP stub — always returns a fixed acknowledgement (no ML).
+        Real natural-language help is an FFP intelligence engine (white paper #1).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message: { type: string, minLength: 1, maxLength: 2000 }
+      responses:
+        '200':
+          description: Fixed acknowledgement.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: { reply: { type: string } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /notifications/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    delete:
+      tags: [notifications]
+      summary: Soft-delete a notification
+      responses:
+        '200': { $ref: '#/components/responses/Success' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /notifications/preferences:
+    get:
+      tags: [notifications]
+      summary: Get channel preferences
+      responses:
+        '200':
+          description: Preferences.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NotificationPreferences' }
+    patch:
+      tags: [notifications]
+      summary: Set channel preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NotificationPreferences' }
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NotificationPreferences' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # ---------------- Reports & audit (F8, F9, F10) ----------------
+  /reports/dashboard:
+    get:
+      tags: [reports]
+      summary: Live overview metrics (AC-8.1)
+      responses:
+        '200':
+          description: Dashboard metrics.
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /reports/response-times:
+    get:
+      tags: [reports]
+      summary: Average/median response time (AC-10.1)
+      parameters:
+        - { $ref: '#/components/parameters/DateFrom' }
+        - { $ref: '#/components/parameters/DateTo' }
+      responses:
+        '200':
+          description: Metrics.
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /reports/fulfillment:
+    get:
+      tags: [reports]
+      summary: Fulfilment rate by period/area (AC-10.1)
+      parameters:
+        - { $ref: '#/components/parameters/DateFrom' }
+        - { $ref: '#/components/parameters/DateTo' }
+      responses:
+        '200':
+          description: Metrics.
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /reports/{name}/export:
+    parameters:
+      - in: path
+        name: name
+        required: true
+        schema: { type: string, enum: [response-times, fulfillment, dashboard] }
+    get:
+      tags: [reports]
+      summary: Export a report as a file (AC-10.2)
+      parameters:
+        - in: query
+          name: format
+          schema: { type: string, enum: [csv], default: csv }
+      responses:
+        '200':
+          description: File download.
+          content:
+            text/csv:
+              schema: { type: string, format: binary }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /audit-logs:
+    get:
+      tags: [audit]
+      summary: Read-only, append-only audit trail (AC-9.1)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/DateFrom' }
+        - { $ref: '#/components/parameters/DateTo' }
+        - in: query
+          name: actor_id
+          schema: { type: string, format: uuid }
+        - in: query
+          name: resource_type
+          schema: { type: string }
+        - in: query
+          name: resource_id
+          schema: { type: string, format: uuid }
+        - in: query
+          name: action
+          schema: { type: string }
+      responses:
+        '200':
+          description: Paged audit entries.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: '#/components/schemas/AuditEntry' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  # ---------------- Files (F2, F5) ----------------
+  /files:
+    post:
+      tags: [files]
+      summary: Upload a photo/document; returns a URL an incident can reference (F2/AC-2.1, F5/AC-5.2)
+      description: >-
+        Multipart upload. Allowed types image/jpeg, image/png, application/pdf;
+        max 10 MB per file. The returned `url` is placed in an incident's `photos`.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+                purpose:
+                  type: string
+                  enum: [incident_photo, completion_proof, org_document]
+      responses:
+        '201':
+          description: Stored.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FileObject' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /files/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [files]
+      summary: Fetch file metadata
+      responses:
+        '200':
+          description: File metadata.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FileObject' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ---------------- System ----------------
+  /health:
+    get:
+      tags: [system]
+      summary: Liveness/readiness probe (unauthenticated)
+      description: The host may also expose this unversioned at /health.
+      security: []
+      responses:
+        '200':
+          description: Service healthy.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  version: { type: string, example: "1.0.0" }
+        '503': { $ref: '#/components/responses/ServiceUnavailable' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Id:
+      in: path
+      name: id
+      required: true
+      schema: { type: string, format: uuid }
+    Page:
+      in: query
+      name: page
+      schema: { type: integer, minimum: 1, default: 1 }
+    Limit:
+      in: query
+      name: limit
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Sort:
+      in: query
+      name: sort
+      description: "Field to sort by; prefix '-' for descending, e.g. -created_at."
+      schema: { type: string, example: -created_at }
+    Latitude:
+      in: query
+      name: latitude
+      required: true
+      schema: { type: number, minimum: -90, maximum: 90 }
+    Longitude:
+      in: query
+      name: longitude
+      required: true
+      schema: { type: number, minimum: -180, maximum: 180 }
+    DateFrom:
+      in: query
+      name: date_from
+      schema: { type: string, format: date }
+    DateTo:
+      in: query
+      name: date_to
+      schema: { type: string, format: date }
+
+  responses:
+    Success:
+      description: Operation succeeded.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: { success: { type: boolean, example: true } }
+    Unauthorized:
+      description: Missing or invalid authentication.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Forbidden:
+      description: Authenticated but not permitted.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: State or uniqueness conflict.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Gone:
+      description: Token expired / resource gone.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Semantic validation failed.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    RateLimited:
+      description: Rate limit exceeded.
+      headers:
+        Retry-After:
+          schema: { type: integer }
+          description: Seconds to wait before retrying.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    PayloadTooLarge:
+      description: Uploaded file exceeds the size limit.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ServiceUnavailable:
+      description: Service unavailable / maintenance.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    InvalidTransition:
+      description: The requested lifecycle transition is not allowed from the current state.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    IncidentOne:
+      description: A single incident.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Incident' }
+    IncidentList:
+      description: A paged list of incidents.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/PaginatedEnvelope'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Incident' }
+
+  schemas:
+    Role:
+      type: string
+      enum: [citizen, provider, coordinator, admin]
+    ServiceType:
+      type: string
+      enum: [medical, food, rescue, water, shelter, other]
+    Priority:
+      type: string
+      enum: [low, medium, high, critical]
+    IncidentStatus:
+      type: string
+      enum: [created, approved, accepted, in_progress, completed, verified, cancelled, rejected]
+    Location:
+      type: object
+      required: [latitude, longitude]
+      properties:
+        latitude: { type: number, minimum: -90, maximum: 90 }
+        longitude: { type: number, minimum: -180, maximum: 180 }
+    Pagination:
+      type: object
+      properties:
+        page: { type: integer }
+        limit: { type: integer }
+        total: { type: integer }
+        total_pages: { type: integer }
+    PaginatedEnvelope:
+      type: object
+      properties:
+        data: { type: array, items: {} }
+        pagination: { $ref: '#/components/schemas/Pagination' }
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, example: already_accepted }
+            message: { type: string }
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field: { type: string }
+                  issue: { type: string }
+    RegisterRequest:
+      type: object
+      required: [email, password, name, phone, role]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, format: password, minLength: 8 }
+        name: { type: string }
+        phone: { type: string, example: "+919876543210" }
+        role: { $ref: '#/components/schemas/Role' }
+    TokenPair:
+      type: object
+      properties:
+        access_token: { type: string }
+        refresh_token: { type: string }
+        token_type: { type: string, example: bearer }
+        expires_in: { type: integer, example: 3600 }
+        user: { $ref: '#/components/schemas/User' }
+    User:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        name: { type: string }
+        phone: { type: string }
+        role: { $ref: '#/components/schemas/Role' }
+        status: { type: string, enum: [pending, active, suspended] }
+        language: { type: string, enum: [en, hi, te] }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    IncidentCreate:
+      type: object
+      required: [service_type, priority, description, location]
+      properties:
+        service_type: { $ref: '#/components/schemas/ServiceType' }
+        priority: { $ref: '#/components/schemas/Priority' }
+        description: { type: string }
+        location: { $ref: '#/components/schemas/Location' }
+        photos:
+          type: array
+          items: { type: string, format: uri }
+    Incident:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        service_type: { $ref: '#/components/schemas/ServiceType' }
+        priority: { $ref: '#/components/schemas/Priority' }
+        status: { $ref: '#/components/schemas/IncidentStatus' }
+        description: { type: string }
+        location: { $ref: '#/components/schemas/Location' }
+        requester_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Null for anonymous/guest submissions.
+        assigned_organization_id: { type: string, format: uuid, nullable: true }
+        rating: { type: integer, minimum: 1, maximum: 5, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    IncidentUpdate:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        from_status: { $ref: '#/components/schemas/IncidentStatus' }
+        to_status: { $ref: '#/components/schemas/IncidentStatus' }
+        actor_id: { type: string, format: uuid, nullable: true }
+        note: { type: string }
+        created_at: { type: string, format: date-time }
+    OrganizationCreate:
+      type: object
+      required: [name, type, services]
+      properties:
+        name: { type: string }
+        type: { type: string, enum: [ngo, government, private, hospital, volunteer_group] }
+        registration_number: { type: string }
+        services:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceType' }
+        contact_phone: { type: string }
+    Organization:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        type: { type: string }
+        services:
+          type: array
+          items: { $ref: '#/components/schemas/ServiceType' }
+        verified: { type: boolean }
+        available: { type: boolean }
+        capacity: { type: integer }
+        current_load: { type: integer }
+        created_at: { type: string, format: date-time }
+    Resource:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        name: { type: string }
+        kind: { type: string, example: ambulance }
+        quantity: { type: integer }
+        location: { $ref: '#/components/schemas/Location' }
+    Alert:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        message: { type: string }
+        severity: { type: string, enum: [info, warning, critical] }
+        active: { type: boolean }
+        area:
+          type: object
+          nullable: true
+          description: GeoJSON polygon of the affected area (null = platform-wide).
+        expires_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+    FileObject:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        url: { type: string, format: uri }
+        content_type: { type: string, example: image/jpeg }
+        size_bytes: { type: integer }
+        purpose: { type: string, enum: [incident_photo, completion_proof, org_document] }
+        created_at: { type: string, format: date-time }
+    AlertCreate:
+      type: object
+      required: [title, message, severity]
+      properties:
+        title: { type: string }
+        message: { type: string }
+        severity: { type: string, enum: [info, warning, critical] }
+        area: { type: object, description: GeoJSON polygon of the affected area }
+    Notification:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        message: { type: string }
+        read: { type: boolean }
+        link: { type: string }
+        created_at: { type: string, format: date-time }
+    NotificationPreferences:
+      type: object
+      properties:
+        email: { type: boolean }
+        sms: { type: boolean }
+        in_app: { type: boolean }
+    AuditEntry:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        actor_id: { type: string, format: uuid, nullable: true }
+        action: { type: string, example: incident.accepted }
+        resource_type: { type: string, example: incident }
+        resource_id: { type: string, format: uuid }
+        created_at: { type: string, format: date-time }

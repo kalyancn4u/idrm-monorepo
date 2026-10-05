@@ -1,0 +1,286 @@
+<header class="hero" id="plan">
+  <div class="hero-inner">
+    <p class="eyebrow">IDRM · v2 templates · RBAC-driven</p>
+    <h1>Role-by-role page templates, the post-registration workflows &amp; the FastAPI / Bun render split</h1>
+    <p class="hero-lead">A mirror (not a replica) of <code>templates/</code>, re-pivoted around the FS §3.3 Permission Matrix.
+      Start with the <a href="#overview">bird's-eye flow</a> (navigation + create/update), then the
+      <a href="#workflows">AAA + security workflows</a>, then the per-role pages. FastAPI renders anything per-user or
+      privacy-sensitive; Bun serves anything public, static or real-time.</p>
+  </div>
+</header>
+
+<!-- ============================================================= -->
+<!-- BIRD'S-EYE VIEW (depicted at the START, per request) -->
+<!-- ============================================================= -->
+<section class="container" id="overview">
+  <h2 style="border:0;">Bird's-eye view — what happens after you register</h2>
+  <p class="text-muted">One picture of the whole system: <strong>where the pages are</strong> (navigation), how an entity is
+    <strong>created</strong> then <strong>updated</strong> through its lifecycle, and the <strong>AAA + security gates</strong> every action passes through.</p>
+
+  <h3>A · Navigation map — where the pages live (and who renders them)</h3>
+  <div class="nav-map">
+    <div class="nav-col">
+      <h5><span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span> Public</h5>
+      <ul>
+        <li><a href="#tpl-shared-home">Home / landing</a></li>
+        <li><a href="#tpl-shared-login">Sign in</a></li>
+        <li><a href="#tpl-shared-register">Create account</a></li>
+        <li><a href="#tpl-map-public">Public map (view-only)</a></li>
+      </ul>
+    </div>
+    <div class="nav-col">
+      <h5><span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> Role dashboards</h5>
+      <ul>
+        <li><a href="#tpl-role-dashboard-citizen">Citizen</a> · <a href="#tpl-role-dashboard-volunteer">Volunteer</a> · <a href="#tpl-role-dashboard-organizer">Organizer</a></li>
+        <li><a href="#tpl-role-dashboard-provider">Provider</a> · <a href="#tpl-role-dashboard-manager">Manager</a> · <a href="#tpl-role-dashboard-event-manager">Event Mgr</a></li>
+        <li><a href="#tpl-role-dashboard-dm-authority">DM Authority</a> · <a href="#tpl-role-dashboard-auditor">Auditor</a> · <a href="#tpl-role-dashboard-admin">Admin</a></li>
+        <li><a href="#tpl-role-dashboard-executive-reserved">Executive <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></a></li>
+      </ul>
+    </div>
+    <div class="nav-col">
+      <h5><span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> Per-request</h5>
+      <ul>
+        <li><a href="#tpl-requests-list-provider-type">List · Provider (Type)</a></li>
+        <li><a href="#tpl-requests-list-authority-jurisdiction">List · Authority (Jurisd.)</a></li>
+        <li><a href="#tpl-service-detail-requestor">Detail ×4 (role lenses)</a></li>
+        <li><a href="#tpl-admin-console-admin-system">Admin system console</a></li>
+      </ul>
+    </div>
+    <div class="nav-col">
+      <h5><span class="render-tier tier-H"><span class="dotc"></span>Hybrid</span> / Account</h5>
+      <ul>
+        <li><a href="#tpl-map-dm-authority-zone">Declare event + zone</a></li>
+        <li><a href="#tpl-shared-profile">Profile &amp; settings</a></li>
+        <li><a href="#tpl-shared-notifications">Notifications (WS)</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>B · Create → Update — the data lifecycle</h3>
+  <div class="card" style="overflow-x:auto;">
+    <p class="text-small muted mb-2"><strong style="color:var(--color-primary-strong);">CREATE</strong> — register, then file a request:</p>
+    <div class="flow" style="margin-bottom:var(--space-4);">
+      <div class="flow-node is-create"><b>Register</b><small>or phone + OTP</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node"><b>Sign in</b><small>AuthN · token</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node"><b>Authorized?</b><small>AuthZ · role+scope</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node is-create"><b>POST /services</b><small>→ SUBMITTED</small></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node is-update"><b>auto-APPROVED</b><small>if emergency</small></div>
+    </div>
+    <p class="text-small muted mb-2"><strong style="color:var(--color-info-fg);">UPDATE</strong> — the request moves through its lifecycle (each hop = AuthZ + Integrity + Audit):</p>
+    <div class="flow">
+      <div class="flow-node is-update"><b>SUBMITTED</b></div><span class="flow-arrow">→</span>
+      <div class="flow-node is-update"><b>APPROVED</b></div><span class="flow-arrow">→</span>
+      <div class="flow-node is-update"><b>ACCEPTED</b></div><span class="flow-arrow">→</span>
+      <div class="flow-node is-update"><b>IN_PROGRESS</b></div><span class="flow-arrow">→</span>
+      <div class="flow-node is-update"><b>COMPLETED</b></div><span class="flow-arrow">→</span>
+      <div class="flow-node is-update"><b>VERIFIED</b></div>
+      <span class="flow-arrow" style="color:var(--color-text-disabled);">⊣</span>
+      <div class="flow-node is-terminal"><b>REJECTED</b><small>· CANCELLED · EXPIRED · DISPUTED</small></div>
+    </div>
+  </div>
+
+  <h3>C · Every create / update passes through these gates</h3>
+  <div class="sec-band">
+    <span class="sec-chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L21 5"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg> Authentication <span class="t">B + F</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="sec-chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Authorization <span class="t">F</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="sec-chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg> Confidentiality <span class="t">F</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="sec-chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Integrity <span class="t">F</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="sec-chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Authenticity <span class="t">B + F</span></span>
+    <span class="flow-arrow">→</span>
+    <span class="sec-chip"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg> Accounting <span class="t">F</span></span>
+  </div>
+  <p class="text-small muted mt-2">Tiers: <strong>B</strong> = Bun edge (verify token, rate-limit, redact-free static), <strong>F</strong> = FastAPI (gate, scope, redact, validate, audit — where the data lives). Details below.</p>
+</section>
+
+<!-- ROLE SWITCHER (data-toc gives it scroll-spy highlighting) -->
+<nav class="role-switcher" aria-label="Jump to section" data-toc>
+  <div class="inner">
+    <span class="rs-label">Jump</span>
+    <a href="#overview">Bird's-eye</a>
+    <a href="#workflows">Workflows</a>
+    <span class="rs-label">Dashboards</span>
+    <a href="#tpl-role-dashboard-citizen">Citizen</a>
+    <a href="#tpl-role-dashboard-volunteer">Volunteer</a>
+    <a href="#tpl-role-dashboard-organizer">Organizer</a>
+    <a href="#tpl-role-dashboard-provider">Provider</a>
+    <a href="#tpl-role-dashboard-manager">Manager</a>
+    <a href="#tpl-role-dashboard-event-manager">Event Mgr</a>
+    <a href="#tpl-role-dashboard-dm-authority">DM Authority</a>
+    <a href="#tpl-role-dashboard-auditor">Auditor</a>
+    <a href="#tpl-role-dashboard-admin">Admin</a>
+    <a href="#tpl-role-dashboard-executive-reserved">Exec <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></a>
+  </div>
+</nav>
+
+<!-- ============================================================= -->
+<!-- AAA + SECURITY SUB-WORKFLOWS -->
+<!-- ============================================================= -->
+<div class="doc-band" id="workflows">
+  <div class="container">
+    <h2 style="border:0;">Post-registration workflows — AAA + Confidentiality / Integrity / Authenticity</h2>
+    <p>Six concerns guard every interaction. Each is elucidated below with its <strong>sub-workflows</strong>, the IDRM
+      endpoints, and which tier renders it. Full text + FS requirement mapping: <code>FLOW-ANALYSIS-PLAN.md</code> §14.</p>
+
+    <div class="wf-card dim-authn">
+      <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L21 5"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg> 1 · Authentication <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span> <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span></h4>
+      <p class="wf-lead">Prove who you are; receive a short-lived, signed token. The Bun edge mints/refreshes + rate-limits; FastAPI checks the bcrypt(12) hash.</p>
+      <div class="flow">
+        <div class="flow-node"><b>Register / OTP</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>POST /auth/login</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Access 15m</b><small>+ Refresh 7d</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Silent refresh</b><small>before expiry</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Logout</b><small>token revoked</small></div>
+      </div>
+      <ul>
+        <li><strong>Email + password</strong> → 15-min access + 7-day refresh token.</li>
+        <li><strong>Phone + OTP quick-start</strong> → instant CITIZEN, no long form.</li>
+        <li><strong>Forgot → reset</strong> (1h link, old sessions killed) · <strong>email verification</strong> (24h) · <strong>5-fail lockout</strong> (15 min).</li>
+      </ul>
+    </div>
+
+    <div class="wf-card dim-authz">
+      <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> 2 · Authorization <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span></h4>
+      <p class="wf-lead">Map identity → permissions (FS §3.3), enforce scope as a server <code>WHERE</code>, and render only the actions a role holds.</p>
+      <div class="flow">
+        <div class="flow-node"><b>JWT role</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Permission set</b><small>FS §3.3</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Scope WHERE</b><small>Own/Area/Type/…</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Render allowed</b><small>actions only</small></div>
+      </div>
+      <ul>
+        <li><strong>Scope</strong>: Own · Area · Type · Org · Event · Jurisdiction (PostGIS for area/type).</li>
+        <li><strong>Action gating</strong>: approve = DM_AUTHORITY/ADMIN · accept = PROVIDER/MANAGER/ADMIN · create ≠ PROVIDER (absent, not disabled).</li>
+        <li><strong>Role elevation</strong> by ADMIN only (<code>POST /users/{id}/role</code>, BR-ROLE-002); vetted NGO may also be DM_AUTHORITY.</li>
+      </ul>
+    </div>
+
+    <div class="wf-card dim-acct">
+      <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg> 3 · Accounting <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> <span class="render-tier tier-WS"><span class="dotc"></span>WS</span></h4>
+      <p class="wf-lead">Record what happened, notify stakeholders, aggregate metrics — for transparency and compliance.</p>
+      <div class="flow">
+        <div class="flow-node"><b>Action</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Audit entry</b><small>who/when/IP/old→new</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Notify</b><small>in-app + WS</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Metrics</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Retain 7y</b></div>
+      </div>
+      <ul>
+        <li><strong>Immutable audit</strong> of every sensitive action (FR-SEC-002).</li>
+        <li><strong>Notifications</strong> per status change (in-app + email; live via WebSocket).</li>
+        <li><strong>Analytics</strong>: response time, completion rate, performance · retention: logs 7y, notifications 30d · financial ledger <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Post-MVP.</li>
+      </ul>
+    </div>
+
+    <div class="wf-card dim-conf">
+      <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg> 4 · Security &amp; Confidentiality <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span></h4>
+      <p class="wf-lead">Keep secrets secret: privacy levels, <strong>server-side</strong> PII redaction, encryption, least-privilege delivery.</p>
+      <div class="flow">
+        <div class="flow-node"><b>Privacy level</b><small>PUBLIC/PROTECTED/PRIVATE</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Redact PII</b><small>server-side</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>TLS + AES-256</b><small>bcrypt(12)</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Least-privilege</b><small>only allowed fields</small></div>
+      </div>
+      <ul>
+        <li><strong>3 privacy levels</strong>, default PROTECTED, raise-only (BR-SR-003).</li>
+        <li><strong>Redaction is server-side</strong> — PROTECTED hides name/phone (contact via relay); hidden PII never reaches the browser (no "hidden div").</li>
+        <li><strong>Encryption</strong> TLS 1.3 / AES-256 / bcrypt(12) · <strong>rate-limit</strong> 100/min at the Bun edge.</li>
+      </ul>
+    </div>
+
+    <div class="wf-card dim-integ">
+      <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 5 · Integrity <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> + DB constraints</h4>
+      <p class="wf-lead">Data is correct and untampered: validated input, lawful state transitions, append-only history.</p>
+      <div class="flow">
+        <div class="flow-node"><b>Validate</b><small>enums/coords/phone</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Lawful transition</b><small>no skipping</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Write old→new</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Append-only log</b></div>
+      </div>
+      <ul>
+        <li><strong>Lifecycle integrity</strong>: states can't be skipped; emergencies auto-approve; authority force-change is logged.</li>
+        <li><strong>Validation</strong>: UPPERCASE enums, GeoJSON <code>[lng,lat]</code>, phone, password — rejected if invalid (DB CHECK).</li>
+        <li><strong>Single-writer</strong>: one requester, ≤ one provider, capacity gate (BR-SR/PM rules).</li>
+      </ul>
+    </div>
+
+    <div class="wf-card dim-authentic">
+      <h4><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 6 · Authenticity <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span> <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span></h4>
+      <p class="wf-lead">The actor and the data are genuine: signed tokens, non-repudiation, credibility review, proof of delivery.</p>
+      <div class="flow">
+        <div class="flow-node"><b>Sign JWT</b></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Edge verify</b><small>sig + expiry</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Bind to identity</b><small>non-repudiation</small></div><span class="flow-arrow">→</span>
+        <div class="flow-node"><b>Proof + verify</b><small>photos · rating</small></div>
+      </div>
+      <ul>
+        <li><strong>JWT</strong> signed + edge-verified on every request before reaching FastAPI.</li>
+        <li><strong>Credibility</strong>: auto-approved emergencies reviewed by DM Authority; Auditor flags irregularities.</li>
+        <li><strong>Proof of delivery</strong> (provider photos/receipts) → requestor verifies + rates · only DM Authority declares events (geofence auto-link).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="doc-band">
+  <div class="container">
+    <h2 style="border:0;">What this is, in one screen</h2>
+    <div class="doc-card">
+      <p style="margin-top:0;">v1 organised pages by <em>screen</em>. <strong>v2 organises them by <em>role × capability</em></strong> — driven by the
+        Permission Matrix below. Three new atoms make the RBAC visible on every page: a <span class="render-tier tier-F"><span class="dotc"></span>render-tier</span>
+        badge (who renders it), a <strong>scope banner</strong> (what data the role sees), and a <code>[ROLE]</code> badge by the brand.
+        Actions a role lacks are <strong>absent from the markup</strong> — mirroring that the server simply won't render them.</p>
+    </div>
+
+    <h3>The render decision (FastAPI vs Bun) — the headline</h3>
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="doc-card">
+        <p style="margin-top:0;"><span class="render-tier tier-F"><span class="dotc"></span>FastAPI (F)</span> renders anything whose bytes change with <strong>who is logged in</strong> — role, scope, or privacy redaction — or that needs DB/PostGIS/Python. Per-user, barely cacheable, security-critical. <em>RBAC + PII redaction happen where the data lives, never in the browser.</em></p>
+        <p class="mb-0"><span class="render-tier tier-B"><span class="dotc"></span>Bun (B)</span> serves anything <strong>identical for everyone</strong> — public/static pages, assets, cluster-tile cache — plus edge plumbing (JWT verify/refresh, rate-limit, CORS, compression) and <span class="render-tier tier-WS"><span class="dotc"></span>WebSocket</span> real-time. Fast on 2G.</p>
+      </div>
+      <div class="doc-card">
+        <p style="margin-top:0;"><span class="render-tier tier-H"><span class="dotc"></span>Hybrid (H)</span> = a Bun-cached shell streamed instantly, with a FastAPI-rendered personalised island stitched in (htmx / ESI / streamed SSR). Fast first paint <em>and</em> authoritative content.</p>
+        <p class="mb-0"><strong>Litmus test:</strong> bytes differ by who's logged in, or hide anything a lesser role mustn't see → <strong>F</strong>. Same for everyone, or plumbing → <strong>B</strong>. Fast shell + private filling → <strong>H</strong>. Must update without reload → <strong>WS</strong>.</p>
+      </div>
+    </div>
+
+    <h3>FS §3.3 Permission Matrix — the contract v2 renders</h3>
+    <p class="text-small muted">✓ full · – none · ! limited (scope) · <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Post-MVP. Scroll the table sideways on a phone.</p>
+    <div class="perm-wrap">
+      <table class="perm-matrix">
+        <thead><tr><th>Permission</th><th>Pub</th><th>Cit</th><th>Vol</th><th>Org</th><th>Prov</th><th>Mgr</th><th>EvM</th><th>Exec</th><th>DMA</th><th>Aud</th><th>Adm</th></tr></thead>
+        <tbody>
+          <tr><td>View public map</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td></tr>
+          <tr><td>Create service request</td><td class="perm-no">–</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-yes">✓</td><td class="perm-no">–</td><td class="perm-yes">✓</td></tr>
+          <tr><td>View own requests</td><td class="perm-no">–</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td></tr>
+          <tr><td>View all requests</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-ltd">! Area</td><td class="perm-ltd">! Area</td><td class="perm-ltd">! Type</td><td class="perm-ltd">! Org</td><td class="perm-ltd">! Event</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td></tr>
+          <tr><td>Accept service request</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-no">–</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-yes">✓</td></tr>
+          <tr><td>Approve service request</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-yes">✓</td><td class="perm-no">–</td><td class="perm-yes">✓</td></tr>
+          <tr><td>Create &amp; manage events</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-yes">✓</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-yes">✓</td><td class="perm-no">–</td><td class="perm-yes">✓</td></tr>
+          <tr><td>Allocate funds</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td></tr>
+          <tr><td>View financial data</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td></tr>
+          <tr><td>Manage users</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-ltd">! Team</td><td class="perm-ltd">! Org</td><td class="perm-ltd">! Org</td><td class="perm-ltd">! Event</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-ltd">! Juris.</td><td class="perm-no">–</td><td class="perm-yes">✓</td></tr>
+          <tr><td>View audit logs</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-ltd">! Ltd</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td></tr>
+          <tr><td>System configuration</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-soon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></td><td class="perm-no">–</td><td class="perm-no">–</td><td class="perm-yes">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-small muted">Scopes (the <span class="perm-ltd">!</span> cells) are server-side <code>WHERE</code> boundaries — never client filters: Own · Area · Type · Org · Event · Jurisdiction · All(read-only) · All.</p>
+
+    <h3>Contents — 24 templates, grouped by render tier</h3>
+    <div class="doc-card">
+      <p style="margin-top:0;"><span class="num-badge">1</span><strong>Bun edge (B) — public &amp; static:</strong> home · login · register · public map.</p>
+      <p><span class="num-badge">2</span><strong>FastAPI (F) — per-role dashboards:</strong> citizen · volunteer · organizer · provider · manager · event-manager · dm-authority · auditor · admin · executive (<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> reserved).</p>
+      <p><span class="num-badge">3</span><strong>FastAPI (F) — cross-cutting:</strong> scoped request lists (provider-type, authority-jurisdiction) · service-detail ×4 (requestor / provider / authority / auditor) · admin system console.</p>
+      <p class="mb-0"><span class="num-badge">4</span><strong>Hybrid (H) &amp; account:</strong> declare-event zone map (Bun shell + FastAPI polygon) · profile · notifications.</p>
+    </div>
+    <p class="text-small muted">Full reasoning, the per-role nuance table, the render map and the AAA/security workflows live in <code>templates-v2/FLOW-ANALYSIS-PLAN.md</code> (§4, §6, §14).</p>
+  </div>
+</div>

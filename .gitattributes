@@ -1,0 +1,19 @@
+# Normalise line endings: Git stores text as LF, checks out native (LF/CRLF) per OS.
+# This ends the "LF will be replaced by CRLF" churn/warnings on Windows.
+* text=auto
+
+# Shell scripts must stay LF even on Windows (they run on Ubuntu).
+*.sh text eol=lf
+
+# Known binary assets — never touch their bytes (belt-and-suspenders; text=auto detects these too).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.pptx binary
+*.potx binary
+*.xlsx binary
+*.xlsm binary
+*.ico binary
+*.pem binary

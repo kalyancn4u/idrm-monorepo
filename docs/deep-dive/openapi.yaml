@@ -1,0 +1,703 @@
+openapi: 3.1.0
+info:
+  title: IDRM API (MVP)
+  version: 1.0.0
+  description: >
+    REST API for the Integrated Disaster Response Management (IDRM) MVP — a Python 3.12 modular monolith
+    (Flask web UI + FastAPI APIs). Resources conform to the Poster 22 data model (see 13-data-model.md).
+    All endpoints are under /api/v1 and require a JWT bearer token unless noted.
+  license:
+    name: Open Source
+servers:
+  - url: /api/v1
+    description: IDRM API base path
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+  - name: Incidents
+  - name: Alerts
+  - name: Resources
+  - name: Tasks
+  - name: Deployments
+  - name: Geospatial
+  - name: Documents
+  - name: Audit
+
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate and obtain a JWT
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh an access token
+      responses:
+        '200':
+          description: Refreshed
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /incidents:
+    get:
+      tags: [Incidents]
+      summary: List incidents
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Sort' }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: severity_level
+          in: query
+          schema: { type: string }
+        - name: incident_type_id
+          in: query
+          schema: { type: string, format: uuid }
+        - { $ref: '#/components/parameters/BBox' }
+      responses:
+        '200':
+          description: A page of incidents
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PageMeta'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items: { $ref: '#/components/schemas/Incident' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Incidents]
+      summary: Report a new incident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IncidentCreate' }
+      responses:
+        '201':
+          description: Incident created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Incident' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /incidents/{incident_id}:
+    parameters:
+      - { $ref: '#/components/parameters/IncidentId' }
+    get:
+      tags: [Incidents]
+      summary: Get an incident
+      responses:
+        '200':
+          description: The incident
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Incident' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Incidents]
+      summary: Update an incident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IncidentUpdatePut' }
+      responses:
+        '200':
+          description: Updated incident
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Incident' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    delete:
+      tags: [Incidents]
+      summary: Cancel/soft-delete an incident
+      responses:
+        '204': { description: Deleted }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /incidents/{incident_id}/updates:
+    parameters:
+      - { $ref: '#/components/parameters/IncidentId' }
+    get:
+      tags: [Incidents]
+      summary: List updates on an incident's timeline
+      responses:
+        '200':
+          description: Timeline entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IncidentUpdateEntry' }
+    post:
+      tags: [Incidents]
+      summary: Add an update to the timeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IncidentUpdateEntryCreate' }
+      responses:
+        '201':
+          description: Update added
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/IncidentUpdateEntry' }
+
+  /incidents/{incident_id}/deployments:
+    parameters:
+      - { $ref: '#/components/parameters/IncidentId' }
+    get:
+      tags: [Deployments]
+      summary: List resource deployments for an incident
+      responses:
+        '200':
+          description: Deployments
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Deployment' }
+    post:
+      tags: [Deployments]
+      summary: Deploy a resource to an incident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DeploymentCreate' }
+      responses:
+        '201':
+          description: Deployment created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Deployment' }
+
+  /alerts:
+    get:
+      tags: [Alerts]
+      summary: List alerts
+      parameters:
+        - name: incident_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Alert' }
+    post:
+      tags: [Alerts]
+      summary: Raise an alert for an incident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AlertCreate' }
+      responses:
+        '201':
+          description: Alert raised
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Alert' }
+
+  /resources:
+    get:
+      tags: [Resources]
+      summary: List resources
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: A page of resources
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PageMeta'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items: { $ref: '#/components/schemas/Resource' }
+    post:
+      tags: [Resources]
+      summary: Register a resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ResourceCreate' }
+      responses:
+        '201':
+          description: Resource created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Resource' }
+
+  /tasks:
+    get:
+      tags: [Tasks]
+      summary: List tasks
+      parameters:
+        - name: incident_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Task' }
+    post:
+      tags: [Tasks]
+      summary: Create a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TaskCreate' }
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+
+  /tasks/{task_id}:
+    parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      tags: [Tasks]
+      summary: Update task status/assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TaskPatch' }
+      responses:
+        '200':
+          description: Updated task
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /map/layers:
+    get:
+      tags: [Geospatial]
+      summary: Get map layers / features
+      parameters:
+        - name: layer_type
+          in: query
+          schema: { type: string }
+        - { $ref: '#/components/parameters/BBox' }
+      responses:
+        '200':
+          description: GeoJSON-style features
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/GeospatialFeature' }
+
+  /documents:
+    get:
+      tags: [Documents]
+      summary: List documents
+      parameters:
+        - name: incident_id
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Documents
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Document' }
+    post:
+      tags: [Documents]
+      summary: Register an uploaded document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DocumentCreate' }
+      responses:
+        '201':
+          description: Document created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Document' }
+
+  /audit-logs:
+    get:
+      tags: [Audit]
+      summary: List audit log entries (admin, read-only)
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - name: entity_name
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: A page of audit entries
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PageMeta'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items: { $ref: '#/components/schemas/AuditLog' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    Size:
+      name: size
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Sort:
+      name: sort
+      in: query
+      description: "Field to sort by; prefix with '-' for descending."
+      schema: { type: string }
+    BBox:
+      name: bbox
+      in: query
+      description: "Bounding box: minLon,minLat,maxLon,maxLat"
+      schema: { type: string }
+    IncidentId:
+      name: incident_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Forbidden:
+      description: Authenticated but not permitted
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: Conflict or illegal state transition
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+            details:
+              type: array
+              items: { type: object }
+            request_id: { type: string }
+          required: [code, message]
+      required: [error]
+
+    PageMeta:
+      type: object
+      properties:
+        total: { type: integer }
+        page: { type: integer }
+        size: { type: integer }
+      required: [total, page, size]
+
+    LoginRequest:
+      type: object
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+      required: [email, password]
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token: { type: string }
+        token_type: { type: string, examples: [bearer] }
+        expires_in: { type: integer }
+        user: { $ref: '#/components/schemas/UserPublic' }
+      required: [access_token, token_type]
+
+    UserPublic:
+      type: object
+      properties:
+        user_id: { type: string, format: uuid }
+        full_name: { type: string }
+        email: { type: string, format: email }
+        role_id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid }
+        status: { type: string }
+
+    Incident:
+      type: object
+      properties:
+        incident_id: { type: string, format: uuid }
+        incident_number: { type: string }
+        title: { type: string }
+        incident_type_id: { type: string, format: uuid }
+        severity_level: { type: string }
+        status: { type: string }
+        location_id: { type: string, format: uuid }
+        reported_by: { type: string, format: uuid }
+        occurred_at: { type: string, format: date-time }
+        description: { type: string }
+        created_at: { type: string, format: date-time }
+
+    IncidentCreate:
+      type: object
+      properties:
+        title: { type: string }
+        incident_type_id: { type: string, format: uuid }
+        severity_level: { type: string }
+        location_id: { type: string, format: uuid }
+        occurred_at: { type: string, format: date-time }
+        description: { type: string, minLength: 10, maxLength: 500 }
+      required: [title, incident_type_id, severity_level, location_id, description]
+
+    IncidentUpdatePut:
+      type: object
+      properties:
+        title: { type: string }
+        severity_level: { type: string }
+        status: { type: string }
+        description: { type: string, minLength: 10, maxLength: 500 }
+
+    IncidentUpdateEntry:
+      type: object
+      properties:
+        update_id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        created_by: { type: string, format: uuid }
+        update_type: { type: string }
+        message: { type: string }
+        created_at: { type: string, format: date-time }
+
+    IncidentUpdateEntryCreate:
+      type: object
+      properties:
+        update_type: { type: string }
+        message: { type: string }
+      required: [message]
+
+    Alert:
+      type: object
+      properties:
+        alert_id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        alert_type: { type: string }
+        message: { type: string }
+        severity: { type: string }
+        channel: { type: string }
+        sent_at: { type: string, format: date-time }
+        status: { type: string }
+
+    AlertCreate:
+      type: object
+      properties:
+        incident_id: { type: string, format: uuid }
+        alert_type: { type: string }
+        message: { type: string }
+        severity: { type: string }
+        channel: { type: string }
+      required: [incident_id, message, channel]
+
+    Resource:
+      type: object
+      properties:
+        resource_id: { type: string, format: uuid }
+        name: { type: string }
+        resource_type_id: { type: string, format: uuid }
+        quantity: { type: integer }
+        unit: { type: string }
+        owner_org_id: { type: string, format: uuid }
+        status: { type: string }
+        location_id: { type: string, format: uuid }
+
+    ResourceCreate:
+      type: object
+      properties:
+        name: { type: string }
+        resource_type_id: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 0 }
+        unit: { type: string }
+        owner_org_id: { type: string, format: uuid }
+        location_id: { type: string, format: uuid }
+      required: [name, resource_type_id, quantity]
+
+    Deployment:
+      type: object
+      properties:
+        deployment_id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        resource_id: { type: string, format: uuid }
+        deployed_by: { type: string, format: uuid }
+        deployed_at: { type: string, format: date-time }
+        returned_at: { type: string, format: date-time }
+        status: { type: string }
+        notes: { type: string }
+
+    DeploymentCreate:
+      type: object
+      properties:
+        resource_id: { type: string, format: uuid }
+        notes: { type: string }
+      required: [resource_id]
+
+    Task:
+      type: object
+      properties:
+        task_id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        assigned_to: { type: string, format: uuid }
+        title: { type: string }
+        priority: { type: string }
+        status: { type: string }
+        due_at: { type: string, format: date-time }
+        created_at: { type: string, format: date-time }
+
+    TaskCreate:
+      type: object
+      properties:
+        incident_id: { type: string, format: uuid }
+        assigned_to: { type: string, format: uuid }
+        title: { type: string }
+        priority: { type: string }
+        due_at: { type: string, format: date-time }
+      required: [incident_id, title]
+
+    TaskPatch:
+      type: object
+      properties:
+        assigned_to: { type: string, format: uuid }
+        status: { type: string }
+        priority: { type: string }
+
+    GeospatialFeature:
+      type: object
+      properties:
+        geo_data_id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        layer_type: { type: string }
+        geometry:
+          type: object
+          description: GeoJSON geometry (Point, LineString, or Polygon)
+        properties:
+          type: object
+        source: { type: string }
+        created_at: { type: string, format: date-time }
+
+    Document:
+      type: object
+      properties:
+        document_id: { type: string, format: uuid }
+        incident_id: { type: string, format: uuid }
+        uploaded_by: { type: string, format: uuid }
+        file_name: { type: string }
+        file_type: { type: string }
+        file_url: { type: string }
+        storage_type: { type: string }
+        uploaded_at: { type: string, format: date-time }
+
+    DocumentCreate:
+      type: object
+      properties:
+        incident_id: { type: string, format: uuid }
+        file_name: { type: string }
+        file_type: { type: string }
+        file_url: { type: string }
+        storage_type: { type: string }
+      required: [file_name, file_url]
+
+    AuditLog:
+      type: object
+      properties:
+        audit_log_id: { type: integer }
+        user_id: { type: string, format: uuid }
+        action: { type: string }
+        entity_name: { type: string }
+        entity_id: { type: string }
+        old_values: { type: object }
+        new_values: { type: object }
+        created_at: { type: string, format: date-time }

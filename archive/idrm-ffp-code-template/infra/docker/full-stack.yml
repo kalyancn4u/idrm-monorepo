@@ -1,0 +1,113 @@
+# =============================================================================
+# infra/docker/full-stack.yml — Full-stack Docker Compose for IDRM.
+#
+# WHAT THIS GIVES YOU
+#   • postgres (with PostGIS) and redis — fully working RIGHT NOW.
+#   • backend / gateway / nginx — defined and ready; they BUILD from the source
+#     dirs and need their Dockerfiles, which land as the app code is implemented.
+#     They sit behind the "app" profile so they don't block the data layer.
+#
+# USAGE
+#   Data layer only (works today):
+#       docker compose -f infra/docker/full-stack.yml up -d
+#   Everything (once Dockerfiles exist):
+#       docker compose -f infra/docker/full-stack.yml --profile app up -d
+#
+# IDEMPOTENT: `up -d` only (re)creates containers whose config/image changed; it
+# leaves healthy, unchanged services running.
+# =============================================================================
+name: idrm
+
+services:
+  # ---- Data layer ----------------------------------------------------------
+  postgres:
+    image: postgis/postgis:16-3.4          # PostgreSQL 16 WITH PostGIS 3.4 baked in
+    environment:
+      POSTGRES_DB: ${DB_NAME:-idrm_db}
+      POSTGRES_USER: ${DB_USER:-idrm_user}
+      POSTGRES_PASSWORD: ${DB_PASS:-idrm_secure_password_2024}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Files in /docker-entrypoint-initdb.d run automatically, in name order,
+      # the FIRST time the data directory is empty (01- → 02- → 03-).
+      - ../../database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-idrm_user} -d ${DB_NAME:-idrm_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]   # persist to disk between restarts
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ---- Application layer (profile: app) ------------------------------------
+  backend:
+    # FastAPI modular monolith — all modules on port 8000.
+    # Needs: src/backend/app-python/Dockerfile (added when the backend is implemented).
+    build:
+      context: ../../src/backend/app-python
+    env_file:
+      - ../../.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-idrm_user}:${DB_PASS:-idrm_secure_password_2024}@postgres:5432/${DB_NAME:-idrm_db}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    profiles: ["app"]
+    restart: unless-stopped
+
+  gateway:
+    # Bun API gateway — HTTP :3000, WebSocket :3001.
+    # Needs: src/backend/api-gateway/Dockerfile.
+    build:
+      context: ../../src/backend/api-gateway
+    env_file:
+      - ../../.env
+    environment:
+      BACKEND_URL: http://backend:8000
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    profiles: ["app"]
+    restart: unless-stopped
+
+  nginx:
+    # Reverse proxy + TLS termination + static frontend serving.
+    # Needs: infra/docker/nginx.conf (added during deployment hardening).
+    image: nginx:1.27-alpine
+    depends_on:
+      - gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    profiles: ["app"]
+    restart: unless-stopped
+
+# Named volumes keep your DB/Redis data even if containers are recreated.
+volumes:
+  pgdata:
+  redisdata:

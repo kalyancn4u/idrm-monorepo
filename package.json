@@ -1,0 +1,24 @@
+{
+  "name": "idrm-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Integrated Disaster Response Management — polyglot monorepo",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "generate": "turbo run generate"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.4.0",
+    "@redocly/cli": "^1.20.0",
+    "@kubb/cli": "^2.20.0",
+    "@kubb/swagger": "^2.20.0",
+    "@kubb/swagger-ts": "^2.20.0",
+    "@kubb/swagger-client": "^2.20.0"
+  },
+  "packageManager": "bun@1.2.0"
+}

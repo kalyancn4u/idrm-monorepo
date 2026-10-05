@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Notifications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body class="has-bottom-nav">
+  <!-- PAGE 10 · Notifications · Who: any authenticated user -->
+  <!-- API: GET /notifications · POST /notifications/{id}/read · POST /notifications/read-all -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="05-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">CITIZEN</span></div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="05-dashboard.html">Dashboard</a></li>
+        <li><a href="09-map.html">Map</a></li>
+        <li><a href="08-my-services.html">My requests</a></li>
+        <li><a href="10-notifications.html" class="active" aria-current="page">Alerts</a></li>
+      </ul>
+      <div class="nav-actions"><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="container" style="max-width:720px;">
+    <div class="page-head">
+      <div><h1 style="margin-bottom:var(--space-1);">Notifications</h1><p class="text-muted" style="margin:0;"><strong>3 unread</strong> · newest first</p></div>
+      <button class="btn btn-outline btn-sm" onclick="document.querySelectorAll('.list-row.unread').forEach(r=>r.classList.remove('unread'));window.idrmToast('All marked as read','success');">Mark all read</button>
+    </div>
+
+    <div class="list-stack">
+      <div class="list-row unread">
+        <span class="stat-icon" aria-hidden="true" style="width:36px;height:36px;font-size:1.1rem;"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div class="flex-1">
+          <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Provider accepted your request</span><span class="badge badge-success">SERVICE_ACCEPTED</span></div>
+          <p class="text-muted" style="margin:var(--space-1) 0;">Apollo First-Response accepted #a1b2c3 · ETA ~12 min.</p>
+          <div class="flex gap-3 items-center"><span class="text-small">2 min ago</span><a href="07-service-detail.html" class="text-small">View request →</a><button class="text-small" data-mark-read style="background:none;border:none;color:var(--color-primary-hover);cursor:pointer;">Mark read</button></div>
+        </div>
+      </div>
+
+      <div class="list-row unread">
+        <span class="stat-icon" aria-hidden="true" style="width:36px;height:36px;font-size:1.1rem;background:var(--color-info-bg);color:var(--color-info-fg);"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <div class="flex-1">
+          <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Request approved</span><span class="badge badge-info">SERVICE_CREATED</span></div>
+          <p class="text-muted" style="margin:var(--space-1) 0;">Your water request #d4e5f6 is now visible to providers.</p>
+          <div class="flex gap-3 items-center"><span class="text-small">1 hr ago</span><a href="07-service-detail.html" class="text-small">View request →</a><button class="text-small" data-mark-read style="background:none;border:none;color:var(--color-primary-hover);cursor:pointer;">Mark read</button></div>
+        </div>
+      </div>
+
+      <div class="list-row unread">
+        <span class="stat-icon" aria-hidden="true" style="width:36px;height:36px;font-size:1.1rem;background:var(--color-review-bg);color:var(--color-review-fg);"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span>
+        <div class="flex-1">
+          <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Please confirm completion</span><span class="badge badge-review">VERIFICATION_REQUEST</span></div>
+          <p class="text-muted" style="margin:var(--space-1) 0;">Provider marked #778899 complete. Confirm &amp; rate the help you received.</p>
+          <div class="flex gap-3 items-center"><span class="text-small">3 hr ago</span><a href="07-service-detail.html" class="text-small">Confirm now →</a><button class="text-small" data-mark-read style="background:none;border:none;color:var(--color-primary-hover);cursor:pointer;">Mark read</button></div>
+        </div>
+      </div>
+
+      <div class="list-row">
+        <span class="stat-icon" aria-hidden="true" style="width:36px;height:36px;font-size:1.1rem;background:var(--color-success-bg);color:var(--color-success-fg);">🎉</span>
+        <div class="flex-1">
+          <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Request completed &amp; verified</span><span class="badge badge-success">SERVICE_COMPLETED</span></div>
+          <p class="text-muted" style="margin:var(--space-1) 0;">#778899 (Food) was verified. Thank you for confirming.</p>
+          <span class="text-small">Yesterday</span>
+        </div>
+      </div>
+
+      <div class="list-row">
+        <span class="stat-icon" aria-hidden="true" style="width:36px;height:36px;font-size:1.1rem;background:var(--color-bg-surface-elevated);color:var(--color-text-muted);">🛈</span>
+        <div class="flex-1">
+          <div class="flex justify-between gap-2 flex-wrap"><span class="strong">Welcome to IDRM</span><span class="badge badge-neutral">GENERAL</span></div>
+          <p class="text-muted" style="margin:var(--space-1) 0;">Your account is ready. Set your language in your profile.</p>
+          <span class="text-small">2 days ago</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-note"><strong>Access ·</strong> Any signed-in role (your own notifications) — default CITIZEN.<br><strong>API ·</strong> <code>GET /api/v1/notifications</code> → <code>{ items[], unread_count }</code>. Mark read: <code>POST /api/v1/notifications/{id}/read</code>. Types: <code>SERVICE_CREATED, SERVICE_ACCEPTED, SERVICE_COMPLETED, VERIFICATION_REQUEST, GENERAL, SYSTEM</code>.</div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="05-dashboard.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Home</a>
+    <a href="09-map.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a>
+    <a href="06-create-service.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request</a>
+    <a href="08-my-services.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Requests</a>
+    <a href="11-profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a>
+  </nav>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

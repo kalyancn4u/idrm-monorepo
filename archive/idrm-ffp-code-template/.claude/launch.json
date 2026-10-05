@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "idrm-templates",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["templates/_preview-server.js"],
+      "port": 4599
+    },
+    {
+      "name": "idrm-templates-v2",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["templates-v2/_preview-server.js"],
+      "port": 4600
+    }
+  ]
+}

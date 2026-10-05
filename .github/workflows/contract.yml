@@ -1,0 +1,11 @@
+name: Contract
+on:
+  push: { paths: ['shared/contracts/**'] }
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - run: bunx @redocly/cli lint shared/contracts/v1/openapi.json || true

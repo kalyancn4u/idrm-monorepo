@@ -1,0 +1,47 @@
+# =============================================================================
+# IDRM backend (FastAPI modular monolith) — Python 3.11
+# Install (inside the conda env):
+#     conda run -n idrm-mvp pip install -r src/backend/requirements.txt
+#
+# NOTE on geospatial: heavy native libs (GDAL/GEOS) are managed by MINICONDA,
+# not pip. If you need geopandas for analytics:
+#     conda install -n idrm-mvp -c conda-forge geopandas
+# The app's runtime spatial work uses PostGIS + GeoAlchemy2 + Shapely (all below).
+#
+# Pins use compatible-release ranges (==X.Y.*) so patch updates flow in but
+# minor/major bumps are deliberate.
+# =============================================================================
+
+# --- Web framework & ASGI server ---
+fastapi==0.109.*
+uvicorn[standard]==0.27.*
+pydantic==2.6.*
+pydantic-settings==2.2.*
+
+# --- Database (async) + PostGIS + migrations ---
+sqlalchemy[asyncio]==2.0.*
+asyncpg==0.29.*            # async PostgreSQL driver (app runtime)
+psycopg2-binary==2.9.*     # sync driver (Alembic / tooling)
+geoalchemy2==0.14.*        # PostGIS geometry/geography types for SQLAlchemy
+alembic==1.13.*            # schema migrations
+
+# --- Geospatial (Python, replaces Java/GeoServer) ---
+shapely==2.0.*             # geometry operations (pip-installable; GDAL via conda)
+
+# --- Cache / sessions / rate-limiting / pub-sub ---
+redis==5.0.*
+
+# --- Auth & security ---
+python-jose[cryptography]==3.3.*   # JWT encode/decode (15-min access, 7-day refresh)
+passlib[bcrypt]==1.7.*             # bcrypt password hashing (cost factor 12)
+python-multipart==0.0.*            # form data & file/photo uploads
+email-validator==2.1.*             # validates email fields used by Pydantic
+
+# --- Utilities ---
+httpx==0.27.*              # async HTTP client (integrations + tests)
+python-dotenv==1.0.*       # load .env during local development
+
+# --- Testing (dev only) ---
+pytest==8.0.*
+pytest-asyncio==0.23.*
+pytest-cov==4.1.*

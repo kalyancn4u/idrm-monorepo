@@ -1,0 +1,30 @@
+{
+  "name": "idrm-web-react",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "description": "IDRM admin dashboard — React 18 + TypeScript + Vite SPA (port 5174). Coordinator/admin views: analytics + the request approval queue. Reuses the gateway API and the Slate+Emerald design tokens.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-router-dom": "^6",
+    "recharts": "^2",
+    "zustand": "^4"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4",
+    "autoprefixer": "^10.4",
+    "postcss": "^8.4",
+    "tailwindcss": "^3.4",
+    "typescript": "^5",
+    "vite": "^5"
+  }
+}

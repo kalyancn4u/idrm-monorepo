@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Declare event &amp; draw zone (DM Authority)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- MAP · DM_AUTHORITY · declare event + draw affected zone · Render: Hybrid (H) — Bun shell + FastAPI persist -->
+  <div class="role-strip role-DM_AUTHORITY" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="../role-dashboard/dm-authority.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role">DM_AUTHORITY</span>
+        </div>
+        <span class="render-tier tier-H" title="Hybrid — Bun-served map shell + FastAPI persists the polygon"><span class="dotc"></span>Hybrid</span>
+      </div>
+      <div class="nav-actions">
+        <a href="../role-dashboard/dm-authority.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+        <a href="../shared/profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-head"><div><h1 style="margin-bottom:var(--space-1);">Declare event &amp; draw affected zone</h1><p class="text-muted" style="margin:0;">Requests inside the polygon auto-link to the event.</p></div></div>
+
+    <div class="scope-banner scope-jurisdiction" role="note">
+      <span class="scope-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>
+      <div class="scope-body">
+        <span class="scope-tag">Authority · define affected area</span>
+        <p>Draw the affected boundary on the map; the system calculates its area and links every request inside it to this event. The zone overlays the public map for everyone.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <section>
+        <div class="map-canvas" style="min-height:420px;" data-map data-lat="17.45" data-lng="78.40" data-zoom="11"
+             data-markers='[{"lat":17.4948,"lng":78.3996,"priority":"CRITICAL","title":"#a1b2c3"},{"lat":17.4435,"lng":78.3772,"priority":"HIGH","title":"#d4e5f6"},{"lat":17.4239,"lng":78.4738,"priority":"MEDIUM","title":"#e5f6a7"}]'>
+          <div class="map-toolbar"><button class="chip active" onclick="idrmToast('Draw mode (mockup)','info')"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg> Draw polygon</button><button class="chip">Clear</button><span class="chip">Cluster: 126</span></div>
+          <span class="map-pin CRITICAL" style="left:40%;top:42%;"></span>
+          <span class="map-pin HIGH" style="left:58%;top:56%;"></span>
+          <span class="map-pin MEDIUM" style="left:48%;top:66%;"></span>
+          <div class="map-note">Leaflet draw tools mount here · the static view is the offline fallback.</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="card">
+          <h3 style="margin-top:0;">Event details</h3>
+          <div class="form-group"><label class="form-label" for="ename">Event name</label><input type="text" id="ename" value="Hyderabad Floods — Madhapur"></div>
+          <div class="form-group"><label class="form-label" for="etype">Type</label><select id="etype"><option>Flood</option><option>Earthquake</option><option>Cyclone</option><option>Fire</option><option>Other</option></select></div>
+          <div class="form-group"><label class="form-label" for="esev">Severity</label><select id="esev"><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option></select></div>
+          <p class="text-small muted">Drawn area: ~12.4 km² · 126 requests would auto-link.</p>
+          <button class="btn btn-primary btn-block" onclick="idrmToast('Event declared + zone saved (mockup)','success')">Declare event</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="api-note">
+      <strong>Access ·</strong> DM_AUTHORITY (declare + draw) and ADMIN; EVENT_MANAGER views/runs but does not declare.<br>
+      <strong>Render ·</strong> <span class="render-tier tier-H"><span class="dotc"></span>Hybrid</span> — the <strong>map shell + tiles come from Bun</strong> (cached, fast), while <strong>FastAPI persists the polygon + recomputes auto-links</strong> (PostGIS <code>ST_Within</code>). The authenticated request overlay is a per-user island.<br>
+      <strong>API ·</strong> <code>GET /api/v1/geo/nearby?jurisdiction=mine</code> · <code>POST /api/v1/events</code> · <code>POST /api/v1/events/{id}/zone</code> (GeoJSON polygon).
+    </div>
+  </div>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

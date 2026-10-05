@@ -1,0 +1,131 @@
+/* =====================================================================
+   IDRM RBAC Showcase — display controls + theming  (SHOWCASE-ONLY)
+   ---------------------------------------------------------------------
+   Inlined into idrm-rbac-showcase.html by _build-showcase.ps1 (after the
+   design system + showcase overrides, so these rules win). Adds:
+     · independent Heading / Body font-face                (--font-heading/body)
+     · XS..XL size scale via the root font-size            (html { font-size })
+     · Light / Dark / System theme  ("system" resolved in JS → data-theme)
+     · a sticky control bar + Ctrl/Cmd+K search modal
+   The standalone pages/ are untouched — they keep the plain Inter system.
+   ===================================================================== */
+
+/* ---- fonts: headings and body are now independent; default = Inter ---- */
+:root { --font-heading: 'Inter', system-ui, sans-serif; --font-body: 'Inter', system-ui, sans-serif; }
+html { font-size: 15px; }                 /* default "M" — a touch smaller than the previous 16px */
+body { font-family: var(--font-body); }
+h1, h2, h3, h4, .h1, .h2, .h3, .h4, .stat-value, .tpl-num { font-family: var(--font-heading); }
+
+/* ---- control bar (sticky; themed through the design-system tokens) ---- */
+/* a calm strip at the very top of each page/the showcase — NOT sticky (the app navbar /
+   role-switcher remain the sticky chrome), so it never crowds the screen on mobile */
+.sc-bar { position: relative; z-index: 50; background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-light);
+  padding: .5rem max(14px, 3vw); display: flex; flex-direction: column; gap: .45rem; }
+.sc-row { display: flex; align-items: center; gap: .75rem; width: 100%; }
+.sc-row-1 { justify-content: space-between; flex-wrap: wrap; row-gap: .5rem; }
+.sc-row-2 { justify-content: center; }
+.sc-left, .sc-right { display: flex; align-items: center; gap: .85rem; flex-wrap: wrap; }
+.sc-group { display: flex; align-items: center; gap: .4rem; }
+.sc-group > label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--color-text-muted); white-space: nowrap; }
+.sc-bar select.sc-select { width: auto; min-height: 0; padding: .35rem 1.9rem .35rem .6rem; font-size: .8rem;
+  font-weight: 600; color: var(--color-text-heading); background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-medium); border-radius: var(--radius-md); cursor: pointer; }
+.sc-bar select.sc-select:hover { border-color: var(--color-primary); }
+.sc-preview { font-size: .72rem; color: var(--color-text-small); padding: .3rem .65rem;
+  background: var(--color-bg-surface-elevated); border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md); white-space: nowrap; }
+@media (max-width: 760px) { .sc-preview { display: none; } }
+
+/* ---- theme toggle: cycles System -> Light -> Dark (icon tints to match) ---- */
+.sc-theme { display: inline-flex; align-items: center; gap: .45rem; padding: .35rem .75rem; min-width: 104px;
+  justify-content: center; border: 1px solid var(--color-border-medium); border-radius: var(--radius-md);
+  background: var(--color-bg-surface); color: var(--color-text-heading); cursor: pointer;
+  font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-family: inherit; }
+.sc-theme:hover { border-color: var(--color-primary); }
+.sc-theme .ic { width: 1.1rem; height: 1.1rem; }
+.sc-theme[data-mode="system"] .ic { color: var(--color-info); }
+.sc-theme[data-mode="light"]  .ic { color: var(--color-warning); }
+.sc-theme[data-mode="dark"]   .ic { color: var(--color-review); }
+
+/* ---- search trigger (centered 2nd row) + modal ---- */
+.sc-search-btn { width: min(560px, 100%); display: flex; align-items: center; gap: .6rem;
+  padding: .5rem .85rem; border: 1px solid var(--color-border-medium); border-radius: var(--radius-md);
+  background: var(--color-bg-surface); color: var(--color-text-small); cursor: pointer;
+  font-size: .82rem; font-weight: 500; font-family: inherit; }
+.sc-search-btn:hover { border-color: var(--color-primary); color: var(--color-primary-hover); }
+.sc-search-btn .ic { width: 1.05rem; height: 1.05rem; }
+.sc-kbd { font-size: .65rem; padding: .1rem .4rem; background: var(--color-bg-surface-elevated);
+  border: 1px solid var(--color-border-light); border-radius: var(--radius-sm); color: var(--color-text-muted);
+  font-weight: 700; font-family: var(--font-mono); white-space: nowrap; }
+.sc-search-btn .sc-kbd { margin-left: auto; }
+
+.sc-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 1000; backdrop-filter: blur(4px); }
+.sc-modal.open { display: flex; align-items: flex-start; justify-content: center; padding-top: 84px; }
+.sc-modal-box { width: 92%; max-width: 600px; background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-light); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl); }
+.sc-input-wrap { display: flex; align-items: center; gap: .6rem; padding: .85rem 1rem; border-bottom: 1px solid var(--color-border-light); }
+.sc-input-wrap .ic { width: 1.2rem; height: 1.2rem; color: var(--color-text-muted); }
+.sc-input { flex: 1; border: none; background: transparent; outline: none; font-family: inherit; font-size: 1rem; color: var(--color-text-heading); }
+.sc-input::placeholder { color: var(--color-text-disabled); }
+.sc-results { max-height: 50vh; overflow-y: auto; }
+.sc-result { padding: .7rem 1rem; border-bottom: 1px solid var(--color-border-light); cursor: pointer; }
+.sc-result:last-child { border-bottom: none; }
+.sc-result:hover, .sc-result.active { background: var(--color-bg-surface-elevated); }
+.sc-bc { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; font-size: .65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--color-primary-hover); margin-bottom: .25rem; }
+.sc-excerpt { font-size: .82rem; color: var(--color-text-body); line-height: 1.5; }
+.sc-excerpt .hl { background: var(--color-warning-bg); color: var(--color-warning-fg); font-weight: 700; padding: 0 .15em; border-radius: 2px; }
+.sc-none { padding: 1.8rem 1rem; text-align: center; color: var(--color-text-small); font-size: .85rem; }
+.sc-hint { display: flex; gap: .9rem; flex-wrap: wrap; padding: .6rem 1rem; border-top: 1px solid var(--color-border-light);
+  font-size: .68rem; color: var(--color-text-small); }
+.sc-hint span { display: inline-flex; align-items: center; gap: .35rem; }
+.sc-flash { outline: 3px solid var(--color-primary) !important; outline-offset: 3px; border-radius: 4px; }
+
+/* compact the bar on phones: hide the field labels (selects are self-evident + keep aria-labels)
+   and tighten the controls so it stays ~2 short rows instead of a tall block */
+@media (max-width: 760px) {
+  .sc-bar { padding: .45rem 12px; }
+  .sc-group > label { display: none; }
+  .sc-bar select.sc-select { padding: .3rem 1.4rem .3rem .5rem; font-size: .78rem; max-width: 5.75rem; }
+  .sc-theme { min-width: 0; }
+}
+
+@media print { .sc-bar, .sc-modal { display: none !important; } }
+
+/* =====================================================================
+   DARK THEME — remap the IDRM design tokens. "System" is resolved to
+   light/dark in JS (matchMedia), so only [data-theme="dark"] is needed.
+   ===================================================================== */
+[data-theme="dark"] {
+  --color-bg-page:#0d1117; --color-bg-surface:#161b22; --color-bg-surface-elevated:#21262d;
+  --color-bg-overlay:rgba(255,255,255,.06);
+  --color-bg-beige:#1b1812; --color-bg-beige-soft:#15130d; --color-border-beige:#3a3526;
+  --color-text-heading:#e6edf3; --color-text-body:#c9d1d9; --color-text-muted:#aeb8c4;
+  --color-text-small:#8b949e; --color-text-disabled:#6e7681;
+  --color-primary:#2ea043; --color-primary-hover:#238636; --color-primary-strong:#5ad27e;
+  --color-primary-darker:#1a6e2e; --color-primary-light:#11392a; --color-primary-tint:#0f261c;
+  --color-secondary:#8b949e; --color-secondary-hover:#aeb8c4;
+  --color-success:#3fb950; --color-success-bg:#0f2a1a; --color-success-fg:#5ad27e;
+  --color-warning:#d29922; --color-warning-bg:#2a2310; --color-warning-fg:#e3b341;
+  --color-error:#f85149;   --color-error-bg:#2d1517;   --color-error-fg:#ff8b82;
+  --color-info:#58a6ff;    --color-info-bg:#0e1b33;    --color-info-fg:#79c0ff;
+  --color-review:#bc8cff;  --color-review-bg:#241a36;  --color-review-fg:#d2a8ff;
+  --color-border-light:#30363d; --color-border-medium:#3a414b; --color-border-strong:#4d5560;
+}
+/* dark fix-ups for components that hard-code light hex */
+[data-theme="dark"] .navbar { background: rgba(13,17,23,.9); }
+[data-theme="dark"] .role-switcher { background: rgba(22,27,34,.95); }
+[data-theme="dark"] .hero { background: linear-gradient(180deg, var(--color-bg-surface), var(--color-bg-page)); }
+[data-theme="dark"] .chip, [data-theme="dark"] .list-row, [data-theme="dark"] .bottom-nav,
+[data-theme="dark"] .nav-links, [data-theme="dark"] .sec-chip, [data-theme="dark"] .nav-col,
+[data-theme="dark"] .perm-matrix, [data-theme="dark"] .perm-matrix td:first-child,
+[data-theme="dark"] .role-switcher a, [data-theme="dark"] .modal, [data-theme="dark"] .drawer,
+[data-theme="dark"] .status-DISPUTED { background: var(--color-bg-surface); }
+[data-theme="dark"] .map-canvas { background: #0b1016; }
+[data-theme="dark"] .status-ACCEPTED { background:#0b2a3a; color:#79c0ff; }
+[data-theme="dark"] .prio-CRITICAL { background:#2d1517; color:#ff8b82; box-shadow: inset 0 0 0 1px rgba(248,81,73,.4); }
+[data-theme="dark"] .prio-HIGH     { background:#2a1a0e; color:#ffa657; box-shadow: inset 0 0 0 1px rgba(255,166,87,.35); }
+[data-theme="dark"] .prio-MEDIUM   { background:#2a2310; color:#e3b341; box-shadow: inset 0 0 0 1px rgba(227,179,65,.35); }
+[data-theme="dark"] .prio-LOW      { background:#0f2a1a; color:#5ad27e; box-shadow: inset 0 0 0 1px rgba(90,210,126,.35); }

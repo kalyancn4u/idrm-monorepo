@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Provider Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+</head>
+<body>
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- ROLE DASHBOARD · PROVIDER (L4) · Scope: Type+Area · Render: FastAPI (F) + WebSocket (WS) -->
+  <div class="role-strip role-PROVIDER" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="provider.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role">PROVIDER</span>
+        </div>
+        <span class="render-tier tier-F" title="Rendered by FastAPI — RBAC-gated, per-user"><span class="dotc"></span>FastAPI</span>
+        <span class="render-tier tier-WS" title="Live updates via Bun WebSocket"><span class="dotc"></span>WS live</span>
+      </div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="provider.html" class="active" aria-current="page">Dashboard</a></li>
+        <li><a href="../requests-list/provider-type.html">Available</a></li>
+        <li><a href="../service-detail/provider.html">Active</a></li>
+        <li><a href="../map/public.html">Map</a></li>
+        <li><a href="../shared/notifications.html" class="nav-badge">Alerts <span class="dot" aria-hidden="true"></span></a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- NOTE: no "+ Request help" — PROVIDER cannot create requests (conflict of interest, FS §3.2). The action is ABSENT, not disabled. -->
+        <a href="../shared/profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="app-sidebar">
+      <nav aria-label="Primary">
+        <ul class="side-nav">
+          <li><a href="provider.html" class="active" aria-current="page"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span> Dashboard</a></li>
+          <li><a href="../requests-list/provider-type.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span> Available</a></li>
+          <li><a href="../service-detail/provider.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span> Active work</a></li>
+          <li><a href="../map/public.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Live map</a></li>
+          <li><a href="../shared/notifications.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></span> Notifications</a></li>
+          <li><a href="../shared/profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div>
+          <h1 style="margin-bottom:var(--space-1);">Apollo First-Response</h1>
+          <p class="text-muted" style="margin:0;">Medical provider · Kukatpally service area · serving MEDICAL + RESCUE.</p>
+        </div>
+      </div>
+
+      <div class="scope-banner scope-limited" role="note">
+        <span class="scope-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
+        <div class="scope-body">
+          <span class="scope-tag">Scope · My service type + area (<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> limited)</span>
+          <p>You see <strong>APPROVED</strong> requests matching your service types (MEDICAL, RESCUE) inside your service area — and your own accepted work. You <strong>cannot create requests</strong> or approve them.</p>
+        </div>
+      </div>
+
+      <section class="section grid grid-4">
+        <div class="card"><div class="stat"><span class="stat-label">Available to accept</span><span class="stat-value">7</span><span class="stat-trend">2 critical</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">In progress</span><span class="stat-value">3</span><span class="stat-trend">assigned to me</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Completed (mo.)</span><span class="stat-value">48</span><span class="stat-trend up">4.7★ avg</span></div></div>
+        <div class="card">
+          <div class="stat"><span class="stat-label">Capacity</span><span class="stat-value" style="font-size:var(--font-size-xl);">3 / 5</span></div>
+          <div class="meter warn mt-2" aria-label="Capacity 3 of 5"><span style="width:60%"></span></div>
+          <span class="text-small">2 slots free · accept is blocked at full (BR-PM-002)</span>
+        </div>
+      </section>
+
+      <div class="grid grid-2" style="align-items:start;">
+        <section>
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Available near me</h3><a href="../requests-list/provider-type.html" class="text-small">Full list →</a></div>
+          <div class="list-stack">
+            <div class="list-row">
+              <span class="svc-dot svc-MEDICAL" aria-hidden="true" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;"><span class="strong">Medical · Ambulance needed</span><span class="status status-APPROVED">● APPROVED</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0 0;">1.2 km · 3 people · <span class="prio prio-CRITICAL">CRITICAL</span></p>
+                <div class="mt-2 flex gap-2"><a href="../service-detail/provider.html" class="btn btn-primary btn-sm">Accept</a><a href="../service-detail/provider.html" class="btn btn-ghost btn-sm">Details</a></div>
+              </div>
+            </div>
+            <div class="list-row" style="opacity:.6;">
+              <span class="svc-dot svc-RESCUE" aria-hidden="true" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;"><span class="strong">Rescue · Stranded on rooftop</span><span class="status status-ACCEPTED">● Taken</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0 0;">Accepted by another provider just now <span class="render-tier tier-WS"><span class="dotc"></span>live</span></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">My active work</h3><a href="../service-detail/provider.html" class="text-small">Manage →</a></div>
+          <div class="list-stack">
+            <div class="list-row">
+              <span class="svc-dot svc-MEDICAL" aria-hidden="true" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;"><span class="strong">Medical · First aid at shelter</span><span class="status status-IN_PROGRESS">● IN_PROGRESS</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0 0;">Kukatpally · started 22 min ago</p>
+                <div class="mt-2 flex gap-2"><button class="btn btn-primary btn-sm" onclick="idrmToast('Marked COMPLETED (mockup)','success')">Mark complete</button></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="api-note">
+        <strong>Access ·</strong> PROVIDER (default); MANAGER sees the same plus an org view. <strong>Cannot create requests.</strong><br>
+        <strong>Scope ·</strong> Type+Area — APPROVED requests where <code>service_type ∈ my_types</code> AND <code>location ∈ my_service_area</code> (PostGIS).<br>
+        <strong>Render ·</strong> <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> queries + capacity gate; <span class="render-tier tier-WS"><span class="dotc"></span>WS</span> flips a card to "taken" the moment another provider accepts (Bun WebSocket ↔ Redis pub/sub). <code>no-store</code>.<br>
+        <strong>API ·</strong> <code>GET /api/v1/geo/nearby?type=MEDICAL,RESCUE&amp;status=APPROVED</code> · <code>POST /api/v1/services/{id}/accept</code> · <code>POST /api/v1/services/{id}/complete</code> · WS <code>service_requests</code>.
+      </div>
+    </main>
+  </div>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

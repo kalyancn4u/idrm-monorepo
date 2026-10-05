@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Available services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body>
+  <!-- PAGE 13 · Available Services · Who: PROVIDER · API: GET /geo/nearby (by service types) · POST /services/{id}/accept -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="12-provider-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">PROVIDER</span></div>
+      <button class="nav-toggle" data-nav-toggle="prov-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="prov-nav">
+        <li><a href="12-provider-dashboard.html">Overview</a></li>
+        <li><a href="13-available-services.html" class="active" aria-current="page">Available</a></li>
+        <li><a href="14-active-services.html">Active</a></li>
+        <li><a href="09-map.html">Map</a></li>
+      </ul>
+      <div class="nav-actions"><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-head">
+      <div><h1 style="margin-bottom:var(--space-1);">Available requests</h1><p class="text-muted" style="margin:0;">Approved requests near you that match your services. Accept to assign your org.</p></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex gap-2 flex-wrap mb-6" data-chips>
+      <span class="chip active">All my types</span>
+      <span class="chip"><span class="svc-dot svc-MEDICAL"></span> Medical</span>
+      <span class="chip"><span class="svc-dot svc-RESCUE"></span> Rescue</span>
+      <span class="chip">≤ 5 km</span>
+      <span class="chip">CRITICAL only</span>
+    </div>
+
+    <div class="grid grid-3">
+      <!-- Card 1 -->
+      <div class="card card-hover">
+        <div class="flex justify-between items-center mb-2"><span class="prio prio-CRITICAL">🔴 CRITICAL</span><span class="status status-APPROVED">APPROVED</span></div>
+        <h3 class="mt-0" style="margin-bottom:var(--space-2);"><span class="svc-dot svc-MEDICAL"></span> Medical · #a1b2c3</h3>
+        <p class="text-body" style="margin-bottom:var(--space-2);">Elderly person needs an ambulance; water rising near temple.</p>
+        <p class="text-muted"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Kukatpally, Hyderabad · 1.2 km · 3 people</p>
+        <div class="flex gap-2 mt-4">
+          <button class="btn btn-primary flex-1" onclick="window.idrmToast('Accepted #a1b2c3 — requestor notified live via WebSocket','success')">Accept</button>
+          <a href="07-service-detail.html" class="btn btn-outline">Details</a>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="card card-hover">
+        <div class="flex justify-between items-center mb-2"><span class="prio prio-HIGH">🟠 HIGH</span><span class="status status-APPROVED">APPROVED</span></div>
+        <h3 class="mt-0" style="margin-bottom:var(--space-2);"><span class="svc-dot svc-RESCUE"></span> Rescue · #ee44aa</h3>
+        <p class="text-body" style="margin-bottom:var(--space-2);">Family stranded on first floor; needs evacuation assistance.</p>
+        <p class="text-muted"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Miyapur, Hyderabad · 3.4 km · 6 people</p>
+        <div class="flex gap-2 mt-4">
+          <button class="btn btn-primary flex-1" onclick="window.idrmToast('Accepted #ee44aa','success')">Accept</button>
+          <a href="07-service-detail.html" class="btn btn-outline">Details</a>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card card-hover">
+        <div class="flex justify-between items-center mb-2"><span class="prio prio-MEDIUM">🟡 MEDIUM</span><span class="status status-APPROVED">APPROVED</span></div>
+        <h3 class="mt-0" style="margin-bottom:var(--space-2);"><span class="svc-dot svc-MEDICAL"></span> First aid · #cc77dd</h3>
+        <p class="text-body" style="margin-bottom:var(--space-2);">Minor injuries at relief camp; needs first-aid supplies + nurse.</p>
+        <p class="text-muted"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> KPHB, Hyderabad · 4.1 km · 10 people</p>
+        <div class="flex gap-2 mt-4">
+          <button class="btn btn-primary flex-1" onclick="window.idrmToast('Accepted #cc77dd','success')">Accept</button>
+          <a href="07-service-detail.html" class="btn btn-outline">Details</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accept confirm modal (static demo) -->
+    <div class="card card-elevated mt-8">
+      <h4 class="mt-0">On "Accept", a provider confirms ETA</h4>
+      <div class="grid grid-2" style="align-items:end;">
+        <div class="form-group" style="margin-bottom:0;"><label class="form-label" for="eta">Estimated arrival</label><input type="text" id="eta" value="2026-05-24T10:30:00Z"></div>
+        <div class="form-group" style="margin-bottom:0;"><label class="form-label" for="acc-notes">Notes</label><input type="text" id="acc-notes" value="On my way with medical kit"></div>
+      </div>
+      <p class="api-note"><strong>Access ·</strong> PROVIDER (default), MANAGER, ADMIN may accept requests (Permission Matrix: "Accept service request").<br><strong>API ·</strong> <code>POST /api/v1/services/{id}/accept</code> → <code>{ estimated_arrival, notes }</code>. Status APPROVED → <span class="status status-ACCEPTED">ACCEPTED</span>; requestor's map updates in real time.</p>
+    </div>
+  </div>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

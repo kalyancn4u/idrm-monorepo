@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Sign in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+</head>
+<body>
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- SHARED · LOGIN · Render: Bun edge (B) — static form; the POST is proxied to FastAPI /auth -->
+  <div class="role-strip role-PUBLIC" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="home.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role public">PUBLIC</span>
+        </div>
+        <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span>
+      </div>
+      <div class="nav-actions"><a href="register.html" class="btn btn-outline btn-sm">Create account</a></div>
+    </div>
+  </header>
+
+  <div class="container" style="max-width:480px;">
+    <div class="card" style="margin-top:var(--space-8);">
+      <h1 style="margin-bottom:var(--space-2);">Welcome back</h1>
+      <p class="text-muted">Sign in to continue. You'll land on the dashboard for your role.</p>
+      <form data-demo-form novalidate>
+        <div class="form-group"><label class="form-label required" for="email">Email</label>
+          <input type="email" id="email" data-validate="email" required placeholder="you@example.in">
+          <p class="form-error" style="display:none;">Enter a valid email address.</p></div>
+        <div class="form-group"><label class="form-label required" for="pw">Password</label>
+          <div class="input-group"><input type="password" id="pw" required placeholder="Your password">
+            <button type="button" class="input-icon" data-toggle-password="pw" aria-label="Show password"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+        <div class="flex justify-between items-center mb-4"><label class="radio-group" style="margin:0;"><input type="checkbox"> Remember me</label><a href="#" class="text-small">Forgot password?</a></div>
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+      <p class="text-small muted mt-4">Access tokens last 15 minutes; the session refreshes silently for up to 7 days.</p>
+    </div>
+
+    <div class="api-note">
+      <strong>Access ·</strong> Public. <strong>Render ·</strong> <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span> — the form markup is static and cached; only the <strong>POST</strong> is proxied to FastAPI <code>/auth/login</code>, which mints the JWTs. Token refresh + rate-limiting also live at the Bun edge.<br>
+      <strong>API ·</strong> <code>POST /api/v1/auth/login</code> → <code>{access_token, refresh_token, expires_in: 900, user}</code> · <code>POST /api/v1/auth/refresh</code>.
+    </div>
+  </div>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

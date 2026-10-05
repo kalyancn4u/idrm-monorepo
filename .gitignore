@@ -1,0 +1,45 @@
+# Root .gitignore for the idrm-artifacts monorepo.
+# Subtrees keep their own, more specific rules:
+#   code/.gitignore  ·  archive/idrm-ffp-code-template/.gitignore
+# NOTE: the FFP template's dev `.env` (safe placeholder defaults) is committed BY DESIGN via its
+# own .gitignore — so plain `.env` is intentionally NOT ignored here. Real secret variants are.
+
+# ── OS ────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Editors ───────────────────────────────────────────────────────
+# Keep the repo's shared VS Code settings (markdown-link guidance, §13); ignore other local files.
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.swp
+*~
+
+# ── Python caches ─────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# ── Jupyter ───────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Walk-through build outputs (Marp) — derived, never committed ───
+docs/**/slides/
+docs/**/_build_*.md
+node_modules/
+
+# ── Secrets (defense-in-depth; plain dev `.env` stays tracked per note above) ──
+*.pem
+*.key
+.env.local
+.env.*.local
+.env.production
+.env.staging

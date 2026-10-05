@@ -1,0 +1,7 @@
+{
+  "name": "idrm-monorepo",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": { "ghcr.io/shyim/devcontainers-features/bun:0": {} },
+  "postCreateCommand": "make setup",
+  "forwardPorts": [8000, 3000, 8081]
+}

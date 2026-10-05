@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Sign in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+</head>
+<body>
+  <!-- PAGE 03 · Login · Who: Public · API: POST /auth/login (+ /auth/refresh loop) -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="01-home.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role public">Public</span></div>
+      <div class="nav-actions"><a href="02-register.html" class="btn btn-outline btn-sm">Create account</a></div>
+    </div>
+  </header>
+
+  <div class="container" style="max-width:460px;">
+    <div class="text-center section">
+      <h1>Welcome back</h1>
+      <p class="text-muted">Sign in to request help or manage relief.</p>
+    </div>
+
+    <div class="card">
+      <form data-demo-form novalidate>
+        <div class="form-group">
+          <label class="form-label required" for="email">Email</label>
+          <input type="email" id="email" name="email" data-validate="email" placeholder="you@example.com" required autocomplete="email">
+          <p class="form-error" style="display:none;">Enter a valid email address.</p>
+        </div>
+
+        <div class="form-group">
+          <div class="flex justify-between items-center">
+            <label class="form-label required" for="password" style="margin-bottom:0;">Password</label>
+            <a href="04-forgot-password.html" class="text-small">Forgot password?</a>
+          </div>
+          <div class="input-group mt-2">
+            <input type="password" id="password" name="password" placeholder="Your password" required autocomplete="current-password">
+            <button type="button" class="input-icon" data-toggle-password="password" aria-label="Show password">👁</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="checkbox-group">
+            <input type="checkbox" id="remember">
+            <label for="remember">Keep me signed in on this device</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Sign in</button>
+      </form>
+
+      <!-- Failure state example (security: never reveal which field is wrong) -->
+      <div class="alert alert-error mt-6" role="alert" aria-live="assertive" style="display:none;" id="login-error">
+        <div class="alert-icon" aria-hidden="true">✗</div>
+        <div class="alert-content"><p class="alert-message" style="margin:0;">Invalid email or password.</p></div>
+      </div>
+
+      <p class="text-muted text-center mt-6" style="margin-bottom:0;">Don't have an account? <a href="02-register.html">Create one</a></p>
+    </div>
+
+    <div class="api-note"><strong>Access ·</strong> Public (no login).<br>
+      <strong>API ·</strong> <code>POST /api/v1/auth/login</code> → <code>{ email, password }</code>.
+      Success <code>200</code> → store <code>access_token</code> + <code>refresh_token</code> in <code>sessionStorage</code>,
+      redirect to <a href="05-dashboard.html">dashboard</a>. Tokens last <strong>900s (15 min)</strong>; a
+      <code>setInterval</code> calls <code>POST /auth/refresh</code> ~1 min before expiry. Failure → show the generic error above.
+    </div>
+  </div>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

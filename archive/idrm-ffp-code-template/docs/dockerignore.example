@@ -1,0 +1,242 @@
+# =================================================================
+# .dockerignore — IDRM project root
+# =================================================================
+# This file controls what gets sent to the Docker daemon as the
+# build context. Everything listed here is EXCLUDED.
+#
+# Why this matters:
+#   - A bloated context (e.g. including node_modules or the conda
+#     env) can add gigabytes to build time, even if those dirs are
+#     never COPYed in the Dockerfile — they're still transferred.
+#   - Secrets in .env files will end up in the image layer if the
+#     COPY . . instruction runs before they're excluded.
+#   - The geospatial data/ folder and model weight files can be
+#     hundreds of MB; never copy them into the application image.
+#
+# Scope: this .dockerignore is for the Python backend build context.
+# The Bun gateway (Dockerfile.gateway) should have its own
+# .dockerignore.gateway or use a separate build context.
+# =================================================================
+
+
+# ===========================================
+# VCS
+# ===========================================
+.git/
+.gitignore
+.gitattributes
+.github/
+
+
+# ===========================================
+# CONDA / LOCAL DEV ENVIRONMENT
+# (Docker uses pip + system apt, not conda)
+# ===========================================
+environment.yml
+setup_idrm_env.sh
+miniforge3/
+.conda/
+.mamba/
+envs/
+
+
+# ===========================================
+# PYTHON ARTIFACTS
+# (compiled in the builder stage — host copies are irrelevant)
+# ===========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.hypothesis/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+cython_debug/
+.ipynb_checkpoints/
+
+
+# ===========================================
+# VIRTUAL ENVIRONMENTS
+# (host venv must never shadow the container's /opt/venv)
+# ===========================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+
+# ===========================================
+# SECRETS & ENV FILES
+# NEVER bake secrets into image layers.
+# Pass them at runtime via docker-compose `environment:` or
+# Docker secrets / K8s Secrets mounted as env vars.
+# ===========================================
+.env
+.env.*
+!.env.example
+.envrc
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*credentials*.json
+*service-account*.json
+kubeconfig
+*.kubeconfig
+.pypirc
+
+
+# ===========================================
+# NODE / BUN / FRONTEND
+# (separate build context — not part of Python backend)
+# ===========================================
+node_modules/
+.bun/
+bun.lock
+bun.lockb
+.next/
+.nuxt/
+.turbo/
+.nx/
+dist/
+build/
+out/
+
+
+# ===========================================
+# LARGE DATA & MODEL FILES
+# Never belong in an application image.
+# Use DVC / Git LFS / S3 presigned URLs to pull at runtime.
+# ===========================================
+data/
+models/
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.pb
+*.safetensors
+*.npz
+*.npy
+*.parquet
+*.feather
+
+
+# ===========================================
+# MLOPS ARTIFACTS
+# ===========================================
+mlruns/
+mlartifacts/
+wandb/
+runs/
+tb_logs/
+.dvc/cache
+.dvc/tmp
+
+
+# ===========================================
+# LOCAL DB DATA VOLUMES
+# (managed by docker-compose volumes, not app source)
+# ===========================================
+pgdata/
+redis-data/
+*.sqlite3
+*.sqlite
+*.db
+*.rdb
+
+
+# ===========================================
+# DOCKER FILES
+# (Dockerfile itself doesn't need to be COPYed into its own image)
+# ===========================================
+Dockerfile
+Dockerfile.*
+.dockerignore
+docker-compose*.yml
+docker-compose*.yaml
+
+
+# ===========================================
+# CI / DEVOPS CONFIGS
+# ===========================================
+.gitlab-ci.yml
+.gitlab-ci-local/
+.act/
+.pre-commit-config.yaml
+Makefile
+
+
+# ===========================================
+# AI ASSISTANT LOCAL STATE
+# ===========================================
+.claude/
+.cursor/
+.aider*
+.continue/
+.windsurf/
+
+
+# ===========================================
+# IDE & EDITOR
+# ===========================================
+.vscode/
+.idea/
+*.code-workspace
+.history/
+*.swp
+*.swo
+*~
+.directory
+
+
+# ===========================================
+# OS JUNK
+# ===========================================
+.DS_Store
+.AppleDouble
+._*
+Thumbs.db
+Thumbs.db:encryptable
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+
+# ===========================================
+# DOCS, NOTEBOOKS, STATIC ASSETS
+# (documentation and notebooks aren't runtime code)
+# ===========================================
+docs/
+*.ipynb
+*.md
+README*
+CHANGELOG*
+CONTRIBUTING*
+LICENSE*
+
+
+# ===========================================
+# LOGS & TEMP
+# ===========================================
+*.log
+*.tmp
+*.bak
+logs/
+tmp/

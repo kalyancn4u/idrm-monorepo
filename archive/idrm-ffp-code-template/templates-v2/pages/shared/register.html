@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Create account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+</head>
+<body>
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- SHARED · REGISTER · Render: Bun edge (B) — static form; POST proxied to FastAPI /auth/register -->
+  <div class="role-strip role-PUBLIC" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="home.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role public">PUBLIC</span>
+        </div>
+        <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span>
+      </div>
+      <div class="nav-actions"><a href="login.html" class="btn btn-outline btn-sm">Sign in</a></div>
+    </div>
+  </header>
+
+  <div class="container" style="max-width:520px;">
+    <div class="card" style="margin-top:var(--space-8);">
+      <h1 style="margin-bottom:var(--space-2);">Create your account</h1>
+      <p class="text-muted">Citizens can also skip this with phone + OTP quick-start.</p>
+      <form data-demo-form novalidate>
+        <div class="form-group"><label class="form-label required" for="name">Full name</label><input type="text" id="name" required placeholder="Aarthi N."></div>
+        <div class="form-group"><label class="form-label required" for="email">Email</label>
+          <input type="email" id="email" data-validate="email" required placeholder="you@example.in">
+          <p class="form-error" style="display:none;">Enter a valid email address.</p></div>
+        <div class="form-group"><label class="form-label required" for="phone">Phone</label>
+          <input type="tel" id="phone" data-validate="phone" required placeholder="+91 98765 43210">
+          <p class="form-error" style="display:none;">Use Indian format +91XXXXXXXXXX.</p></div>
+        <div class="form-group"><label class="form-label required" for="pw">Password</label>
+          <div class="input-group"><input type="password" id="pw" data-validate="password" data-strength="pw-bar" required placeholder="8+ chars, 1 upper, 1 number">
+            <button type="button" class="input-icon" data-toggle-password="pw" aria-label="Show password"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="meter mt-2" aria-hidden="true"><span id="pw-bar" data-label="pw-label" style="width:0"></span></div>
+          <p class="form-hint"><span id="pw-label"></span></p></div>
+        <div class="form-group"><label class="form-label required" for="role">I am registering as</label>
+          <select id="role"><option value="CITIZEN">Citizen — I need help</option><option value="VOLUNTEER">Volunteer — I want to help</option><option value="PROVIDER">Service Provider — NGO / hospital</option></select>
+          <p class="form-hint">Only CITIZEN, VOLUNTEER and PROVIDER can self-register. Elevated roles (ORGANIZER, MANAGER, EVENT_MANAGER, DM_AUTHORITY, AUDITOR, ADMIN) are granted by an ADMIN.</p></div>
+        <div class="form-group"><label class="form-label" for="lang">Language</label><select id="lang"><option value="en">English</option><option value="hi">हिन्दी (Hindi)</option><option value="te">తెలుగు (Telugu)</option></select></div>
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+      </form>
+    </div>
+
+    <div class="api-note">
+      <strong>Access ·</strong> Public. <strong>Render ·</strong> <span class="render-tier tier-B"><span class="dotc"></span>Bun edge</span> — static form, cached. The <strong>allowed-role list is enforced again on the server</strong>: even if the client posts <code>role: ADMIN</code>, FastAPI rejects anything outside CITIZEN/VOLUNTEER/PROVIDER.<br>
+      <strong>API ·</strong> <code>POST /api/v1/auth/register</code> {email, password, full_name, phone, role, language_preference} → 201.
+    </div>
+  </div>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

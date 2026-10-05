@@ -1,0 +1,6 @@
+# Documented routing for the future API gateway.
+# MVP: the monolith serves /api/v1/* directly.
+routes:
+  - id: monolith
+    uri: /api/v1/*
+    upstream: http://monolith:8000

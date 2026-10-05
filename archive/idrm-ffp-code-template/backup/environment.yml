@@ -1,0 +1,201 @@
+# =============================================================================
+# FILE    : environment.yml
+# PROJECT : IDRM (Integrated Disaster Response Management) — MVP
+# PURPOSE : Defines the complete conda environment "idrm-mvp" for local
+#           development on Ubuntu 22.04 / 24.04 LTS.
+#
+# ── QUICK START ───────────────────────────────────────────────────────────────
+#
+#   First time (creates the environment from scratch):
+#     conda env create -f environment.yml
+#
+#   Activate before every dev session:
+#     conda activate idrm-mvp
+#
+#   Re-sync after pulling new code (adds / upgrades packages as needed):
+#     conda env update -f environment.yml --prune
+#
+#   Deactivate when done:
+#     conda deactivate
+#
+#   Remove and recreate from scratch if the env breaks:
+#     conda env remove -n idrm-mvp
+#     conda env create  -f environment.yml
+#
+# ── DEPENDENCY TIERS — WHY TWO INSTALLERS? ───────────────────────────────────
+#
+#   This file uses BOTH conda and pip to install packages. Here is why:
+#
+#   TIER 1 — CONDA (handles packages with C/C++ native libraries)
+#   ─────────────────────────────────────────────────────────────
+#   Some Python packages are wrappers around native C/C++ libraries
+#   (e.g. GEOS for geometry, libpq for PostgreSQL). When you install these
+#   via pip, pip tries to compile the C code on your machine, which often
+#   fails due to missing system headers. conda-forge ships pre-compiled
+#   binaries that include all their own C library dependencies — no system
+#   headers needed. So anything with a native C dependency goes in TIER 1.
+#
+#   Packages in this tier:
+#     shapely  — geometry engine; bundles its own GEOS C library
+#
+#   TIER 2 — PIP (pure Python packages or packages with reliable binary wheels)
+#   ─────────────────────────────────────────────────────────────────────────────
+#   Pure Python packages (no C compilation) and packages that publish their
+#   own pre-compiled binary wheels on PyPI go in TIER 2. These are listed
+#   under the "pip:" subsection and installed using pip after conda sets up
+#   the environment.
+#
+#   Packages in this tier:
+#     fastapi, uvicorn, sqlalchemy, geoalchemy2, alembic, pydantic,
+#     passlib, pytest, black, flake8, mypy — and the rest (see below).
+#
+# ── WHERE DO THE GEOSPATIAL LIBRARIES LIVE? ──────────────────────────────────
+#
+#   GeoAlchemy2  → pip   (pure Python; wraps SQLAlchemy with PostGIS types)
+#   Shapely      → conda (ships with GEOS C library from conda-forge)
+#
+#   Rule of thumb: if a library is "just Python", use pip.
+#                  if a library wraps a C/C++ library, use conda-forge.
+#
+# ── VERSION POLICY ────────────────────────────────────────────────────────────
+#
+#   Conda packages: exact versions (=x.y.z) for reproducibility.
+#   Pip packages  : minimum lower bounds (>=x.y.z) — pip picks the latest
+#                   compatible version. This keeps development environments
+#                   up-to-date automatically.
+#
+#   For a fully reproducible production lock-file, run inside the env:
+#     pip freeze > requirements.lock.txt
+#   and commit requirements.lock.txt for production deploys.
+#
+# =============================================================================
+
+name: idrm-mvp     # the name used in: conda activate idrm-mvp
+
+# ─── Channel Priority ─────────────────────────────────────────────────────────
+# Channels are searched top-to-bottom. conda-forge must be first so that its
+# geospatial builds (shapely + GEOS) take priority over the defaults channel.
+# Mixing channels without strict priority can cause "dependency hell" where
+# two packages expect different versions of the same C library.
+channels:
+  - conda-forge    # community-maintained; best geospatial + scientific builds
+  - defaults       # Anaconda's official channel (fallback)
+
+dependencies:
+
+  # ── Core Python runtime ───────────────────────────────────────────────────
+  # Python 3.11 is the project-standard LTS version for IDRM.
+  # Do NOT change this to 3.12+ without testing all geospatial packages first.
+  - python=3.11.9
+
+  # pip must itself be a conda package so conda can manage its own version.
+  # All pip-installable packages are listed in the "pip:" section below.
+  - pip>=24.0
+
+  # ── TIER 1: Geospatial C-library packages (conda-forge ONLY) ─────────────
+  #
+  # WHY CONDA FOR SHAPELY:
+  #   Shapely wraps GEOS (a C++ geometry library). When conda-forge installs
+  #   shapely, it also installs the exact version of GEOS that shapely was
+  #   compiled against — guaranteed binary compatibility. If you install
+  #   shapely via pip instead, pip's wheel bundles its own GEOS, which may
+  #   conflict with system GEOS if other tools (e.g. QGIS, libgeos-dev)
+  #   are present on the same machine.
+  #
+  # shapely 2.x is a major rewrite (released 2023) — NOT compatible with 1.x.
+  # The API changed significantly. All IDRM geometry code targets shapely 2.x.
+  - shapely>=2.0.6
+
+  # ── TIER 2: All other packages (installed via pip) ─────────────────────────
+  # See src/backend/requirements.txt for the full list with inline comments.
+  # Running `pip install -r src/backend/requirements.txt` inside the activated
+  # conda env installs exactly the same set of packages as listed below.
+  - pip:
+
+    # ── Web framework ────────────────────────────────────────────────────────
+    # FastAPI uses Python type hints to validate requests and auto-generate
+    # OpenAPI (Swagger) docs at http://localhost:8000/docs
+    - fastapi>=0.115.0
+
+    # uvicorn is the ASGI server that runs FastAPI.
+    # [standard] adds: watchfiles (auto-reload on code change),
+    #                   websockets support, and httptools (faster HTTP parser).
+    - uvicorn[standard]>=0.30.0
+
+    # ── Database ORM & drivers ────────────────────────────────────────────────
+    # SQLAlchemy 2.x ORM. [asyncio] unlocks async/await syntax for DB queries.
+    # SQLAlchemy 2.x is NOT backward compatible with 1.x — different API.
+    - sqlalchemy[asyncio]>=2.0.30
+
+    # asyncpg: high-performance async PostgreSQL driver.
+    # Used by sqlalchemy[asyncio] for non-blocking database calls.
+    - asyncpg>=0.29.0
+
+    # psycopg2-binary: synchronous PostgreSQL driver.
+    # Used by Alembic (which runs migrations synchronously, not async).
+    # The -binary variant bundles libpq so you don't need postgresql-dev headers.
+    - psycopg2-binary>=2.9.9
+
+    # ── Geospatial PostGIS ORM extension ─────────────────────────────────────
+    # GeoAlchemy2 teaches SQLAlchemy to understand PostGIS column types
+    # (e.g. GEOMETRY, GEOGRAPHY) and spatial functions (ST_Distance, etc.).
+    # It is pure Python — no C dependencies — so pip is correct for this one.
+    - geoalchemy2>=0.14.2
+
+    # ── Database migrations ───────────────────────────────────────────────────
+    # Alembic tracks database schema changes as versioned migration scripts.
+    # Every time you change a SQLAlchemy model, run:
+    #   alembic revision --autogenerate -m "describe the change"
+    #   alembic upgrade head
+    - alembic>=1.13.0
+
+    # ── Validation & configuration ────────────────────────────────────────────
+    # Pydantic v2 validates request/response data using Python type hints.
+    # v2 is a complete rewrite of v1 — APIs are NOT backward compatible.
+    - pydantic>=2.7.0
+
+    # pydantic-settings reads .env files into Pydantic Settings models,
+    # giving you type-safe access to environment variables.
+    - pydantic-settings>=2.3.0
+
+    # python-dotenv loads .env files into os.environ at startup.
+    - python-dotenv>=1.0.1
+
+    # ── Authentication ────────────────────────────────────────────────────────
+    # python-jose handles JWT (JSON Web Token) creation and verification.
+    # [cryptography] adds RSA/EC key support on top of the base HS256.
+    - python-jose[cryptography]>=3.3.0
+
+    # passlib handles password hashing. [bcrypt] enables the bcrypt algorithm,
+    # which is the recommended choice for storing user passwords.
+    - passlib[bcrypt]>=1.7.4
+
+    # python-multipart parses multipart/form-data (file uploads, HTML forms).
+    # FastAPI requires this for any endpoint that accepts Form() or File().
+    - python-multipart>=0.0.9
+
+    # ── HTTP client (for outbound requests and test client) ───────────────────
+    # httpx is an async-capable HTTP client. FastAPI's TestClient wraps httpx,
+    # so it's also required for writing API integration tests.
+    - httpx>=0.27.0
+
+    # ── Code quality ──────────────────────────────────────────────────────────
+    # black: opinionated code auto-formatter. Run: black .
+    # Configure in pyproject.toml or .black.toml (line length = 88 by default).
+    - black>=24.0.0
+
+    # flake8: PEP-8 style linter. Run: flake8 .
+    # Reports style violations but does NOT auto-fix them (black does that).
+    - flake8>=7.0.0
+
+    # mypy: static type checker. Run: mypy .
+    # Reads Python type annotations and catches type errors before runtime.
+    - mypy>=1.9.0
+
+    # ── Testing ───────────────────────────────────────────────────────────────
+    # pytest: test runner. Run: pytest  (discovers test_*.py files).
+    - pytest>=8.0.0
+
+    # pytest-asyncio: allows async def test functions to work with pytest.
+    # Required because FastAPI route handlers are async.
+    - pytest-asyncio>=0.23.0

@@ -1,0 +1,7 @@
+*                    @idrm-maintainers
+/services/monolith/  @idrm-backend
+/apps/               @idrm-frontend
+/packages/           @idrm-frontend
+/shared/contracts/   @idrm-architects
+/infra/              @idrm-devops
+/docs/               @idrm-writers

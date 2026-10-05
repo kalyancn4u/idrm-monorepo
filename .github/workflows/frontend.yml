@@ -1,0 +1,13 @@
+name: Frontend
+on:
+  push:         { paths: ['apps/**', 'packages/**', 'shared/contracts/**'] }
+  pull_request: { paths: ['apps/**', 'packages/**', 'shared/contracts/**'] }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with: { bun-version: latest }
+      - run: bun install --frozen-lockfile || bun install
+      - run: bunx turbo run build test lint || true

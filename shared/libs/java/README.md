@@ -1,0 +1,2 @@
+# Shared java library
+Placeholder.

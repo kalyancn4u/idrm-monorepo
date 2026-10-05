@@ -1,0 +1,15 @@
+[Unit]
+Description=IDRM Monolith
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=idrm
+WorkingDirectory=/opt/idrm/services/monolith
+EnvironmentFile=/etc/idrm/idrm.env
+ExecStart=/opt/idrm/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

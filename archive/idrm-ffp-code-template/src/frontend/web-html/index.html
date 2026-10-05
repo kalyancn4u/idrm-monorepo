@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IDRM — Get help in a disaster</title>
+    <meta
+      name="description"
+      content="Integrated Disaster Response Management connects citizens in crisis with NGOs, hospitals, and volunteers on a single live map."
+    />
+
+    <!-- Inter font (the one configured token — see instructions_ui_v3.md) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind, processed by Vite + PostCSS -->
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+
+  <body class="font-sans antialiased bg-slate-50 text-slate-700">
+    <!-- ===== Top navigation ===== -->
+    <header class="border-b border-slate-200 bg-white">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4" aria-label="Primary">
+        <a href="/" class="text-lg font-extrabold tracking-tight text-slate-900">IDRM</a>
+        <div class="flex items-center gap-2 sm:gap-4">
+          <a href="/src/pages/about.html" class="text-sm font-medium text-slate-600 hover:text-emerald-700">About</a>
+          <a
+            href="/src/pages/login.html"
+            class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            >Sign in</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ===== Hero ===== -->
+      <section class="mx-auto max-w-6xl px-4 py-16 text-center sm:py-24">
+        <h1 class="mx-auto max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl">
+          Help in a disaster, <span class="text-emerald-600">coordinated</span>.
+        </h1>
+        <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
+          IDRM connects citizens in crisis with verified NGOs, hospitals, and volunteers — and
+          shows every active request on one live map, so help reaches the right place faster.
+        </p>
+        <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href="/src/pages/register.html"
+            class="w-full rounded-lg bg-emerald-600 px-6 py-3 text-base font-semibold text-white hover:bg-emerald-700 sm:w-auto"
+            >Request help</a
+          >
+          <a
+            href="/src/pages/register.html"
+            class="w-full rounded-lg border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-700 hover:bg-slate-100 sm:w-auto"
+            >Register as a provider</a
+          >
+        </div>
+        <p class="mt-4 text-sm text-slate-500">
+          Already have an account? <a href="/src/pages/login.html" class="text-emerald-600 hover:underline">Sign in</a>.
+        </p>
+      </section>
+
+      <!-- ===== Emergency hotlines (STATIC — no API; usable even if the app is offline) ===== -->
+      <section class="border-y border-slate-200 bg-white" aria-labelledby="hotlines-heading">
+        <div class="mx-auto max-w-6xl px-4 py-10">
+          <h2 id="hotlines-heading" class="text-center text-sm font-semibold uppercase tracking-wide text-slate-500">
+            In an immediate, life-threatening emergency, call first
+          </h2>
+          <ul class="mx-auto mt-5 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3">
+            <li class="rounded-lg bg-slate-50 px-4 py-3 text-center ring-1 ring-slate-200">
+              <div class="text-2xl font-extrabold text-slate-900">112</div>
+              <div class="text-xs text-slate-500">National Emergency</div>
+            </li>
+            <li class="rounded-lg bg-slate-50 px-4 py-3 text-center ring-1 ring-slate-200">
+              <div class="text-2xl font-extrabold text-slate-900">108</div>
+              <div class="text-xs text-slate-500">Ambulance / Medical</div>
+            </li>
+            <li class="rounded-lg bg-slate-50 px-4 py-3 text-center ring-1 ring-slate-200">
+              <div class="text-2xl font-extrabold text-slate-900">101</div>
+              <div class="text-xs text-slate-500">Fire</div>
+            </li>
+            <li class="rounded-lg bg-slate-50 px-4 py-3 text-center ring-1 ring-slate-200">
+              <div class="text-2xl font-extrabold text-slate-900">100</div>
+              <div class="text-xs text-slate-500">Police</div>
+            </li>
+            <li class="rounded-lg bg-slate-50 px-4 py-3 text-center ring-1 ring-slate-200">
+              <div class="text-2xl font-extrabold text-slate-900">1077</div>
+              <div class="text-xs text-slate-500">District Disaster Control</div>
+            </li>
+            <li class="rounded-lg bg-slate-50 px-4 py-3 text-center ring-1 ring-slate-200">
+              <div class="text-2xl font-extrabold text-slate-900">1070</div>
+              <div class="text-xs text-slate-500">State Disaster Helpline</div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===== How it works ===== -->
+      <section class="mx-auto max-w-6xl px-4 py-16" aria-labelledby="how-heading">
+        <h2 id="how-heading" class="text-center text-3xl font-bold tracking-tight text-slate-900">How it works</h2>
+        <ol class="mx-auto mt-10 grid max-w-4xl gap-6 sm:grid-cols-3">
+          <li class="rounded-xl border border-slate-200 bg-white p-6">
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">1</div>
+            <h3 class="mt-4 text-lg font-semibold text-slate-900">Request help</h3>
+            <p class="mt-2 text-sm text-slate-600">Pin your location, pick what you need (medical, food, shelter…), and submit in seconds.</p>
+          </li>
+          <li class="rounded-xl border border-slate-200 bg-white p-6">
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">2</div>
+            <h3 class="mt-4 text-lg font-semibold text-slate-900">Approved &amp; matched</h3>
+            <p class="mt-2 text-sm text-slate-600">Authorities review (emergencies are auto-approved) and a nearby verified provider accepts it.</p>
+          </li>
+          <li class="rounded-xl border border-slate-200 bg-white p-6">
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">3</div>
+            <h3 class="mt-4 text-lg font-semibold text-slate-900">Help arrives</h3>
+            <p class="mt-2 text-sm text-slate-600">Track status live, then confirm completion. Your privacy is protected throughout.</p>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-slate-500 sm:flex-row">
+        <span>© IDRM · Government disaster-relief platform</span>
+        <a href="/src/pages/about.html" class="hover:text-emerald-700">About IDRM</a>
+      </div>
+    </footer>
+
+    <!-- Public page: only behavior is "skip to dashboard if already signed in". -->
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+# =============================================================================
+# .gitignore — what Git should NOT track.
+# Note: the dev `.env` (safe defaults) IS committed for convenience; the REAL
+# secret files (.env.staging / .env.production / *.local) are ignored below.
+# =============================================================================
+
+# --- Secrets / environment ---
+.env.local
+.env.*.local
+.env.staging
+.env.production
+*.pem
+*.key
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+
+# --- Node / Bun / Expo ---
+node_modules/
+dist/
+build/
+.expo/
+*.tsbuildinfo
+# (lockfiles like bun.lockb / package-lock.json ARE committed — do not ignore them)
+
+# --- Logs & temp ---
+*.log
+logs/
+tmp/
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editors ---
+.idea/
+*.swp
+*.swo
+.vscode/*.local

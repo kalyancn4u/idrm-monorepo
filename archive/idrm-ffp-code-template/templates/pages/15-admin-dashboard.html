@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Admin / Authority dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="../assets/idrm-design-system.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- PAGE 15 · Admin Dashboard · Who: DM_AUTHORITY / ADMIN (role guard) -->
+  <!-- API: GET /analytics/dashboard · POST /services/{id}/approve|reject · GET /admin/users · GET /admin/audit-logs (full admin = React SPA :5174) -->
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-group"><a href="15-admin-dashboard.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a><span class="brand-role">DM_AUTHORITY</span></div>
+      <button class="nav-toggle" data-nav-toggle="adm-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="adm-nav">
+        <li><a href="15-admin-dashboard.html" class="active" aria-current="page">Overview</a></li>
+        <li><a href="#approvals">Approvals</a></li>
+        <li><a href="#users">Users</a></li>
+        <li><a href="09-map.html">Map</a></li>
+      </ul>
+      <div class="nav-actions"><a href="11-profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a></div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="app-sidebar">
+      <nav aria-label="Admin">
+        <ul class="side-nav">
+          <li><a href="15-admin-dashboard.html" class="active" aria-current="page"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span> Overview</a></li>
+          <li><a href="#approvals"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span> Approvals <span class="badge badge-warning" style="margin-left:auto;">3</span></a></li>
+          <li><a href="#breakdown"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span> Breakdown</a></li>
+          <li><a href="#users"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Users</a></li>
+          <li><a href="#audit"><span class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span> Audit log</a></li>
+        </ul>
+      </nav>
+      <hr class="divider">
+      <p class="text-small muted">Full admin suite (user management, exports, heatmaps) lives in the React SPA on port 5174.</p>
+    </aside>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div><h1 style="margin-bottom:var(--space-1);">Response overview</h1><p class="text-muted" style="margin:0;">Hyderabad &amp; Vijayawada pilot · live</p></div>
+        <button class="btn btn-outline" onclick="window.idrmToast('Declare disaster event (mockup)','info')">+ Declare event</button>
+      </div>
+
+      <!-- KPIs -->
+      <section class="section grid grid-4">
+        <div class="card"><div class="flex justify-between items-start"><div class="stat"><span class="stat-label">Total requests</span><span class="stat-value">1,250</span></div><span class="stat-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span></div></div>
+        <div class="card"><div class="flex justify-between items-start"><div class="stat"><span class="stat-label">Active</span><span class="stat-value">87</span><span class="stat-trend">across 2 districts</span></div><span class="stat-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span></div></div>
+        <div class="card"><div class="flex justify-between items-start"><div class="stat"><span class="stat-label">Avg. response</span><span class="stat-value">18.5m</span><span class="stat-trend up">▼ faster</span></div><span class="stat-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span></div></div>
+        <div class="card"><div class="flex justify-between items-start"><div class="stat"><span class="stat-label">Completion rate</span><span class="stat-value">89%</span><span class="stat-trend up">▲ 3%</span></div><span class="stat-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span></div></div>
+      </section>
+
+      <!-- Approval queue -->
+      <section class="section" id="approvals">
+        <div class="flex justify-between items-center mb-4"><h2 style="margin:0;border:0;">Approval queue</h2><span class="badge badge-warning">3 pending</span></div>
+        <div class="alert alert-info" role="note"><div class="alert-icon">ℹ️</div><div class="alert-content"><p class="alert-message" style="margin:0;">Emergency/urgent requests are <strong>auto-approved</strong>. You review the rest, plus after-the-fact credibility.</p></div></div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead><tr><th>Request</th><th>Type</th><th>Priority</th><th>Requestor</th><th>Location</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="strong">#f0a1b2</span></td><td><span class="svc-dot svc-FOOD"></span> FOOD</td><td><span class="prio prio-MEDIUM">MEDIUM</span></td>
+                <td>S. Kumar <span class="privacy privacy-PROTECTED"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></td><td>Vijayawada</td>
+                <td class="flex gap-2"><button class="btn btn-primary btn-sm" onclick="window.idrmToast('Approved #f0a1b2','success')">Approve</button><button class="btn btn-danger btn-sm" onclick="window.idrmToast('Rejected #f0a1b2','error')">Reject</button></td>
+              </tr>
+              <tr>
+                <td><span class="strong">#c3d4e5</span></td><td><span class="svc-dot svc-SHELTER"></span> SHELTER</td><td><span class="prio prio-LOW">LOW</span></td>
+                <td>M. Devi <span class="privacy privacy-PROTECTED"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></td><td>Guntur</td>
+                <td class="flex gap-2"><button class="btn btn-primary btn-sm" onclick="window.idrmToast('Approved #c3d4e5','success')">Approve</button><button class="btn btn-danger btn-sm" onclick="window.idrmToast('Rejected #c3d4e5','error')">Reject</button></td>
+              </tr>
+              <tr>
+                <td><span class="strong">#a9b8c7</span> <span class="status status-DISPUTED">DISPUTED</span></td><td><span class="svc-dot svc-MEDICAL"></span> MEDICAL</td><td><span class="prio prio-HIGH">HIGH</span></td>
+                <td>R. Naidu</td><td>Hyderabad</td>
+                <td class="flex gap-2"><button class="btn btn-outline btn-sm" onclick="window.idrmToast('Reassigned → IN_PROGRESS','info')">Reassign</button><button class="btn btn-danger btn-sm" onclick="window.idrmToast('Marked invalid → REJECTED','error')">Invalid</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Breakdown -->
+      <section class="section" id="breakdown">
+        <h2 style="border:0;">Breakdown</h2>
+        <div class="grid grid-2">
+          <div class="card">
+            <h4 class="mt-0">By service type</h4>
+            <div class="chart-box">
+              <canvas data-chart='{"type":"doughnut","data":{"labels":["MEDICAL","FOOD","WATER","SHELTER","RESCUE","OTHER"],"datasets":[{"data":[450,380,220,200,180,20],"backgroundColor":["#c16b83","#b07f30","#4f86b3","#8174ad","#c2554f","#6b7280"],"borderColor":"#ffffff","borderWidth":2}]},"options":{"responsive":true,"maintainAspectRatio":false,"cutout":"58%","plugins":{"legend":{"position":"right","labels":{"boxWidth":12,"font":{"size":11}}}}}}' style="display:none;" aria-label="Requests by service type chart"></canvas>
+              <div class="chart-fallback flex flex-col gap-2">
+                <div><div class="flex justify-between text-small"><span><span class="svc-dot svc-MEDICAL"></span> MEDICAL</span><span>450</span></div><div style="height:8px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:90%;background:var(--svc-medical);"></div></div></div>
+                <div><div class="flex justify-between text-small"><span><span class="svc-dot svc-FOOD"></span> FOOD</span><span>380</span></div><div style="height:8px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:76%;background:var(--svc-food);"></div></div></div>
+                <div><div class="flex justify-between text-small"><span><span class="svc-dot svc-WATER"></span> WATER</span><span>220</span></div><div style="height:8px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:44%;background:var(--svc-water);"></div></div></div>
+                <div><div class="flex justify-between text-small"><span><span class="svc-dot svc-SHELTER"></span> SHELTER</span><span>200</span></div><div style="height:8px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:40%;background:var(--svc-shelter);"></div></div></div>
+                <div><div class="flex justify-between text-small"><span><span class="svc-dot svc-RESCUE"></span> RESCUE</span><span>180</span></div><div style="height:8px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:36%;background:var(--svc-rescue);"></div></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h4 class="mt-0">By status</h4>
+            <div class="chart-box">
+              <canvas data-chart='{"type":"bar","data":{"labels":["SUBMITTED","APPROVED","ACCEPTED","IN_PROGRESS","COMPLETED","VERIFIED"],"datasets":[{"label":"Requests","data":[34,11,28,25,890,262],"backgroundColor":["#8b5cf6","#3b82f6","#0ea5e9","#f59e0b","#10b981","#059669"],"borderRadius":6}]},"options":{"responsive":true,"maintainAspectRatio":false,"plugins":{"legend":{"display":false}},"scales":{"y":{"beginAtZero":true}}}}' style="display:none;" aria-label="Requests by status chart"></canvas>
+              <div class="chart-fallback flex gap-2 flex-wrap">
+                <span class="status status-SUBMITTED">SUBMITTED · 34</span>
+                <span class="status status-APPROVED">APPROVED · 11</span>
+                <span class="status status-ACCEPTED">ACCEPTED · 28</span>
+                <span class="status status-IN_PROGRESS">IN_PROGRESS · 25</span>
+                <span class="status status-COMPLETED">COMPLETED · 890</span>
+                <span class="status status-VERIFIED">VERIFIED · 262</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Users -->
+      <section class="section" id="users">
+        <div class="flex justify-between items-center mb-4"><h2 style="margin:0;border:0;">Users</h2><div class="input-group has-icon-left" style="max-width:260px;"><span class="input-icon-left" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input type="search" placeholder="Search users…" aria-label="Search users"></div></div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Role</th><th>Org</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>Aarthi Reddy</td><td><span class="badge badge-neutral">CITIZEN</span></td><td>—</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-sm">Manage</button></td></tr>
+              <tr><td>Apollo First-Response</td><td><span class="badge badge-info">PROVIDER</span></td><td>Apollo</td><td><span class="badge badge-success">Verified</span></td><td><button class="btn btn-ghost btn-sm">Manage</button></td></tr>
+              <tr><td>K. Rao</td><td><span class="badge badge-review">VOLUNTEER</span></td><td>Red Cross HYD</td><td><span class="badge badge-warning">Pending</span></td><td><button class="btn btn-ghost btn-sm">Manage</button></td></tr>
+              <tr><td>GHMC Disaster Cell</td><td><span class="badge badge-review">DM_AUTHORITY</span></td><td>GHMC</td><td><span class="badge badge-success">Active</span></td><td><button class="btn btn-ghost btn-sm">Manage</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Audit -->
+      <section class="section" id="audit">
+        <h2 style="border:0;">Recent audit log</h2>
+        <div class="card">
+          <ul class="timeline">
+            <li class="done"><span class="tl-dot"></span><div class="tl-title">#a1b2c3 status → IN_PROGRESS</div><div class="tl-time">10:11 · Apollo First-Response</div></li>
+            <li class="done"><span class="tl-dot"></span><div class="tl-title">#a1b2c3 auto-approved (emergency)</div><div class="tl-time">10:02 · system</div></li>
+            <li class="done"><span class="tl-dot"></span><div class="tl-title">User K. Rao registered (VOLUNTEER)</div><div class="tl-time">09:40 · self</div></li>
+          </ul>
+          <p class="api-note" style="margin-top:var(--space-4);"><strong>API ·</strong> <code>GET /api/v1/admin/audit-logs</code> (Auditor &amp; Admin: full; DM_AUTHORITY: limited to jurisdiction).</p>
+        </div>
+      </section>
+
+      <div class="api-note"><strong>Access ·</strong> DM_AUTHORITY (default) and ADMIN; EVENT_MANAGER (events) and AUDITOR (read-only) see relevant parts. Approve/reject = DM_AUTHORITY/ADMIN; user management &amp; system config = ADMIN.<br><strong>API ·</strong> <code>GET /api/v1/analytics/dashboard</code> (KPIs) · approve/reject via <code>POST /services/{id}/approve</code> / <code>/reject</code> · users via <code>/admin/users</code>. Role guard: <code>DM_AUTHORITY</code> / <code>ADMIN</code>.</div>
+    </main>
+  </div>
+
+  <script src="../assets/idrm-templates.js"></script>
+</body>
+</html>

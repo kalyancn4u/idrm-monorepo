@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IDRM — Citizen Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;600;700;800&family=Lato:wght@400;700;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/idrm-design-system.css" rel="stylesheet">
+  <link href="../../assets/showcase-controls.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="has-bottom-nav">
+<!-- SC-CONTROLS-START -->
+<!-- ===== IDRM RBAC Showcase — display controls (font face / size / theme / search) ===== -->
+<div class="sc-bar" role="region" aria-label="Display settings">
+  <div class="sc-row sc-row-1">
+    <div class="sc-left">
+      <div class="sc-group">
+        <label for="sc-hfont">Headings</label>
+        <select id="sc-hfont" class="sc-select" aria-label="Heading font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-bfont">Body</label>
+        <select id="sc-bfont" class="sc-select" aria-label="Body font">
+          <option value="'Inter', sans-serif" selected>Inter</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans Pro</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Lexend', sans-serif">Lexend</option>
+          <option value="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">System Default</option>
+        </select>
+      </div>
+      <div class="sc-group">
+        <label for="sc-size">Size</label>
+        <select id="sc-size" class="sc-select" aria-label="Font size">
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m" selected>M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-right">
+      <span class="sc-preview" id="sc-preview">Inter / Inter &middot; M</span>
+      <button class="sc-theme" id="sc-theme" data-mode="system" title="Theme — click to cycle System / Light / Dark" aria-label="Toggle theme">
+        <span id="sc-theme-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M2 17h20"></path><path d="M6 20h12"></path></svg></span>
+        <span id="sc-theme-label">System</span>
+      </button>
+    </div>
+  </div>
+  <div class="sc-row sc-row-2">
+    <button class="sc-search-btn" id="sc-search-trigger" aria-label="Search the showcase">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <span>Search roles, pages &amp; workflows&hellip;</span>
+      <span class="sc-kbd">Ctrl/&#8984; K</span>
+    </button>
+  </div>
+</div>
+
+<div class="sc-modal" id="sc-modal" role="dialog" aria-modal="true" aria-label="Search the showcase">
+  <div class="sc-modal-box">
+    <div class="sc-input-wrap">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input class="sc-input" id="sc-input" placeholder="Search — try 'provider', 'authority', 'authentication'&hellip;" autocomplete="off" aria-label="Search input">
+    </div>
+    <div class="sc-results" id="sc-results"></div>
+    <div class="sc-hint">
+      <span><span class="sc-kbd">&#8593;&#8595;</span> navigate</span>
+      <span><span class="sc-kbd">&#8629;</span> jump</span>
+      <span><span class="sc-kbd">Esc</span> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- SC-CONTROLS-END -->
+  <!-- ROLE DASHBOARD · CITIZEN (L2) · Scope: Own · Render: FastAPI (F) -->
+  <div class="role-strip role-CITIZEN" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="head-tags">
+        <div class="brand-group">
+          <a href="citizen.html" class="brand"><span class="brand-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg></span> IDRM</a>
+          <span class="brand-role">CITIZEN</span>
+        </div>
+        <span class="render-tier tier-F" title="Rendered by FastAPI — RBAC-gated, per-user"><span class="dotc"></span>FastAPI</span>
+      </div>
+      <button class="nav-toggle" data-nav-toggle="app-nav" aria-label="Open menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
+      <ul class="nav-links" id="app-nav">
+        <li><a href="citizen.html" class="active" aria-current="page">Dashboard</a></li>
+        <li><a href="../map/public.html">Map</a></li>
+        <li><a href="../service-detail/requestor.html">My requests</a></li>
+        <li><a href="../shared/notifications.html" class="nav-badge">Alerts <span class="dot" aria-hidden="true"></span></a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="../service-detail/requestor.html" class="btn btn-primary btn-sm">+ Request help</a>
+        <a href="../shared/profile.html" class="avatar" title="Account" aria-label="Account"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="app-sidebar">
+      <nav aria-label="Primary">
+        <ul class="side-nav">
+          <li><a href="citizen.html" class="active" aria-current="page"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Dashboard</a></li>
+          <li><a href="../service-detail/requestor.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request help</a></li>
+          <li><a href="../service-detail/requestor.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> My requests</a></li>
+          <li><a href="../map/public.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Live map</a></li>
+          <li><a href="../shared/notifications.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></span> Notifications</a></li>
+          <li><a href="../shared/profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div>
+          <h1 style="margin-bottom:var(--space-1);">Hello, Aarthi</h1>
+          <p class="text-muted" style="margin:0;">Here's what's happening with your requests.</p>
+        </div>
+        <a href="../service-detail/requestor.html" class="btn btn-primary">+ New request</a>
+      </div>
+
+      <div class="scope-banner scope-own" role="note">
+        <span class="scope-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+        <div class="scope-body">
+          <span class="scope-tag">Scope · Own requests only</span>
+          <p>You see only the requests you created (<code>requestor_id = you</code>) — enforced server-side. Other people's requests are never sent to your browser.</p>
+        </div>
+      </div>
+
+      <section class="section grid grid-3">
+        <div class="card"><div class="stat"><span class="stat-label">Active requests</span><span class="stat-value">2</span><span class="stat-trend">1 in progress</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Awaiting review</span><span class="stat-value">1</span><span class="stat-trend">submitted today</span></div></div>
+        <div class="card"><div class="stat"><span class="stat-label">Completed</span><span class="stat-value">5</span><span class="stat-trend up">all verified</span></div></div>
+      </section>
+
+      <div class="grid grid-2" style="align-items:start;">
+        <section>
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Your active requests</h3><a href="../service-detail/requestor.html" class="text-small">View all →</a></div>
+          <div class="list-stack">
+            <a href="../service-detail/requestor.html" class="list-row" style="text-decoration:none;color:inherit;">
+              <span class="svc-dot svc-MEDICAL" aria-hidden="true" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;"><span class="strong">Medical · Ambulance needed</span><span class="status status-IN_PROGRESS">● IN_PROGRESS</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0 0;">Kukatpally, Hyderabad · 3 people · <span class="prio prio-CRITICAL">CRITICAL</span></p>
+              </div>
+            </a>
+            <a href="../service-detail/requestor.html" class="list-row" style="text-decoration:none;color:inherit;">
+              <span class="svc-dot svc-WATER" aria-hidden="true" style="margin-top:6px;"></span>
+              <div class="flex-1">
+                <div class="flex justify-between items-center gap-2" style="flex-wrap:wrap;"><span class="strong">Water · Drinking water for shelter</span><span class="status status-SUBMITTED">● SUBMITTED</span></div>
+                <p class="text-muted" style="margin:var(--space-1) 0 0;">Kukatpally, Hyderabad · 40 people · <span class="prio prio-HIGH">HIGH</span></p>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section>
+          <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Recent alerts</h3><a href="../shared/notifications.html" class="text-small">All notifications →</a></div>
+          <div class="list-stack">
+            <div class="list-row unread"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><div class="flex-1"><span class="strong">Provider accepted your request</span><p class="text-muted" style="margin:var(--space-1) 0 0;">Apollo First-Response is on the way · ETA 12 min</p><span class="text-small">2 min ago</span></div></div>
+            <div class="list-row"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span><div class="flex-1"><span class="strong">Request approved</span><p class="text-muted" style="margin:var(--space-1) 0 0;">Your water request is now visible to providers.</p><span class="text-small">1 hr ago</span></div></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="section">
+        <div class="flex justify-between items-center mb-4"><h3 style="margin:0;">Your requests on the map</h3><a href="../map/public.html" class="text-small">Open full map →</a></div>
+        <div class="map-canvas" style="min-height:260px;" data-map data-lat="17.46" data-lng="78.40" data-zoom="11"
+             data-markers='[{"lat":17.4948,"lng":78.3996,"priority":"CRITICAL","title":"Medical · Ambulance"},{"lat":17.4435,"lng":78.3772,"priority":"HIGH","title":"Water"}]'>
+          <span class="map-pin CRITICAL" style="left:38%;top:46%;"></span>
+          <span class="map-pin HIGH" style="left:62%;top:60%;"></span>
+          <div class="map-note">Live map (Leaflet + OpenStreetMap) loads here · this static view is the offline fallback.</div>
+        </div>
+      </section>
+
+      <div class="api-note">
+        <strong>Access ·</strong> CITIZEN (default). VOLUNTEER/ORGANIZER share this own-loop; PROVIDER/MANAGER/EVENT_MANAGER/DM_AUTHORITY/AUDITOR/ADMIN have different landings.<br>
+        <strong>Scope ·</strong> Own — <code>requestor_id = me</code> (server <code>WHERE</code>, not a client filter).<br>
+        <strong>Render ·</strong> <span class="render-tier tier-F"><span class="dotc"></span>FastAPI</span> — per-user data + which actions exist are RBAC-gated where the data lives; <code>Cache-Control: no-store</code>. The static app shell around it can be a Bun-cached <span class="render-tier tier-H"><span class="dotc"></span>Hybrid</span> shell + a streamed data island.<br>
+        <strong>API ·</strong> <code>GET /api/v1/users/me</code> · <code>GET /api/v1/services?requestor=me&amp;status=SUBMITTED,IN_PROGRESS</code> · <code>GET /api/v1/notifications?read=false</code>. Auth guard → <a href="../shared/login.html">login</a> if no token.
+      </div>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile">
+    <a href="citizen.html" class="active"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span> Home</a>
+    <a href="../map/public.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg></span> Map</a>
+    <a href="../service-detail/requestor.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span> Request</a>
+    <a href="../service-detail/requestor.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></span> Requests</a>
+    <a href="../shared/profile.html"><span class="ico" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span> Profile</a>
+  </nav>
+
+  <script src="../../assets/idrm-templates.js"></script>
+  <script src="../../assets/showcase-controls.js"></script>
+</body>
+</html>

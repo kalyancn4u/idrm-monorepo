@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My requests — IDRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+
+  <body class="font-sans antialiased bg-slate-50 text-slate-700 min-h-screen flex flex-col">
+    <header id="app-header" class="border-b border-slate-200 bg-white"></header>
+
+    <main class="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
+      <div class="flex items-center justify-between gap-4">
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900">My requests</h1>
+        <a href="/src/pages/create-service.html" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">New request</a>
+      </div>
+
+      <div class="mt-4">
+        <label for="status-filter" class="sr-only">Filter by status</label>
+        <select id="status-filter" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30">
+          <option value="">All statuses</option>
+          <option value="SUBMITTED">Submitted</option>
+          <option value="APPROVED">Approved</option>
+          <option value="ACCEPTED">Accepted</option>
+          <option value="IN_PROGRESS">In progress</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="VERIFIED">Verified</option>
+          <option value="DISPUTED">Disputed</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="EXPIRED">Expired</option>
+        </select>
+      </div>
+
+      <div id="list" class="mt-6 space-y-3">
+        <p class="text-sm text-slate-500">Loading…</p>
+      </div>
+
+      <div id="pager" class="mt-6 flex items-center justify-center gap-3"></div>
+    </main>
+
+    <script type="module" src="/src/js/my-services.js"></script>
+  </body>
+</html>

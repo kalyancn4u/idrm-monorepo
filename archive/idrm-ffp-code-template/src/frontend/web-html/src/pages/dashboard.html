@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — IDRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+
+  <body class="font-sans antialiased bg-slate-50 text-slate-700 min-h-screen flex flex-col">
+    <!-- Signed-in nav (filled by ui.js mountAppHeader) -->
+    <header id="app-header" class="border-b border-slate-200 bg-white"></header>
+
+    <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+      <h1 id="greeting" class="text-3xl font-bold tracking-tight text-slate-900">Welcome</h1>
+      <p class="mt-1 text-sm text-slate-500">You have <span id="request-count">…</span> request(s).</p>
+
+      <!-- Quick actions -->
+      <div class="mt-6 grid gap-4 sm:grid-cols-3">
+        <a href="/src/pages/create-service.html" class="rounded-xl border border-slate-200 bg-white p-5 hover:border-emerald-300 hover:shadow-sm">
+          <div class="text-base font-semibold text-slate-900">Request help</div>
+          <p class="mt-1 text-sm text-slate-500">Create a new service request.</p>
+        </a>
+        <a href="/src/pages/map-view.html" class="rounded-xl border border-slate-200 bg-white p-5 hover:border-emerald-300 hover:shadow-sm">
+          <div class="text-base font-semibold text-slate-900">View map</div>
+          <p class="mt-1 text-sm text-slate-500">See active requests nearby.</p>
+        </a>
+        <a href="/src/pages/my-services.html" class="rounded-xl border border-slate-200 bg-white p-5 hover:border-emerald-300 hover:shadow-sm">
+          <div class="text-base font-semibold text-slate-900">My requests</div>
+          <p class="mt-1 text-sm text-slate-500">Track everything you've submitted.</p>
+        </a>
+      </div>
+
+      <!-- Recent requests (filled by dashboard.js) -->
+      <h2 class="mt-10 text-xl font-semibold text-slate-900">Your recent requests</h2>
+      <div id="recent" class="mt-4 space-y-3">
+        <p class="text-sm text-slate-500">Loading…</p>
+      </div>
+    </main>
+
+    <script type="module" src="/src/js/dashboard.js"></script>
+  </body>
+</html>
